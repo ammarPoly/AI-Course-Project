@@ -1,0 +1,5 @@
+# STRETCH (optional — nothing depends on it): a read-only reviewer for your scorecard
+
+Only after your CORE scorecard exists. Uses the Week 6 rules: copy `WORK_TEMPLATE/` to a new working folder **outside** the pack, copy your scorecard and the `MEMOS/` folder into it, start Claude Code **in that folder** with an explicit mode, read the status bar, and ask for a plan first.
+The supplied subagent `scorecard-reviewer` may only read files. It checks that every flag in your scorecard has a memo quotation or a record reference that really supports it, and lists unsupported claims. **You** decide what to change. Record what you saw (plan, approval, files checked) — and if it does not run, write that down and carry on with your main build.
+Claude Code is included in Claude Pro; nothing here needs an API key or a paid upgrade. *SYNTHETIC — for teaching (Week 7 studio, Artificial Intelligence in Logistics). C5-A Supplier Risk Control Tower · Version V1 · 2026-11-07. Every company, person, number and document in this pack is fictional.*

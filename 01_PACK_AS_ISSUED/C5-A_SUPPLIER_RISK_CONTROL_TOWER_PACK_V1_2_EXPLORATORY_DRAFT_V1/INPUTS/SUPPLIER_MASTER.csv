@@ -1,0 +1,27 @@
+supplier_id,supplier_name,part_families,approval_status,spend_band
+SUP-01,Corranby Foundry Works W.L.L.,castings,APPROVED,A
+SUP-02,Talbeck Castings Co.,castings,APPROVED,B
+SUP-03,Vellmoor Motors W.L.L.,motors; machined shafts,APPROVED,A
+SUP-04,Ostrand Electric Drives LLC,motors,APPROVED,B
+SUP-05,Kestrelwire Electronics FZE,PCB assemblies,APPROVED,A
+SUP-06,Halvard Bearings Trading W.L.L.,bearings,APPROVED,B
+SUP-07,Marrowgate Impellers Ltd,impellers,APPROVED,A
+SUP-08,Linnetbrook Cables W.L.L.,cables,APPROVED,C
+SUP-09,Tidewell Seal Systems Co.,mechanical seals,APPROVED,A
+SUP-10,Gannetstone Fasteners W.L.L.,fasteners,APPROVED,C
+SUP-11,Peltrove Gasket Supply,gaskets,APPROVED,C
+SUP-12,Gulfreach Fasteners Company W.L.L.,fasteners,APPROVED,B
+SUP-13,Brindlecourt Bearing Supply,bearings,APPROVED,C
+SUP-14,Saltcote Coatings W.L.L.,paint and coatings,APPROVED,B
+SUP-15,Merrowfield Packaging W.L.L.,packaging,APPROVED,C
+SUP-16,Amberlode Sealing W.L.L.,mechanical seals,APPROVED,B
+SUP-17,Copperhythe Cable Works,cables,APPROVED,B
+SUP-18,Fennick Gasket Industries,gaskets,APPROVED,C
+SUP-19,Ironvale Freight Services W.L.L.,inbound freight,APPROVED,B
+SUP-20,Quillmarsh Impeller Co.,impellers,APPROVED,B
+SUP-21,Kelvingrey Paint Systems,paint and coatings,APPROVED,C
+SUP-22,Thornwick Cartons W.L.L.,packaging,APPROVED,B
+SUP-23,Harrowmere Freight Lines,inbound freight,APPROVED,C
+SUP-24,Coldharbour Enclosures W.L.L.,electrical enclosures,APPROVED,B
+SUP-25,Pinemoor Enclosure Fabrication,electrical enclosures,APPROVED,C
+SUP-26,Mallowmere Machining W.L.L.,machined shafts,APPROVED,B

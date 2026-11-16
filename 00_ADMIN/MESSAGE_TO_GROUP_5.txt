@@ -1,0 +1,16 @@
+Week 7 studio: your group and project
+
+Group 5 · Project C5 Supplier Risk Control Tower
+
+Two files are attached:
+1. C5-A_SUPPLIER_RISK_CONTROL_TOWER_PACK_V1_2_EXPLORATORY_DRAFT_V1.zip: your project pack. It is for your group only. Do not share it with other groups.
+2. W07_STUDENT_LAUNCH_PACKAGE_EXPLORATORY_DRAFT_V1.zip: the studio kit, the same for every group.
+
+What to do:
+- Every member downloads both files and keeps a local copy.
+- Unzip your pack into the folder 01_PACK_AS_ISSUED of your group folder. Never edit that copy; work on copies.
+- Read first: 00_START_HERE_STUDENTS_WEEK07 in the studio kit, then 00_START_HERE in your pack (sections 1 to 6), then your rule card in RULES.
+- Your brief says what your prototype must do. How you build it is your group's decision.
+- Bring your laptop, your own Claude Pro account signed in, and Excel. Buy nothing. No API keys.
+
+Groups are set by the instructor; changes only through me.
