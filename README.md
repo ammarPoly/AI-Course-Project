@@ -6,7 +6,7 @@ This repository is Group 5's canonical group folder (K-04 layout).
 |---|---|
 | Group | Group 5 |
 | Project and variant | C5-A Supplier Risk Control Tower |
-| Members (first names or the codes the instructor uses) | |
+| Members (first names or the codes the instructor uses) | Ammar (build lead), Hussain (data / input lead), Fatima (tester), Maryam (evidence lead), Marwan (presenter) |
 | Where the current working version is | `02_WORK/` … |
 | Latest saved version | `03_VERSIONS/` … |
 | Frozen showcase version (from feature freeze) | |
@@ -14,6 +14,8 @@ This repository is Group 5's canonical group folder (K-04 layout).
 Keep **one canonical folder** wherever your group already shares files. **Every member keeps a local copy of `01_PACK_AS_ISSUED/`.**
 
 ## Where things are
+
+- `00_ADMIN/TODO/`: one to-do file per member, with the prompts to paste into your own Claude
 
 - `00_ADMIN/MESSAGE_TO_GROUP_5.txt`: the instructor's message to the group
 - `00_ADMIN/W07_STUDENT_LAUNCH_PACKAGE/`: the Week 7 studio kit (K-01 to K-14). Read `00_START_HERE_STUDENTS_WEEK07` first.
