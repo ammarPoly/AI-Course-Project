@@ -19,8 +19,8 @@ Group self-check, with an evidence pointer for every line.
 **Instructor observation (one line — an observation, not a mark):** ____________________________________________
 
 **Other CP-7 files (K-04 §3), current state:**
-- Usage-budget card: `00_ADMIN/G05_usage_budget_v01.md` (batch 2 DONE 2026-11-23, confirmed by Marwan; batches 1 and 3 and the independent check PLANNED)
-- Sweep log: `05_EVIDENCE/C5_sweep_log.csv` (header only; NOT YET any rows)
-- Evidence list: `05_EVIDENCE/EVIDENCE_LIST.md` (1 entry)
+- Usage-budget card: `00_ADMIN/G05_usage_budget_v01.md` (batches 1, 2 and 3 DONE 2026-11-23; independent check PLANNED)
+- Sweep log: `05_EVIDENCE/C5_sweep_log.csv` (SW-01 batch 2, SW-02 batch 1, SW-03 batch 3: all 24 memo IDs echoed back, none missing)
+- Evidence list: `05_EVIDENCE/EVIDENCE_LIST.md` (5 entries; exported chats for all three batches saved)
 
 *Week 7 student launch package · Artificial Intelligence in Logistics · studio kit Version V1.2 · 2026-11-08. Templates and guidance only — no answers, no marks.*
