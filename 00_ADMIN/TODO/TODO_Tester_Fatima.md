@@ -12,6 +12,20 @@
 - Honest note for the record: Ammar already ran the tool on the real files on 2026-11-23, before T-01 was written. Write that in the Notes column of T-01. Don't open his results before you write your expected result.
 - The group decided a memo counts only for the supplier in its header; it's in the canvas decision log. Tell Ammar if you disagree.
 
+## From where to where
+
+| Step | What | From | To |
+|---|---|---|---|
+| T-01 expected result | `SUPPLIER_MASTER.csv`, `ASSESSMENT_LOG.csv`, the supplier's memo, `RISK_RULES_RR-C5.md` (read only, **no AI**) | repo: `01_PACK_AS_ISSUED/C5-A_SUPPLIER_RISK_CONTROL_TOWER_PACK_V1_2_EXPLORATORY_DRAFT_V1/INPUTS/` and repo: `01_PACK_AS_ISSUED/C5-A_SUPPLIER_RISK_CONTROL_TOWER_PACK_V1_2_EXPLORATORY_DRAFT_V1/RULES/` | your head and the test record |
+| Test record `G05_C5_test_record_v01.xlsx` | repo: `04_TESTS/` | your computer (download, fill in T-01, save), then back to repo: `04_TESTS/` (upload the same name) |
+| The tool `control_tower.html` (only **after** T-01 is written) | repo: `02_WORK/` | your computer, then double-click to open |
+| Files to load into the tool | repo: `01_PACK_AS_ISSUED/C5-A_SUPPLIER_RISK_CONTROL_TOWER_PACK_V1_2_EXPLORATORY_DRAFT_V1/INPUTS/` (`SUPPLIER_MASTER.csv`, `ASSESSMENT_LOG.csv`, the `MEMOS` folder) | the tool's boxes, or drop the whole INPUTS folder on it |
+| Pack zip `C5-A_SUPPLIER_RISK_CONTROL_TOWER_PACK_V1_2_EXPLORATORY_DRAFT_V1.zip` (Week 8: extension cases and flag check) | inside `Group_5_C5_Supplier_Risk_Control_Tower.zip` (the instructor's message) | a **fresh chat** in your own Claude |
+| Each flag check result | that chat | test record: one INDEPENDENT CHECK line per flag |
+
+**How to put a file in the repo:** on GitHub, open the folder named in the "To" column, click **Add file → Upload files**, drag the file in, then click **Commit changes**. **How to make a CSV from Claude's answer:** copy the CSV block, paste it into Notepad (or TextEdit in plain text mode), and save it with the name shown and `.csv` at the end.
+
+
 ## Week 7 (now)
 
 1. **Read** `00_START_HERE_C5` sections 1 to 6 and the whole rule card `RULES/RISK_RULES_RR-C5.md`. You'll know it better than anyone, because every expected result comes from it.

@@ -10,6 +10,20 @@
 - Your tutor question is answered: the tutor left it to the group, and the decision is in the canvas decision log (a memo counts only for the supplier in its header; a mention of another supplier is shown as a note). Read it and tell Ammar if you disagree.
 - **Your main job now is memo batch 1** (below, under Week 8). Please run it soon: the flags can't be built until the batch CSVs exist.
 
+## From where to where
+
+| Step | What | From | To |
+|---|---|---|---|
+| 1 | The pack zip `C5-A_SUPPLIER_RISK_CONTROL_TOWER_PACK_V1_2_EXPLORATORY_DRAFT_V1.zip` | inside `Group_5_C5_Supplier_Risk_Control_Tower.zip` (the instructor's message) | a new Claude Project in your own account (name it "G05 C5 batch 1"), as a Project file |
+| 1 (backup) | If Claude can't open the zip: `MEMOS_BATCH_1.md` and `RISK_RULES_RR-C5.md` | repo: `01_PACK_AS_ISSUED/C5-A_SUPPLIER_RISK_CONTROL_TOWER_PACK_V1_2_EXPLORATORY_DRAFT_V1/INPUTS/` and repo: `01_PACK_AS_ISSUED/C5-A_SUPPLIER_RISK_CONTROL_TOWER_PACK_V1_2_EXPLORATORY_DRAFT_V1/RULES/` | the same Claude Project, as Project files |
+| 2 | The batch prompt | this file (the grey box under "Memo batch 1") | a **new chat** in that Project |
+| 3 | The CSV block Claude gives you | that chat | a file named `BATCH_1_Hussain_<YYYY-MM-DD>.csv` in repo `02_WORK/extraction/` (or send it to Ammar) |
+| 4 | The whole chat, exported (Week 2 route) | your Claude | Maryam, who saves it in repo `05_EVIDENCE/` |
+| 5 | Date, your name, batch 1, memo IDs echoed back and the count | the `MEMOS READ` line at the end of Claude's answer | Maryam, for the sweep log |
+
+**How to put a file in the repo:** on GitHub, open the folder named in the "To" column, click **Add file → Upload files**, drag the file in, then click **Commit changes**. **How to make a CSV from Claude's answer:** copy the CSV block, paste it into Notepad (or TextEdit in plain text mode), and save it with the name shown and `.csv` at the end.
+
+
 ## Week 7 (now)
 
 1. **Check your own copy of the pack.** Unzip the pack zip on your laptop, open `PACK_INVENTORY.md` and compare it with the folder: same file names, same number of files. The copy in the repo was checked on 2026-11-18 and all files matched their fingerprints. Optional on a Mac: in Terminal inside the pack folder, run `shasum -a 256 -c PACK_SHA256SUMS.txt` (every line should say OK).
