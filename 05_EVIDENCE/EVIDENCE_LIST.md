@@ -5,3 +5,7 @@ One line per evidence file in `05_EVIDENCE/`. Never edit the evidence files them
 | File | Date | Who made it | What it proves |
 |---|---|---|---|
 | `05_EVIDENCE/G05_C5_coverage_record_2026-11-23_Ammar.txt` | 2026-11-23 | Ammar | The tool's record of the first run on the real files: 26 suppliers, 23 log rows, all 24 memos present, none missing. |
+| `05_EVIDENCE/CHAT_BATCH_2_Marwan_2026-11-23.md` | 2026-11-23 | Marwan | Exported chat of memo batch 2: one run, no re-ask; MEMOS READ lists MEMO-09 to MEMO-16 (8); its CSV is identical to `02_WORK/extraction/BATCH_2_Marwan_2026-11-23.csv`. Sweep log SW-01. |
+| `05_EVIDENCE/G05_C5_batch1_message_2026-11-23_Hussain.txt` | 2026-11-23 | Hussain | Hussain's message about memo batch 1: MEMOS READ lists MEMO-01 to MEMO-08 (8), no deviations, and confirms `02_WORK/extraction/BATCH_1_Hussain_2026-11-23.csv` is from his run. The exported chat is listed below. Sweep log SW-02. |
+| `05_EVIDENCE/CHAT_BATCH_3_Maryam_2026-11-23.md` | 2026-11-23 | Maryam | Chat of memo batch 3, copied from the browser: one run plus one follow-up (no rows added); MEMOS READ lists MEMO-17 to MEMO-24 (8); its CSV is identical to `02_WORK/extraction/BATCH_3_Maryam_2026-11-23.csv`. Sweep log SW-03. |
+| `05_EVIDENCE/BATCH_1_Hussain_2026-11-23_chat.md` | 2026-11-23 | Hussain | Chat of memo batch 1 (pack zip, unchanged prompt): MEMOS READ lists MEMO-01 to MEMO-08 (8); its CSV is identical to `02_WORK/extraction/BATCH_1_Hussain_2026-11-23.csv`. Later messages are only about where to save the file. Sweep log SW-02. |

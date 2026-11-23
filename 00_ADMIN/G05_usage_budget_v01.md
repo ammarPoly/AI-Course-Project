@@ -6,9 +6,10 @@ The course's per-group budget card, written as a budget of **runs** — the allo
 
 | Week | Planned heavy step (image reads, sweeps, long-document chats, artifact rebuilds) | Member who runs it | Model label used | Meter at start (as displayed, optional) | Meter at end (as displayed, optional) |
 |------|------------------------------|--------------------|--------------------|--------------------|--------------------|
-| 7 | Memo batch 2 (MEMO-09 to MEMO-16), one run · status: DONE 2026-11-23 (confirmed by Marwan); output `02_WORK/extraction/BATCH_2_Marwan_2026-11-23.csv` | Marwan | | | |
-| 8 | Memo batch 1 (MEMO-01 to MEMO-08), one run · status: PLANNED | Hussain | | | |
-| 8 | Memo batch 3 (MEMO-17 to MEMO-24), one run · status: PLANNED | Maryam | | | |
+| 7 | Memo batch 2 (MEMO-09 to MEMO-16), one run · status: DONE 2026-11-23 (confirmed by Marwan); output `02_WORK/extraction/BATCH_2_Marwan_2026-11-23.csv`; sweep log SW-01 | Marwan | Opus 5.5 Medium | | |
+| 7 | Memo batch 1 (MEMO-01 to MEMO-08), one run · status: DONE 2026-11-23 (confirmed by Hussain); output `02_WORK/extraction/BATCH_1_Hussain_2026-11-23.csv`; sweep log SW-02 | Hussain | Opus 5.5 | | |
+| 7 | Memo batch 3 (MEMO-17 to MEMO-24), one run · status: DONE 2026-11-23; output `02_WORK/extraction/BATCH_3_Maryam_2026-11-23.csv`; sweep log SW-03 | Maryam | Opus 5.5 | | |
+| 8 | | | | | |
 | 9 | Independent check: trace at least five flags to their sources in a fresh chat (once the scorecard exists) · status: PLANNED | Fatima | | | |
 | 10 | | | | | |
 
