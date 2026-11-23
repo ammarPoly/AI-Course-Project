@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>C5-A Supplier Risk Control Tower (Group 5)</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  :root {
+    --ink: #172033; --muted: #5d6779; --line: #dfe3ea; --bg: #f3f5f8; --card: #ffffff;
+    --accent: #1f5bd8; --accent-soft: #e8effd;
+    --ok: #17784a; --ok-bg: #e3f4ea; --warn: #8a5800; --warn-bg: #fdf1d8; --bad: #a32432; --bad-bg: #fbe6e8;
+    --radius: 10px;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; font: 15px/1.5 system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif; color: var(--ink); background: var(--bg); }
+  header { background: var(--ink); color: #fff; padding: 16px 32px; display: flex; align-items: baseline; gap: 16px; flex-wrap: wrap; }
+  header h1 { margin: 0; font-size: 20px; font-weight: 650; letter-spacing: .2px; }
+  header .sub { color: #b9c1cf; font-size: 13px; }
+  main { max-width: 1180px; margin: 0 auto; padding: 22px 24px 60px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 20px 22px; margin-bottom: 18px; }
+  h2 { margin: 0 0 4px; font-size: 17px; }
+  .hint { color: var(--muted); font-size: 13px; margin: 0 0 12px; }
+
+  /* drop area */
+  .drop { border: 2px dashed #b9c4d8; border-radius: var(--radius); padding: 28px 20px; text-align: center; background: #fafbfd; transition: background .15s, border-color .15s; }
+  .drop.over { background: var(--accent-soft); border-color: var(--accent); }
+  .drop .big { font-size: 17px; font-weight: 600; margin: 0 0 4px; }
+  .drop .small { color: var(--muted); font-size: 13px; margin: 0 0 14px; }
+  .btn { font: inherit; font-size: 14px; padding: 8px 16px; border-radius: 7px; border: 1px solid var(--accent); background: var(--accent); color: #fff; cursor: pointer; }
+  .btn:hover { filter: brightness(1.08); }
+  .btn.ghost { background: #fff; color: var(--accent); }
+  .btn.ghost:hover { background: var(--accent-soft); filter: none; }
+  .btn.small { font-size: 12px; padding: 4px 10px; }
+  .btn.danger { background: #fff; color: var(--bad); border-color: #e3b4ba; }
+  .btn.danger:hover { background: var(--bad-bg); filter: none; }
+  .btn:disabled { opacity: .45; cursor: default; }
+  .row { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+  #overlay { position: fixed; inset: 0; background: rgba(31, 91, 216, .12); border: 4px dashed var(--accent); display: none; align-items: center; justify-content: center; font-size: 22px; font-weight: 650; color: var(--accent); z-index: 50; pointer-events: none; }
+  #overlay.show { display: flex; }
+
+  /* source tiles */
+  .tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; margin-top: 16px; }
+  .tile { border: 1px solid var(--line); border-radius: 8px; padding: 12px 14px; display: flex; flex-direction: column; gap: 4px; }
+  .tile { border-style: dashed; border-width: 2px; transition: background .15s, border-color .15s; }
+  .tile.done { border-color: #9fd3b6; background: #f7fcf9; }
+  .tile.over { border-color: var(--accent); background: var(--accent-soft); }
+  .tile .actions { display: flex; gap: 6px; }
+  .tile .foot { display: flex; justify-content: space-between; align-items: center; gap: 8px; margin-top: auto; padding-top: 8px; }
+  .tile .droptext { font-size: 12px; color: var(--muted); }
+  .tile .top { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+  .tile .name { font-weight: 600; font-size: 14px; }
+  .tile .count { font-size: 13px; }
+  .tile .files { font-size: 12px; color: var(--muted); word-break: break-word; max-height: 54px; overflow: auto; }
+  .dot { width: 10px; height: 10px; border-radius: 50%; background: #c9ced8; display: inline-block; margin-right: 6px; }
+  .tile.done .dot { background: var(--ok); }
+  .tile.optional .name::after { content: " (optional)"; font-weight: 400; color: var(--muted); font-size: 12px; }
+  .toolbar { display: flex; justify-content: space-between; align-items: center; margin-top: 12px; gap: 10px; flex-wrap: wrap; }
+  #activity { font-size: 13px; color: var(--muted); }
+
+  /* messages */
+  .msg { padding: 8px 12px; border-radius: 7px; margin: 8px 0 0; font-size: 13px; }
+  .msg.warn { background: var(--warn-bg); color: var(--warn); }
+  .msg.bad { background: var(--bad-bg); color: var(--bad); }
+  .msg.ok { background: var(--ok-bg); color: var(--ok); }
+  .msg.info { background: var(--accent-soft); color: #1d3f86; }
+
+  /* tabs */
+  .tabs { display: flex; gap: 4px; border-bottom: 1px solid var(--line); margin: -4px -22px 16px; padding: 0 22px; flex-wrap: wrap; }
+  .tab { font: inherit; font-size: 14px; background: none; border: none; padding: 10px 14px; cursor: pointer; color: var(--muted); border-bottom: 3px solid transparent; }
+  .tab.active { color: var(--ink); font-weight: 600; border-bottom-color: var(--accent); }
+  .tab .badge { font-size: 11px; background: #eef0f4; border-radius: 9px; padding: 1px 7px; margin-left: 4px; color: var(--muted); }
+  .panel { display: none; }
+  .panel.active { display: block; }
+
+  /* tables */
+  .bar { display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 10px; }
+  .stats { font-size: 14px; }
+  input[type=search], select { font: inherit; font-size: 14px; padding: 7px 10px; border: 1px solid var(--line); border-radius: 7px; min-width: 240px; }
+  table { border-collapse: collapse; width: 100%; font-size: 13px; }
+  th, td { border-bottom: 1px solid var(--line); padding: 7px 9px; text-align: left; vertical-align: top; }
+  th { background: #f0f2f6; font-weight: 600; position: sticky; top: 0; z-index: 1; }
+  #coverage td:first-child, #matching td:first-child { white-space: nowrap; }
+  tr.click { cursor: pointer; }
+  tr.click:hover td { background: #f5f8fe; }
+  .scroll { max-height: 560px; overflow: auto; border: 1px solid var(--line); border-radius: 8px; }
+  .tag { display: inline-block; padding: 1px 8px; border-radius: 10px; font-size: 12px; font-weight: 600; white-space: nowrap; }
+  .tag.ok { color: var(--ok); background: var(--ok-bg); }
+  .tag.warn { color: var(--warn); background: var(--warn-bg); }
+  .tag.bad { color: var(--bad); background: var(--bad-bg); }
+  .mono { font-family: ui-monospace, Consolas, Menlo, monospace; font-size: 12px; }
+  .scope { color: var(--muted); font-size: 12px; margin-top: 2px; }
+  .trace { width: auto; }
+  .trace td { border: none; padding: 2px 10px 2px 0; }
+  .trace td:first-child { color: var(--muted); white-space: nowrap; }
+  details summary { cursor: pointer; color: var(--accent); font-size: 12px; }
+  blockquote { margin: 6px 0; padding: 7px 12px; border-left: 3px solid var(--accent); background: #f3f6fc; border-radius: 0 6px 6px 0; }
+  .empty { color: var(--muted); padding: 24px 0; text-align: center; }
+  .detail h3 { margin: 18px 0 6px; font-size: 15px; }
+  .memo-block { border: 1px solid var(--line); border-radius: 8px; padding: 10px 14px; margin: 8px 0; }
+  pre.record { white-space: pre-wrap; margin: 0; background: #f8f9fb; border: 1px solid var(--line); border-radius: 8px; padding: 12px 14px; }
+  footer { color: var(--muted); font-size: 12px; text-align: center; padding: 10px; }
+</style>
+</head>
+<body>
+<div id="overlay">Drop the files to load them</div>
+
+<header>
+  <h1>Supplier Risk Control Tower</h1>
+  <span class="sub">Group 5 · C5-A · rules RR-C5 as of 2026-10-31 · works offline, nothing leaves this computer</span>
+</header>
+
+<main>
+  <section class="card">
+    <h2>1. Load the sources</h2>
+    <p class="hint">Two ways to load: drop everything in the big area and the tool sorts each file by what's inside it, or drop a file on its own box below to load it as exactly that, whatever the file is called. Memo and extraction files are added to what's already loaded; a new master or log replaces the old one.</p>
+
+    <div class="drop" id="drop">
+      <p class="big">Drag files or the whole INPUTS folder here</p>
+      <p class="small">or drop them anywhere on this page</p>
+      <div class="row">
+        <button class="btn" id="pick-files">Choose files</button>
+        <button class="btn ghost" id="pick-folder">Choose a folder</button>
+      </div>
+      <input type="file" id="in-files" multiple accept=".csv,.md,.txt" hidden>
+      <input type="file" id="in-folder" webkitdirectory multiple hidden>
+    </div>
+
+    <div class="tiles">
+      <div class="tile" id="t-master" data-type="master"><div class="top"><span class="name"><span class="dot"></span>Supplier master</span></div><div class="count"></div><div class="files"></div><div class="foot"><span class="droptext">Drop the file here</span><span class="actions"><button class="btn ghost small" data-choose="master">Choose</button><button class="btn danger small" data-clear="master">Clear</button></span></div><input type="file" id="in-master" hidden></div>
+      <div class="tile" id="t-log" data-type="log"><div class="top"><span class="name"><span class="dot"></span>Assessment log</span></div><div class="count"></div><div class="files"></div><div class="foot"><span class="droptext">Drop the file here</span><span class="actions"><button class="btn ghost small" data-choose="log">Choose</button><button class="btn danger small" data-clear="log">Clear</button></span></div><input type="file" id="in-log" hidden></div>
+      <div class="tile" id="t-memos" data-type="memos"><div class="top"><span class="name"><span class="dot"></span>Memos</span></div><div class="count"></div><div class="files"></div><div class="foot"><span class="droptext">Drop files here</span><span class="actions"><button class="btn ghost small" data-choose="memos">Choose</button><button class="btn danger small" data-clear="memos">Clear</button></span></div><input type="file" id="in-memos" multiple hidden></div>
+      <div class="tile optional" id="t-extraction" data-type="extraction"><div class="top"><span class="name"><span class="dot"></span>Memo extraction</span></div><div class="count"></div><div class="files"></div><div class="foot"><span class="droptext">Drop files here</span><span class="actions"><button class="btn ghost small" data-choose="extraction">Choose</button><button class="btn danger small" data-clear="extraction">Clear</button></span></div><input type="file" id="in-extraction" multiple hidden></div>
+    </div>
+
+    <div class="toolbar">
+      <span id="activity">Nothing loaded yet.</span>
+      <button class="btn danger" id="clear-all">Clear all files</button>
+    </div>
+    <div id="messages"></div>
+  </section>
+
+  <section class="card">
+    <div class="tabs" role="tablist">
+      <button class="tab active" data-tab="coverage">Coverage <span class="badge" id="b-coverage">0</span></button>
+      <button class="tab" data-tab="matching">Memo matching <span class="badge" id="b-matching">0</span></button>
+      <button class="tab" data-tab="detail">Supplier detail</button>
+      <button class="tab" data-tab="record">Coverage record</button>
+    </div>
+
+    <div class="panel active" id="p-coverage">
+      <p class="hint">RR-C5 §3. Coverage only, kept apart from risk: NO MEMO means the memos can't tell us about that supplier; it is not a flag. Click a supplier to open its detail.</p>
+      <div id="coverage"></div>
+    </div>
+
+    <div class="panel" id="p-matching">
+      <p class="hint">RR-C5 §2. Each memo's "Supplier (as written)" header goes through the five steps in order. A memo is attached to a supplier only when the result is identical to exactly one master supplier.</p>
+      <div id="matching"></div>
+    </div>
+
+    <div class="panel" id="p-detail">
+      <div class="bar"><select id="pick"><option value="">Choose a supplier</option></select></div>
+      <div id="detail" class="detail"></div>
+    </div>
+
+    <div class="panel" id="p-record">
+      <p class="hint">Proof of what this run actually read: every file, every memo ID and every quotation check.</p>
+      <div id="record"></div>
+    </div>
+  </section>
+</main>
+
+<footer>The tool shows evidence. The category director and the buyers decide what to do about any supplier. SYNTHETIC classroom data.</footer>
+
+<script>
+// LOGIC-START
+// Plain functions with no page code, so they can be tested on their own.
+
+const AS_OF = "2026-10-31";
+const LEGAL_SUFFIXES = ["wll", "co", "company", "ltd", "llc", "fze"];
+const EXTRACTION_HEADER = ["memo_id","memo_date","header_supplier_as_written","statement_about_as_written","topic","part_family","position","cap_bhd","quotation"];
+
+// Read CSV text into rows. Handles quoted fields, commas and doubled quotes inside quotes.
+function parseCSV(text) {
+  text = text.replace(/^﻿/, "");
+  const rows = []; let row = []; let field = ""; let inQuotes = false;
+  for (let i = 0; i < text.length; i++) {
+    const c = text[i];
+    if (inQuotes) {
+      if (c === '"') {
+        if (text[i + 1] === '"') { field += '"'; i++; } else { inQuotes = false; }
+      } else { field += c; }
+    } else if (c === '"') { inQuotes = true; }
+    else if (c === ",") { row.push(field); field = ""; }
+    else if (c === "\n" || c === "\r") {
+      if (c === "\r" && text[i + 1] === "\n") i++;
+      row.push(field); rows.push(row); row = []; field = "";
+    } else { field += c; }
+  }
+  if (field !== "" || row.length) { row.push(field); rows.push(row); }
+  return rows.filter(r => !(r.length === 1 && r[0].trim() === ""));
+}
+
+// Turn CSV rows into objects. Each object remembers its line in the file (header = line 1).
+function csvToRecords(text) {
+  const rows = parseCSV(text);
+  if (!rows.length) return { header: [], records: [] };
+  const header = rows[0].map(h => h.trim());
+  const records = rows.slice(1).map((r, i) => {
+    const obj = { _line: i + 2 };
+    header.forEach((h, j) => { obj[h] = (r[j] ?? "").trim(); });
+    return obj;
+  });
+  return { header, records };
+}
+
+// Split a memo file into memos. Works for one memo per file and for the batch files.
+function parseMemoFile(text, fileName) {
+  text = text.replace(/^﻿/, "").replace(/\r\n?/g, "\n");
+  const chunks = text.split(/^(?=# MEMO-\d+)/m).filter(c => /^# MEMO-\d+/.test(c));
+  return chunks.map(chunk => {
+    const id = (chunk.match(/^# (MEMO-\d+)/) || [])[1] || null;
+    const date = (chunk.match(/\*\*Date:\*\*\s*(\d{4}-\d{2}-\d{2})/) || [])[1] || null;
+    const sup = chunk.match(/\*\*Supplier \(as written\):\*\*\s*([^·\n]*)/);
+    const supplierAsWritten = sup ? sup[1].trim() : null;
+    // keep the memo text without the classroom footer (after the --- line)
+    const body = chunk.split(/^---\s*$/m)[0].trim();
+    return { id, date, supplierAsWritten, text: body, source: fileName };
+  });
+}
+
+// RR-C5 §2: the five steps, in order. Returns every step so a person can check it.
+function normaliseName(name) {
+  const steps = [];
+  let s = String(name ?? "");
+  steps.push(["As written", s]);
+  s = s.replace(/\./g, "");
+  steps.push(["1. Remove full stops", s]);
+  s = s.replace(/[^\p{L}\p{N}\s]/gu, " ");
+  steps.push(["2. Other punctuation to a space", s]);
+  s = s.toLowerCase();
+  steps.push(["3. Ignore letter case", s]);
+  let words = s.split(/\s+/).filter(Boolean);
+  words = words.filter(w => !LEGAL_SUFFIXES.includes(w));
+  steps.push(["4. Remove legal suffixes (WLL, Co, Company, Ltd, LLC, FZE)", words.join(" ")]);
+  if (words.length) {
+    const last = words[words.length - 1];
+    if (last.length > 1 && last.endsWith("s")) words[words.length - 1] = last.slice(0, -1);
+  }
+  const key = words.join(" ");
+  steps.push(["5. Ignore a plural \"s\" on the last word", key]);
+  return { key, steps };
+}
+
+// Match one memo header name to the master. Exactly one identical result = match.
+function matchMemo(memo, masterRecords) {
+  const memoNorm = normaliseName(memo.supplierAsWritten);
+  const hits = masterRecords.filter(m => normaliseName(m.supplier_name).key === memoNorm.key);
+  if (!memo.supplierAsWritten) {
+    return { status: "CANNOT DETERMINE (match)", reason: "the memo has no Supplier (as written) line", supplierId: null, memoNorm, hits: [] };
+  }
+  if (hits.length === 1) {
+    return { status: "MATCH", reason: "identical to exactly one master supplier after the §2 steps", supplierId: hits[0].supplier_id, memoNorm, hits };
+  }
+  if (hits.length === 0) {
+    return { status: "CANNOT DETERMINE (match)", reason: "no master supplier name is identical after the §2 steps", supplierId: null, memoNorm, hits };
+  }
+  return { status: "CANNOT DETERMINE (match)", reason: "more than one master supplier is identical after the §2 steps: " + hits.map(h => h.supplier_id).join(", "), supplierId: null, memoNorm, hits };
+}
+
+// Collapse runs of spaces and line breaks so a quotation split over two lines still counts as word for word.
+function squash(s) { return String(s ?? "").replace(/\s+/g, " ").trim(); }
+
+// Check each extraction row against the memo it cites.
+function checkExtraction(rows, memosById) {
+  return rows.map(r => {
+    const memo = memosById[r.memo_id];
+    let check;
+    if (!memo) check = { status: "REJECTED", reason: r.memo_id + " was not loaded in this run" };
+    else if ((r.topic || "").toUpperCase() === "NONE") check = { status: "NONE ROW", reason: "memo read, no qualification or indemnity sentence reported" };
+    else if (!r.quotation) check = { status: "REJECTED", reason: "no quotation given" };
+    else if (squash(memo.text).includes(squash(r.quotation))) check = { status: "VERIFIED", reason: "quotation found word for word in " + r.memo_id };
+    else check = { status: "REJECTED", reason: "quotation not found word for word in " + r.memo_id };
+    return { ...r, check };
+  });
+}
+
+// RR-C5 §3: coverage for every master supplier, kept apart from risk.
+function buildCoverage(masterRecords, logRecords, memos, matches) {
+  const logRowCount = logRecords.length;
+  const memoCount = memos.length;
+  return masterRecords.map(m => {
+    const memoIds = memos.filter(x => matches[x.id] && matches[x.id].supplierId === m.supplier_id).map(x => x.id).sort();
+    const logRows = logRecords.filter(l => l.supplier_id === m.supplier_id);
+    return {
+      supplier_id: m.supplier_id,
+      supplier_name: m.supplier_name,
+      master_line: m._line,
+      memos: memoIds.length ? memoIds.join("; ") : "NO MEMO",
+      memo_scope: memoIds.length ? "" : "no memo matched " + m.supplier_id + " among " + memoCount + " memos read in this run (RR-C5 §2), as of " + AS_OF,
+      log_row: logRows.length ? "yes" : "no",
+      log_detail: logRows.length
+        ? logRows.map(l => "ASSESSMENT_LOG.csv line " + l._line + ": " + l.last_assessment_date + ", " + l.result).join("; ")
+        : "no row for " + m.supplier_id + " in ASSESSMENT_LOG.csv (" + logRowCount + " data rows, as of " + AS_OF + ")"
+    };
+  });
+}
+
+// Memo numbers that are missing from the run (gaps between MEMO-01 and the highest number read).
+function memoNumberGaps(ids) {
+  const nums = ids.map(i => parseInt(i.replace("MEMO-", ""), 10)).filter(n => !isNaN(n));
+  if (!nums.length) return [];
+  const max = Math.max(...nums); const have = new Set(nums); const gaps = [];
+  for (let n = 1; n <= max; n++) if (!have.has(n)) gaps.push("MEMO-" + String(n).padStart(2, "0"));
+  return gaps;
+}
+
+// Work out what a dropped file is, from its content (not just its name).
+function classifyFile(name, text) {
+  const lower = String(name).toLowerCase();
+  const clean = String(text).replace(/^\uFEFF/, "");
+  if (lower.endsWith(".csv")) {
+    const firstLine = clean.split(/\r?\n/)[0] || "";
+    const head = ((parseCSV(firstLine)[0]) || []).map(h => h.trim());
+    if (head.join(",") === EXTRACTION_HEADER.join(",")) return "extraction";
+    if (["supplier_id", "supplier_name", "part_families", "approval_status"].every(h => head.includes(h))) return "master";
+    if (["supplier_id", "last_assessment_date", "result"].every(h => head.includes(h))) return "log";
+    return "unknown";
+  }
+  if (lower.endsWith(".md") || lower.endsWith(".txt")) {
+    const memos = parseMemoFile(clean, name).filter(m => m.id && (m.date || m.supplierAsWritten));
+    return memos.length ? "memos" : "unknown";
+  }
+  return "unknown";
+}
+
+// LOGIC-END
+
+
+// ---------- page code: loading files, clearing them and drawing the results ----------
+
+const state = {
+  master: null,          // { name, size, header, records }
+  log: null,             // { name, size, header, records }
+  memoFiles: [],         // [{ name, size, text }]
+  extractionFiles: [],   // [{ name, size, text }]
+  notes: [],             // messages from the last load
+  search: "",
+  selected: "",
+  tab: "coverage"
+};
+
+const $ = id => document.getElementById(id);
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const tag = (text, kind) => '<span class="tag ' + kind + '">' + esc(text) + '</span>';
+const pl = (n, one, many) => n + " " + (n === 1 ? one : (many || one + "s"));
+const TYPE_LABEL = { master: "Supplier master", log: "Assessment log", memos: "Memos", extraction: "Memo extraction" };
+
+// ----- getting files in (buttons, drop area, whole page, folders) -----
+
+$("pick-files").addEventListener("click", () => $("in-files").click());
+$("pick-folder").addEventListener("click", () => $("in-folder").click());
+for (const id of ["in-files", "in-folder"]) {
+  $(id).addEventListener("change", async e => {
+    const files = [...e.target.files];
+    e.target.value = "";            // so choosing the same file again still works
+    await ingest(files);
+  });
+}
+
+// Each box has its own Choose button and is its own drop area.
+document.querySelectorAll("[data-choose]").forEach(b => b.addEventListener("click", () => $("in-" + b.dataset.choose).click()));
+document.querySelectorAll(".tile[data-type]").forEach(tile => {
+  const type = tile.dataset.type;
+  $("in-" + type).addEventListener("change", async e => { const files = [...e.target.files]; e.target.value = ""; await ingest(files, type); });
+  tile.addEventListener("dragenter", e => { if (hasFiles(e)) { e.preventDefault(); tile.classList.add("over"); } });
+  tile.addEventListener("dragover", e => { if (hasFiles(e)) { e.preventDefault(); e.stopPropagation(); e.dataTransfer.dropEffect = "copy"; tile.classList.add("over"); } });
+  tile.addEventListener("dragleave", e => { if (!tile.contains(e.relatedTarget)) tile.classList.remove("over"); });
+  tile.addEventListener("drop", async e => {
+    if (!hasFiles(e)) return;
+    e.preventDefault(); e.stopPropagation();
+    tile.classList.remove("over"); dragDepth = 0; hideOverlay();
+    await ingest(await filesFromDrop(e.dataTransfer), type);
+  });
+});
+
+// Stop the browser from opening a dropped file itself, anywhere on the page.
+let dragDepth = 0;
+window.addEventListener("dragenter", e => { if (hasFiles(e)) { e.preventDefault(); dragDepth++; $("overlay").classList.add("show"); $("drop").classList.add("over"); } });
+window.addEventListener("dragover", e => { if (hasFiles(e)) { e.preventDefault(); e.dataTransfer.dropEffect = "copy"; } });
+window.addEventListener("dragleave", e => { if (hasFiles(e)) { dragDepth = Math.max(0, dragDepth - 1); if (!dragDepth) hideOverlay(); } });
+window.addEventListener("drop", async e => {
+  if (!hasFiles(e)) return;
+  e.preventDefault(); dragDepth = 0; hideOverlay();
+  const files = await filesFromDrop(e.dataTransfer);
+  await ingest(files);
+});
+function hasFiles(e) { return e.dataTransfer && [...(e.dataTransfer.types || [])].includes("Files"); }
+function hideOverlay() { $("overlay").classList.remove("show"); $("drop").classList.remove("over"); document.querySelectorAll(".tile.over").forEach(t => t.classList.remove("over")); }
+
+// A dropped folder is opened and every file inside it is read.
+async function filesFromDrop(dt) {
+  const items = [...(dt.items || [])];
+  const entries = items.map(i => i.webkitGetAsEntry ? i.webkitGetAsEntry() : null).filter(Boolean);
+  if (!entries.length) return [...dt.files];
+  const out = [];
+  async function walk(entry) {
+    if (entry.isFile) {
+      out.push(await new Promise((res, rej) => entry.file(res, rej)));
+    } else if (entry.isDirectory) {
+      const reader = entry.createReader();
+      let batch;
+      do {
+        batch = await new Promise((res, rej) => reader.readEntries(res, rej));
+        for (const child of batch) await walk(child);
+      } while (batch.length);
+    }
+  }
+  for (const entry of entries) await walk(entry);
+  return out;
+}
+
+// What each source must contain before it can be used.
+function validateAs(type, text) {
+  const need = { master: ["supplier_id", "supplier_name", "part_families", "approval_status"], log: ["supplier_id", "last_assessment_date", "result"] };
+  if (type === "master" || type === "log") {
+    const { header } = csvToRecords(text);
+    const missing = need[type].filter(h => !header.includes(h));
+    return missing.length ? "it has no " + missing.join(", ") + " column" + (missing.length > 1 ? "s" : "") : null;
+  }
+  if (type === "extraction") {
+    const { header } = csvToRecords(text);
+    return header.join(",") === EXTRACTION_HEADER.join(",") ? null : "its header doesn't match 02_WORK/EXTRACTION_FORMAT.md";
+  }
+  if (type === "memos") {
+    return parseMemoFile(text, "").some(m => m.id) ? null : "no memo starting with \"# MEMO-\" was found in it";
+  }
+  return null;
+}
+
+// Put each file in the right place. forcedType = the box it was dropped on; without it the tool sorts by content.
+async function ingest(files, forcedType) {
+  const notes = []; const ignored = []; const counts = { master: 0, log: 0, memos: 0, extraction: 0 };
+  for (const f of files) {
+    if (f.name.startsWith(".") || f.name.startsWith("._")) continue;     // hidden system files
+    const text = await f.text();
+    let type;
+    if (forcedType) {
+      const problem = validateAs(forcedType, text);
+      if (problem) {
+        const looks = classifyFile(f.name.replace(/\.[^.]*$/, "") + (/^\s*#/.test(text) ? ".md" : ".csv"), text);
+        notes.push(["bad", f.name + " was not loaded as " + TYPE_LABEL[forcedType] + ": " + problem + "." + (looks !== "unknown" && looks !== forcedType ? " It looks like the " + TYPE_LABEL[looks] + "; drop it on that box." : "")]);
+        continue;
+      }
+      type = forcedType;
+    } else {
+      type = classifyFile(f.name, text);
+      if (type === "unknown") { ignored.push(f.name); continue; }
+    }
+    if (type === "master" || type === "log") {
+      counts[type]++;
+      if (state[type] && state[type].name !== f.name) notes.push(["info", TYPE_LABEL[type] + ": " + state[type].name + " replaced by " + f.name]);
+      const { header, records } = csvToRecords(text);
+      state[type] = { name: f.name, size: f.size, header, records };
+    } else {
+      const list = type === "memos" ? state.memoFiles : state.extractionFiles;
+      if (list.some(x => x.name === f.name && x.text === text)) { notes.push(["info", f.name + " was already loaded, skipped"]); continue; }
+      list.push({ name: f.name, size: f.size, text });
+      counts[type]++;
+    }
+  }
+  const loaded = Object.entries(counts).filter(([, n]) => n).map(([t, n]) => n + " to " + TYPE_LABEL[t]);
+  if (loaded.length) notes.unshift(["ok", "Loaded " + loaded.join(", ") + "."]);
+  if (ignored.length) notes.push(["warn", ignored.length + " file(s) not recognised and not used: " + ignored.slice(0, 8).join(", ") + (ignored.length > 8 ? " …" : "")]);
+  if (!files.length) notes.push(["warn", "No files came through. Try again, or use Choose files."]);
+  state.notes = notes;
+  render();
+}
+
+// ----- clearing -----
+
+document.querySelectorAll("[data-clear]").forEach(b => b.addEventListener("click", () => clearType(b.dataset.clear)));
+$("clear-all").addEventListener("click", () => { ["master", "log", "memos", "extraction"].forEach(t => clearType(t, true)); state.notes = [["info", "All files cleared. Drop new files to start again."]]; state.selected = ""; render(); });
+function clearType(type, quiet) {
+  if (type === "master") state.master = null;
+  if (type === "log") state.log = null;
+  if (type === "memos") state.memoFiles = [];
+  if (type === "extraction") state.extractionFiles = [];
+  if (!quiet) { state.notes = [["info", TYPE_LABEL[type] + " cleared."]]; render(); }
+}
+
+// ----- tabs -----
+
+document.querySelectorAll(".tab").forEach(t => t.addEventListener("click", () => showTab(t.dataset.tab)));
+function showTab(name) {
+  state.tab = name;
+  document.querySelectorAll(".tab").forEach(t => t.classList.toggle("active", t.dataset.tab === name));
+  document.querySelectorAll(".panel").forEach(p => p.classList.toggle("active", p.id === "p-" + name));
+}
+
+// ----- working everything out from what is loaded -----
+
+function computed() {
+  const byId = {}; const duplicateNotes = [];
+  for (const f of state.memoFiles) {
+    for (const m of parseMemoFile(f.text, f.name)) {
+      if (!m.id) continue;
+      if (byId[m.id]) {
+        const same = squash(byId[m.id].text) === squash(m.text);
+        duplicateNotes.push({ id: m.id, same, text: m.id + " is in both " + byId[m.id].source + " and " + f.name + (same ? " (same text, counted once)" : " (TEXT DIFFERS, first copy kept: check this)") });
+      } else byId[m.id] = m;
+    }
+  }
+  const memos = Object.values(byId).sort((a, b) => a.id.localeCompare(b.id));
+  const masterRecs = state.master ? state.master.records : [];
+  const logRecs = state.log ? state.log.records : [];
+  const matches = {};
+  memos.forEach(m => { matches[m.id] = matchMemo(m, masterRecs); });
+  const extraction = []; const extractionFiles = [];
+  for (const f of state.extractionFiles) {
+    const { records } = csvToRecords(f.text);
+    records.forEach(r => { r._file = f.name; });
+    extraction.push(...records); extractionFiles.push({ name: f.name, rows: records.length });
+  }
+  const checked = checkExtraction(extraction, byId);
+  const coverage = (state.master && state.log) ? buildCoverage(masterRecs, logRecs, memos, matches) : [];
+  return { memos, byId, duplicateNotes, masterRecs, logRecs, matches, extraction, extractionFiles, checked, coverage };
+}
+
+// ----- drawing -----
+
+function render() {
+  const c = computed();
+  renderTiles(c); renderMessages(c); renderCoverage(c); renderMatching(c); renderPicker(c); renderDetail(c); renderRecord(c);
+}
+
+function setTile(id, done, count, files) {
+  const t = $(id);
+  t.classList.toggle("done", done);
+  t.querySelector(".count").innerHTML = count;
+  t.querySelector(".files").textContent = files;
+  t.querySelector("[data-clear]").disabled = !done;
+}
+
+function renderTiles(c) {
+  setTile("t-master", !!state.master, state.master ? pl(state.master.records.length, "supplier") : '<span class="hint">waiting for SUPPLIER_MASTER.csv</span>', state.master ? state.master.name : "");
+  setTile("t-log", !!state.log, state.log ? pl(state.log.records.length, "assessment row") : '<span class="hint">waiting for ASSESSMENT_LOG.csv</span>', state.log ? state.log.name : "");
+  const gaps = memoNumberGaps(c.memos.map(m => m.id));
+  setTile("t-memos", state.memoFiles.length > 0,
+    state.memoFiles.length ? pl(c.memos.length, "distinct memo") + (gaps.length ? ' · <span class="tag warn">' + gaps.length + ' missing</span>' : "") : '<span class="hint">waiting for the memo files</span>',
+    state.memoFiles.length ? state.memoFiles.length + " file(s): " + state.memoFiles.map(f => f.name).join(", ") : "");
+  setTile("t-extraction", state.extractionFiles.length > 0,
+    state.extractionFiles.length ? pl(c.extraction.length, "row") : '<span class="hint">from the memo batch runs (Week 8)</span>',
+    state.extractionFiles.map(f => f.name).join(", "));
+  const parts = [];
+  if (state.master) parts.push(pl(state.master.records.length, "supplier"));
+  if (state.log) parts.push(pl(state.log.records.length, "log row"));
+  if (c.memos.length) parts.push(pl(c.memos.length, "memo"));
+  if (c.extraction.length) parts.push(pl(c.extraction.length, "extraction row"));
+  $("activity").textContent = parts.length ? "Loaded: " + parts.join(" · ") : "Nothing loaded yet.";
+  $("clear-all").disabled = !parts.length;
+  $("b-coverage").textContent = c.coverage.length;
+  $("b-matching").textContent = c.memos.length;
+}
+
+function renderMessages(c) {
+  const out = state.notes.map(([k, t]) => '<div class="msg ' + k + '">' + esc(t) + '</div>');
+  if (state.master) {
+    const missing = ["supplier_id", "supplier_name", "part_families", "approval_status"].filter(h => !state.master.header.includes(h));
+    if (missing.length) out.push('<div class="msg bad">The master is missing columns: ' + esc(missing.join(", ")) + '</div>');
+  }
+  c.memos.filter(m => !m.date || !m.supplierAsWritten).forEach(m => out.push('<div class="msg warn">' + esc(m.id) + ': the header is missing ' + (!m.date ? "the Date" : "the Supplier (as written) line") + '</div>'));
+  c.duplicateNotes.filter(d => !d.same).forEach(d => out.push('<div class="msg bad">' + esc(d.text) + '</div>'));
+  $("messages").innerHTML = out.join("");
+}
+
+function waiting(what) { return '<p class="empty">' + esc(what) + '</p>'; }
+
+function renderCoverage(c) {
+  if (!c.coverage.length) { $("coverage").innerHTML = waiting("Load the master, the log and the memos to see coverage."); return; }
+  const q = state.search.toLowerCase();
+  const rows = c.coverage.filter(r => !q || (r.supplier_id + " " + r.supplier_name).toLowerCase().includes(q));
+  const body = rows.map(r => '<tr class="click" data-sup="' + esc(r.supplier_id) + '"><td><b>' + esc(r.supplier_id) + '</b></td><td>' + esc(r.supplier_name) + '</td><td>' +
+    (r.memos === "NO MEMO" ? tag("NO MEMO", "warn") + '<div class="scope">' + esc(r.memo_scope) + '</div>' : esc(r.memos)) + '</td><td>' +
+    (r.log_row === "yes" ? tag("yes", "ok") : tag("no", "warn")) + '</td><td>' + esc(r.log_detail) + '</td></tr>').join("");
+  $("coverage").innerHTML =
+    '<div class="bar"><span class="stats"><b>' + c.coverage.length + '</b> suppliers · <b>' + c.coverage.filter(r => r.memos === "NO MEMO").length + '</b> with NO MEMO · <b>' + c.coverage.filter(r => r.log_row === "no").length + '</b> with no log row</span>' +
+    '<span><input type="search" id="search" placeholder="Search supplier ID or name" value="' + esc(state.search) + '"> <button class="btn ghost" id="dl-coverage">Download CSV</button></span></div>' +
+    '<div class="scroll"><table><thead><tr><th>ID</th><th>Supplier</th><th>Memos found</th><th>Log row</th><th>Log evidence or scope searched</th></tr></thead><tbody>' +
+    (body || '<tr><td colspan="5" class="empty">No supplier matches the search.</td></tr>') + '</tbody></table></div>';
+  const s = $("search");
+  s.addEventListener("input", () => { state.search = s.value; const pos = s.selectionStart; renderCoverage(computed()); const n = $("search"); n.focus(); n.setSelectionRange(pos, pos); });
+  $("dl-coverage").addEventListener("click", downloadCoverage);
+  document.querySelectorAll("#coverage tr.click").forEach(tr => tr.addEventListener("click", () => openSupplier(tr.dataset.sup)));
+}
+
+function traceTable(steps) {
+  return '<table class="trace">' + steps.map(s => '<tr><td>' + esc(s[0]) + '</td><td class="mono">' + esc(s[1]) + '</td></tr>').join("") + '</table>';
+}
+
+function renderMatching(c) {
+  if (!state.master || !c.memos.length) { $("matching").innerHTML = waiting("Load the master and the memos to see the matching."); return; }
+  const unmatched = c.memos.filter(m => c.matches[m.id].status !== "MATCH").length;
+  const rows = c.memos.map(m => {
+    const r = c.matches[m.id];
+    const sup = r.supplierId ? c.masterRecs.find(x => x.supplier_id === r.supplierId) : null;
+    const masterTraces = r.hits.map(h => '<p><b>Master ' + esc(h.supplier_id) + '</b> (SUPPLIER_MASTER.csv line ' + h._line + ')</p>' + traceTable(normaliseName(h.supplier_name).steps)).join("");
+    return '<tr><td><b>' + esc(m.id) + '</b></td><td>' + esc(m.date) + '</td><td>' + esc(m.supplierAsWritten) + '</td><td class="mono">' + esc(r.memoNorm.key) + '</td><td>' +
+      tag(r.status, r.status === "MATCH" ? "ok" : "warn") + '</td><td>' + (sup ? esc(sup.supplier_id + " " + sup.supplier_name) : "") + '</td>' +
+      '<td><details><summary>show steps</summary><p><b>Memo header</b></p>' + traceTable(r.memoNorm.steps) + masterTraces + '<p>' + esc(r.reason) + '</p></details></td></tr>';
+  }).join("");
+  $("matching").innerHTML = '<div class="bar"><span class="stats"><b>' + c.memos.length + '</b> memos · <b>' + (c.memos.length - unmatched) + '</b> matched · <b>' + unmatched + '</b> CANNOT DETERMINE (match)</span></div>' +
+    '<div class="scroll"><table><thead><tr><th>Memo</th><th>Date</th><th>Supplier (as written)</th><th>After §2 steps</th><th>Result</th><th>Master supplier</th><th>Working</th></tr></thead><tbody>' + rows + '</tbody></table></div>';
+}
+
+function renderPicker(c) {
+  const sel = $("pick");
+  sel.innerHTML = '<option value="">Choose a supplier</option>' + c.masterRecs.map(m => '<option value="' + esc(m.supplier_id) + '">' + esc(m.supplier_id + " " + m.supplier_name) + '</option>').join("");
+  if (!c.masterRecs.some(m => m.supplier_id === state.selected)) state.selected = "";
+  sel.value = state.selected;
+}
+$("pick").addEventListener("change", () => { state.selected = $("pick").value; renderDetail(computed()); });
+function openSupplier(id) { state.selected = id; $("pick").value = id; renderDetail(computed()); showTab("detail"); }
+
+function renderDetail(c) {
+  const id = state.selected;
+  if (!state.master) { $("detail").innerHTML = waiting("Load the master first."); return; }
+  if (!id) { $("detail").innerHTML = waiting("Choose a supplier above, or click one in the Coverage tab."); return; }
+  const m = c.masterRecs.find(x => x.supplier_id === id);
+  const cov = c.coverage.find(x => x.supplier_id === id);
+  let h = '<h3>' + esc(m.supplier_id + " · " + m.supplier_name) + '</h3>';
+  h += '<p><b>Master row</b><br><span class="mono">SUPPLIER_MASTER.csv line ' + m._line + ': ' + esc([m.supplier_id, m.supplier_name, m.part_families, m.approval_status, m.spend_band].join(" | ")) + '</span></p>';
+  h += '<p><b>Assessment log</b><br>' + (cov ? esc(cov.log_detail) : '<span class="hint">load the log to see this</span>') + '</p>';
+  const memos = c.memos.filter(x => c.matches[x.id].supplierId === id);
+  h += '<p><b>Memos matched (RR-C5 §2)</b></p>';
+  if (!c.memos.length) h += '<p class="hint">Load the memos to see this.</p>';
+  else if (!memos.length) h += '<p>' + tag("NO MEMO", "warn") + ' <span class="scope">' + esc(cov ? cov.memo_scope : "") + '</span></p>';
+  memos.forEach(x => {
+    h += '<div class="memo-block"><b>' + esc(x.id) + '</b> · ' + esc(x.date) + ' · as written: "' + esc(x.supplierAsWritten) + '" · from ' + esc(x.source);
+    h += '<details><summary>§2 working</summary><p>Memo header:</p>' + traceTable(c.matches[x.id].memoNorm.steps) + '<p>Master name:</p>' + traceTable(normaliseName(m.supplier_name).steps) + '</details>';
+    const rows = c.checked.filter(r => r.memo_id === x.id);
+    if (!c.extraction.length) h += '<p class="hint" style="margin:6px 0 0">No extraction loaded yet, so there are no quotations to show.</p>';
+    rows.forEach(r => {
+      const kind = r.check.status === "VERIFIED" ? "ok" : r.check.status === "NONE ROW" ? "warn" : "bad";
+      h += '<div style="margin-top:8px">' + tag(r.check.status, kind) + ' ' + esc(r.topic) + (r.position ? " · " + esc(r.position) : "") + (r.part_family ? " · " + esc(r.part_family) : "") + ' · about: ' + esc(r.statement_about_as_written) +
+        (r.quotation ? '<blockquote>' + esc(r.quotation) + '</blockquote>' : '') + '<div class="scope">' + esc(r.check.reason) + ' (' + esc(r._file) + ' line ' + r._line + ')</div></div>';
+    });
+    h += '</div>';
+  });
+  $("detail").innerHTML = h;
+}
+
+function recordText(c) {
+  const L = [];
+  L.push("COVERAGE RECORD, C5-A Supplier Risk Control Tower, Group 5");
+  L.push("Run at: " + new Date().toISOString() + " · rules RR-C5 as of " + AS_OF);
+  L.push("");
+  L.push("FILES READ");
+  if (state.master) L.push("- " + state.master.name + ": " + state.master.records.length + " data rows");
+  if (state.log) L.push("- " + state.log.name + ": " + state.log.records.length + " data rows");
+  state.memoFiles.forEach(f => { const ids = parseMemoFile(f.text, f.name).map(m => m.id); L.push("- " + f.name + ": " + ids.length + " memo(s): " + ids.join(", ")); });
+  c.extractionFiles.forEach(f => L.push("- " + f.name + ": " + f.rows + " extraction rows"));
+  L.push("");
+  L.push("MEMOS READ: " + c.memos.length + " distinct");
+  L.push(c.memos.map(m => m.id).join(", ") || "(none)");
+  const gaps = memoNumberGaps(c.memos.map(m => m.id));
+  L.push("Missing numbers in the sequence: " + (gaps.length ? gaps.join(", ") : "none"));
+  c.duplicateNotes.forEach(d => L.push("Duplicate: " + d.text));
+  if (c.extraction.length) {
+    const covered = new Set(c.extraction.map(r => r.memo_id));
+    const noRows = c.memos.filter(m => !covered.has(m.id)).map(m => m.id);
+    const count = s => c.checked.filter(r => r.check.status === s).length;
+    L.push("");
+    L.push("EXTRACTION CHECK");
+    L.push("Verified quotations: " + count("VERIFIED") + " · NONE rows: " + count("NONE ROW") + " · rejected: " + count("REJECTED"));
+    L.push("Memos with no extraction row (not yet read by Claude, or skipped): " + (noRows.length ? noRows.join(", ") : "none"));
+    c.checked.filter(r => r.check.status === "REJECTED").forEach(r => L.push("REJECTED " + r._file + " line " + r._line + ": " + r.check.reason));
+  }
+  return L.join("\n");
+}
+
+function renderRecord(c) {
+  if (!state.master && !state.log && !state.memoFiles.length && !state.extractionFiles.length) { $("record").innerHTML = waiting("Nothing loaded yet."); return; }
+  const gaps = memoNumberGaps(c.memos.map(m => m.id));
+  const warn = gaps.length ? '<div class="msg warn" style="margin-bottom:10px">Memo numbers missing from this run: ' + esc(gaps.join(", ")) + '. A run that missed a memo must be recorded and repeated.</div>' : '';
+  $("record").innerHTML = warn + '<div class="bar"><span></span><button class="btn ghost" id="dl-record">Download record (TXT)</button></div><pre class="record mono">' + esc(recordText(c)) + '</pre>';
+  $("dl-record").addEventListener("click", () => download("G05_C5_coverage_record_" + today() + ".txt", recordText(computed()), "text/plain"));
+}
+
+// ----- downloads -----
+
+function download(name, text, type) {
+  const blob = new Blob([text], { type });
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob); a.download = name; document.body.appendChild(a); a.click();
+  setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 500);
+}
+const csvCell = v => /[",\n]/.test(String(v)) ? '"' + String(v).replace(/"/g, '""') + '"' : String(v);
+const today = () => new Date().toISOString().slice(0, 10);
+function downloadCoverage() {
+  const c = computed();
+  const head = ["supplier_id", "supplier_name", "memos_found (IDs or NO MEMO)", "assessment_log_row (yes / no)", "scope searched", "notes"];
+  const rows = c.coverage.map(r => [r.supplier_id, r.supplier_name, r.memos, r.log_row, [r.log_detail, r.memo_scope].filter(Boolean).join(" | "), ""]);
+  download("G05_C5_coverage_" + today() + ".csv", [head, ...rows].map(r => r.map(csvCell).join(",")).join("\n"), "text/csv");
+}
+
+render();
+</script>
+</body>
+</html>
