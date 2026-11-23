@@ -87,6 +87,8 @@
   .tag.ok { color: var(--ok); background: var(--ok-bg); }
   .tag.warn { color: var(--warn); background: var(--warn-bg); }
   .tag.bad { color: var(--bad); background: var(--bad-bg); }
+  .legend { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 380px), 1fr)); gap: 6px 18px; font-size: 13px; margin: 0 0 12px; padding: 10px 12px; border: 1px solid var(--line); border-radius: 8px; }
+  .legend div { display: flex; gap: 8px; align-items: baseline; min-width: 0; }
   .tag.info { color: #1d3f86; background: var(--accent-soft); }
   .mono { font-family: ui-monospace, Consolas, Menlo, monospace; font-size: 12px; }
   .scope { color: var(--muted); font-size: 12px; margin-top: 2px; }
@@ -817,6 +819,12 @@ function renderScorecard(c) {
   const count = s => sc.rows.filter(r => r.status === s).length;
   h += '<div class="bar"><span class="stats">' + ["RED", "AMBER", "CANNOT DETERMINE", "GREEN"].map(s => statusTag(s) + " <b>" + count(s) + "</b>").join(" &nbsp; ") + '</span>' +
     '<button class="btn ghost" id="dl-scorecard">Download scorecard CSV</button></div>';
+  h += '<div class="legend">' +
+    '<div>' + statusTag("RED") + ' <span>SINGLE SOURCE and also an INDEMNITY GAP or NEVER ASSESSED</span></div>' +
+    '<div>' + statusTag("AMBER") + ' <span>one flag, but not the RED combination</span></div>' +
+    '<div>' + statusTag("CANNOT DETERMINE") + ' <span>no flag, but the memos do not state its indemnity position</span></div>' +
+    '<div>' + statusTag("GREEN") + ' <span>no flag, and its indemnity cap is BHD 50,000 or more</span></div>' +
+    '<p class="scope" style="grid-column:1/-1;margin:2px 0 0"><b>The flags:</b> SINGLE SOURCE = the only approved, qualified supplier for a part family (§4.2) · INDEMNITY GAP = no indemnity clause, or a cap below BHD 50,000 (§4.3) · NEVER ASSESSED = approved but no row in the assessment log (§4.1). Status rules from RR-C5 §6.</p></div>';
   const body = sc.rows.map(r => {
     const ss = r.ss.flag ? tag("SINGLE SOURCE", "bad") + '<div class="scope">' + esc(r.ss.families.join("; ")) + '</div>' : '<span class="hint">no</span>';
     const indKind = r.ind.result === "GAP" ? "bad" : r.ind.result === "NO GAP" ? "ok" : "info";
