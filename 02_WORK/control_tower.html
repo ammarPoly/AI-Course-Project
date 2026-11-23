@@ -41,7 +41,12 @@
   /* source tiles */
   .tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; margin-top: 16px; }
   .tile { border: 1px solid var(--line); border-radius: 8px; padding: 12px 14px; display: flex; flex-direction: column; gap: 4px; }
-  .tile.done { border-color: #b7dfc8; background: #f7fcf9; }
+  .tile { border-style: dashed; border-width: 2px; transition: background .15s, border-color .15s; }
+  .tile.done { border-color: #9fd3b6; background: #f7fcf9; }
+  .tile.over { border-color: var(--accent); background: var(--accent-soft); }
+  .tile .actions { display: flex; gap: 6px; }
+  .tile .foot { display: flex; justify-content: space-between; align-items: center; gap: 8px; margin-top: auto; padding-top: 8px; }
+  .tile .droptext { font-size: 12px; color: var(--muted); }
   .tile .top { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
   .tile .name { font-weight: 600; font-size: 14px; }
   .tile .count { font-size: 13px; }
@@ -107,7 +112,7 @@
 <main>
   <section class="card">
     <h2>1. Load the sources</h2>
-    <p class="hint">Drop everything at once: the tool works out which file is which from what's inside it. Memo files and extraction files are added to what's already loaded; a new master or log replaces the old one.</p>
+    <p class="hint">Two ways to load: drop everything in the big area and the tool sorts each file by what's inside it, or drop a file on its own box below to load it as exactly that, whatever the file is called. Memo and extraction files are added to what's already loaded; a new master or log replaces the old one.</p>
 
     <div class="drop" id="drop">
       <p class="big">Drag files or the whole INPUTS folder here</p>
@@ -121,10 +126,10 @@
     </div>
 
     <div class="tiles">
-      <div class="tile" id="t-master"><div class="top"><span class="name"><span class="dot"></span>Supplier master</span><button class="btn danger small" data-clear="master">Clear</button></div><div class="count"></div><div class="files"></div></div>
-      <div class="tile" id="t-log"><div class="top"><span class="name"><span class="dot"></span>Assessment log</span><button class="btn danger small" data-clear="log">Clear</button></div><div class="count"></div><div class="files"></div></div>
-      <div class="tile" id="t-memos"><div class="top"><span class="name"><span class="dot"></span>Memos</span><button class="btn danger small" data-clear="memos">Clear</button></div><div class="count"></div><div class="files"></div></div>
-      <div class="tile optional" id="t-extraction"><div class="top"><span class="name"><span class="dot"></span>Memo extraction</span><button class="btn danger small" data-clear="extraction">Clear</button></div><div class="count"></div><div class="files"></div></div>
+      <div class="tile" id="t-master" data-type="master"><div class="top"><span class="name"><span class="dot"></span>Supplier master</span></div><div class="count"></div><div class="files"></div><div class="foot"><span class="droptext">Drop the file here</span><span class="actions"><button class="btn ghost small" data-choose="master">Choose</button><button class="btn danger small" data-clear="master">Clear</button></span></div><input type="file" id="in-master" hidden></div>
+      <div class="tile" id="t-log" data-type="log"><div class="top"><span class="name"><span class="dot"></span>Assessment log</span></div><div class="count"></div><div class="files"></div><div class="foot"><span class="droptext">Drop the file here</span><span class="actions"><button class="btn ghost small" data-choose="log">Choose</button><button class="btn danger small" data-clear="log">Clear</button></span></div><input type="file" id="in-log" hidden></div>
+      <div class="tile" id="t-memos" data-type="memos"><div class="top"><span class="name"><span class="dot"></span>Memos</span></div><div class="count"></div><div class="files"></div><div class="foot"><span class="droptext">Drop files here</span><span class="actions"><button class="btn ghost small" data-choose="memos">Choose</button><button class="btn danger small" data-clear="memos">Clear</button></span></div><input type="file" id="in-memos" multiple hidden></div>
+      <div class="tile optional" id="t-extraction" data-type="extraction"><div class="top"><span class="name"><span class="dot"></span>Memo extraction</span></div><div class="count"></div><div class="files"></div><div class="foot"><span class="droptext">Drop files here</span><span class="actions"><button class="btn ghost small" data-choose="extraction">Choose</button><button class="btn danger small" data-clear="extraction">Clear</button></span></div><input type="file" id="in-extraction" multiple hidden></div>
     </div>
 
     <div class="toolbar">
@@ -362,6 +367,22 @@ for (const id of ["in-files", "in-folder"]) {
   });
 }
 
+// Each box has its own Choose button and is its own drop area.
+document.querySelectorAll("[data-choose]").forEach(b => b.addEventListener("click", () => $("in-" + b.dataset.choose).click()));
+document.querySelectorAll(".tile[data-type]").forEach(tile => {
+  const type = tile.dataset.type;
+  $("in-" + type).addEventListener("change", async e => { const files = [...e.target.files]; e.target.value = ""; await ingest(files, type); });
+  tile.addEventListener("dragenter", e => { if (hasFiles(e)) { e.preventDefault(); tile.classList.add("over"); } });
+  tile.addEventListener("dragover", e => { if (hasFiles(e)) { e.preventDefault(); e.stopPropagation(); e.dataTransfer.dropEffect = "copy"; tile.classList.add("over"); } });
+  tile.addEventListener("dragleave", e => { if (!tile.contains(e.relatedTarget)) tile.classList.remove("over"); });
+  tile.addEventListener("drop", async e => {
+    if (!hasFiles(e)) return;
+    e.preventDefault(); e.stopPropagation();
+    tile.classList.remove("over"); dragDepth = 0; hideOverlay();
+    await ingest(await filesFromDrop(e.dataTransfer), type);
+  });
+});
+
 // Stop the browser from opening a dropped file itself, anywhere on the page.
 let dragDepth = 0;
 window.addEventListener("dragenter", e => { if (hasFiles(e)) { e.preventDefault(); dragDepth++; $("overlay").classList.add("show"); $("drop").classList.add("over"); } });
@@ -374,7 +395,7 @@ window.addEventListener("drop", async e => {
   await ingest(files);
 });
 function hasFiles(e) { return e.dataTransfer && [...(e.dataTransfer.types || [])].includes("Files"); }
-function hideOverlay() { $("overlay").classList.remove("show"); $("drop").classList.remove("over"); }
+function hideOverlay() { $("overlay").classList.remove("show"); $("drop").classList.remove("over"); document.querySelectorAll(".tile.over").forEach(t => t.classList.remove("over")); }
 
 // A dropped folder is opened and every file inside it is read.
 async function filesFromDrop(dt) {
@@ -398,14 +419,43 @@ async function filesFromDrop(dt) {
   return out;
 }
 
-// Sort each file into the right place by looking at its content.
-async function ingest(files) {
+// What each source must contain before it can be used.
+function validateAs(type, text) {
+  const need = { master: ["supplier_id", "supplier_name", "part_families", "approval_status"], log: ["supplier_id", "last_assessment_date", "result"] };
+  if (type === "master" || type === "log") {
+    const { header } = csvToRecords(text);
+    const missing = need[type].filter(h => !header.includes(h));
+    return missing.length ? "it has no " + missing.join(", ") + " column" + (missing.length > 1 ? "s" : "") : null;
+  }
+  if (type === "extraction") {
+    const { header } = csvToRecords(text);
+    return header.join(",") === EXTRACTION_HEADER.join(",") ? null : "its header doesn't match 02_WORK/EXTRACTION_FORMAT.md";
+  }
+  if (type === "memos") {
+    return parseMemoFile(text, "").some(m => m.id) ? null : "no memo starting with \"# MEMO-\" was found in it";
+  }
+  return null;
+}
+
+// Put each file in the right place. forcedType = the box it was dropped on; without it the tool sorts by content.
+async function ingest(files, forcedType) {
   const notes = []; const ignored = []; const counts = { master: 0, log: 0, memos: 0, extraction: 0 };
   for (const f of files) {
     if (f.name.startsWith(".") || f.name.startsWith("._")) continue;     // hidden system files
     const text = await f.text();
-    const type = classifyFile(f.name, text);
-    if (type === "unknown") { ignored.push(f.name); continue; }
+    let type;
+    if (forcedType) {
+      const problem = validateAs(forcedType, text);
+      if (problem) {
+        const looks = classifyFile(f.name.replace(/\.[^.]*$/, "") + (/^\s*#/.test(text) ? ".md" : ".csv"), text);
+        notes.push(["bad", f.name + " was not loaded as " + TYPE_LABEL[forcedType] + ": " + problem + "." + (looks !== "unknown" && looks !== forcedType ? " It looks like the " + TYPE_LABEL[looks] + "; drop it on that box." : "")]);
+        continue;
+      }
+      type = forcedType;
+    } else {
+      type = classifyFile(f.name, text);
+      if (type === "unknown") { ignored.push(f.name); continue; }
+    }
     if (type === "master" || type === "log") {
       counts[type]++;
       if (state[type] && state[type].name !== f.name) notes.push(["info", TYPE_LABEL[type] + ": " + state[type].name + " replaced by " + f.name]);
