@@ -5,6 +5,11 @@
 **Covering for:** Hussain (data lead), if he's absent.
 **Your core step in your own account:** memo batch 2 (MEMO-09 to MEMO-16).
 
+## Status (updated 2026-11-23)
+
+- The first part of the tool works (loading files, memo matching, coverage). **Your main job now is memo batch 2** (below, under Week 8). Please run it soon: the flags can't be built until the batch CSVs exist.
+- The group decided a memo counts only for the supplier in its header; it's in the canvas decision log. Tell Ammar if you disagree.
+
 ## Week 7 (now)
 
 1. **Read** `00_START_HERE_C5` sections 1 to 6 (section 6 is the showcase, so read it twice) and the rule card `RULES/RISK_RULES_RR-C5.md`.
@@ -67,6 +72,9 @@ After the CSV, write one line: MEMOS READ: followed by every memo ID you read an
 
 
 ### Your other jobs (Weeks 9 and 10)
+
+**Getting the tool:** it's in the repo at `02_WORK/control_tower.html`. Open it on GitHub, click the download arrow at the top right, then double-click the file to open it in your browser. Always download the latest copy from the repo instead of using an old one from a chat.
+
 
 - Plan the run of show with `K-12_SHOWCASE_PREPARATION_SHEET_AND_GUIDE.md`: what goes in, what the AI does, what comes out, one failure or limit, what still needs a human.
 - Demo insurance: a saved copy of the frozen page, the input files and the CSV outputs of the last good run, so the demo works even if a laptop fails.

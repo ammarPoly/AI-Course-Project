@@ -1,0 +1,34 @@
+COVERAGE RECORD, C5-A Supplier Risk Control Tower, Group 5 (slice 1)
+Run at: 2026-11-23T10:09:00.126Z · rules RR-C5 as of 2026-10-31
+
+FILES READ
+- SUPPLIER_MASTER.csv: 26 data rows
+- ASSESSMENT_LOG.csv: 23 data rows
+- MEMO-22.md: 1 memo(s): MEMO-22
+- MEMO-23.md: 1 memo(s): MEMO-23
+- MEMO-24.md: 1 memo(s): MEMO-24
+- MEMO-01.md: 1 memo(s): MEMO-01
+- MEMO-02.md: 1 memo(s): MEMO-02
+- MEMO-03.md: 1 memo(s): MEMO-03
+- MEMO-04.md: 1 memo(s): MEMO-04
+- MEMO-05.md: 1 memo(s): MEMO-05
+- MEMO-06.md: 1 memo(s): MEMO-06
+- MEMO-07.md: 1 memo(s): MEMO-07
+- MEMO-08.md: 1 memo(s): MEMO-08
+- MEMO-09.md: 1 memo(s): MEMO-09
+- MEMO-10.md: 1 memo(s): MEMO-10
+- MEMO-11.md: 1 memo(s): MEMO-11
+- MEMO-12.md: 1 memo(s): MEMO-12
+- MEMO-13.md: 1 memo(s): MEMO-13
+- MEMO-14.md: 1 memo(s): MEMO-14
+- MEMO-15.md: 1 memo(s): MEMO-15
+- MEMO-16.md: 1 memo(s): MEMO-16
+- MEMO-17.md: 1 memo(s): MEMO-17
+- MEMO-18.md: 1 memo(s): MEMO-18
+- MEMO-19.md: 1 memo(s): MEMO-19
+- MEMO-20.md: 1 memo(s): MEMO-20
+- MEMO-21.md: 1 memo(s): MEMO-21
+
+MEMOS READ: 24 distinct
+MEMO-01, MEMO-02, MEMO-03, MEMO-04, MEMO-05, MEMO-06, MEMO-07, MEMO-08, MEMO-09, MEMO-10, MEMO-11, MEMO-12, MEMO-13, MEMO-14, MEMO-15, MEMO-16, MEMO-17, MEMO-18, MEMO-19, MEMO-20, MEMO-21, MEMO-22, MEMO-23, MEMO-24
+Missing numbers in the sequence: none

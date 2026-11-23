@@ -5,11 +5,17 @@
 **Covering for:** Marwan (presenter), if he's absent.
 **Your core step in your own account:** building the page and running it on the inputs.
 
+## Status (updated 2026-11-23)
+
+- Done: canvas drafted, roles set, to-do files, memo decision recorded in the canvas decision log (header supplier only; other mentions are notes), pull request #1 merged.
+- Done: first slice of the tool built (load files, §2 matching, coverage, coverage record). You ran it on the real files on 2026-11-23: 26 suppliers, 23 log rows, 24 memos, none missing. The coverage record is in `05_EVIDENCE/`.
+- Waiting for: Fatima's expected result for T-01, the three memo batch CSVs, the instructor's READY TO BUILD initial on the canvas, and the group confirming the memo decision.
+
 ## Week 7 (now)
 
 1. **Get the canvas reviewed.** The draft is `00_ADMIN/G05_C5-A_canvas_v01_2026-11-18.md`. Go through it with the group, then show it to the instructor for READY TO BUILD (or REWORK FIELD n).
-2. **Settle one design question before building** (Hussain takes it to the consult queue): does a sentence about supplier B inside a memo whose header names supplier A count as a memo "about" supplier B under RR-C5 §4.2 and §4.3? Write the answer in the decision log.
-3. **Build the first slice with Fatima.** She writes the expected result first. Then you build just enough of the page to take one supplier and its memo through to the coverage line and the verified quotation.
+2. ~~Settle the memo design question~~ **Done 2026-11-23.** The tutor left it to the group; the decision is in the canvas log. Ask the group to confirm it.
+3. **First slice: built.** Once Fatima has written T-01, run the tool with her for that supplier so she can record the verdict.
 4. **Save version v01** in `03_VERSIONS/` at the end of the meeting.
 
 ## How to build (your Claude)
@@ -36,6 +42,6 @@ After the slice works and Fatima has recorded the verdict, the later steps (all 
 
 ## Week 8 (next)
 
-- Collect the three batch CSVs from Hussain, Marwan and Maryam in `02_WORK/extraction/`.
+- Collect the three batch CSVs from Hussain, Marwan and Maryam in `02_WORK/extraction/`. As each one arrives, load it in the tool's Memo extraction box: the coverage record shows any quote that isn't word for word in its memo, and any memo with no rows.
 - Build the full scorecard and coverage on all 26 suppliers and 24 memos, so the acceptance questions can be answered by running the page.
 - Fill canvas field 7 (the trap you actually found, with evidence) and agree the visible addition (field 13) with the tutor.

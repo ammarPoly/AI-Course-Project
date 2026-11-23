@@ -5,6 +5,13 @@
 **Covering for:** Fatima (tester), if she's absent.
 **Your core step in your own account:** memo batch 3 (MEMO-17 to MEMO-24).
 
+## Status (updated 2026-11-23)
+
+- First evidence saved: `05_EVIDENCE/G05_C5_coverage_record_2026-11-23_Ammar.txt`, the tool's record of Ammar's first run on the real files (26 suppliers, 23 log rows, all 24 memos, none missing). Add it to the evidence list.
+- The test record is set up in `04_TESTS/` for Fatima.
+- **Your main job now is memo batch 3** (below, under Week 8), plus logging Hussain's and Marwan's batch runs in the sweep log.
+- The group decided a memo counts only for the supplier in its header; it's in the canvas decision log. Tell Ammar if you disagree.
+
 ## Week 7 (now)
 
 1. **Read** `00_START_HERE_C5` sections 1 to 6 and the rule card `RULES/RISK_RULES_RR-C5.md`.
