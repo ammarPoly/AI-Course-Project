@@ -29,6 +29,33 @@ Follow these steps in order. `PACK/` below means the folder `01_PACK_AS_ISSUED/C
 **To upload a file to the repo:** open the folder on GitHub, click **Add file → Upload files**, drag the file in, then click **Commit changes**.
 **To make a CSV from Claude's answer:** copy the CSV block, paste it into Notepad (or TextEdit in plain text mode), and save it with the name shown, ending in `.csv`.
 
+## How to work out your expected result (simple version)
+
+Your expected result is **your own reading of the rule card, applied to the pack files**. Not the tool, not AI, not a guess. You do by hand what the tool is supposed to do, then check whether the tool agrees.
+
+**You need four things** (all in the repo under `01_PACK_AS_ISSUED/C5-A_..._DRAFT_V1/`):
+
+| File | What you take from it |
+|---|---|
+| `RULES/RISK_RULES_RR-C5.md` | The rules: how names match (§2), what coverage means (§3), the flags (§4) |
+| `INPUTS/SUPPLIER_MASTER.csv` | The supplier's ID and official name |
+| `INPUTS/ASSESSMENT_LOG.csv` | Whether that supplier has an assessment row |
+| `INPUTS/MEMOS/` | The **Supplier (as written)** line at the top of each memo |
+
+**Example with a made-up supplier** (not from the pack):
+
+1. The master says `SUP-99, Example Pumps Co.`
+2. Rule card §2: remove full stops, turn other punctuation into spaces, ignore capitals, drop Co / Ltd / WLL / LLC / FZE / Company, and drop a plural "s" on the last word. So the master name becomes **example pump**.
+3. Check each memo's header the same way. "EXAMPLE PUMPS" becomes **example pump**, so it's a **match**. "Exampel Pumps" doesn't match, so it's **CANNOT DETERMINE (match)**.
+4. Search the log for SUP-99. If there's no row, write "no row (searched all 23 rows)".
+5. Your expected result: *"Memos: MEMO-xx (§2). Log row: no (§3)."* Write it in the test record **before** opening the tool.
+
+**Then** open the tool, click the same supplier and compare:
+- Same answer → **MATCH**
+- Different answer → **MISMATCH**. That's a useful finding, not a failure: either the tool or the reading of the rule is wrong, and the group works out which.
+
+Working it out on paper first is fine, but the final answer goes in `04_TESTS/G05_C5_test_record_v01.xlsx`.
+
 ## Week 7 (now)
 
 1. **Read** `00_START_HERE_C5` sections 1 to 6 and the whole rule card `RULES/RISK_RULES_RR-C5.md`. You'll know it better than anyone, because every expected result comes from it.
