@@ -5,12 +5,21 @@
 **Covering for:** Maryam (evidence lead), if she's absent.
 **Your core step in your own account:** the independent check (tracing flags back to their sources in a fresh chat).
 
+## Status (updated 2026-11-23)
+
+- The test record is ready: `04_TESTS/G05_C5_test_record_v01.xlsx` (and `.md`). AQ-1 to AQ-5 are in it; T-01 is empty for you.
+- The first part of the tool is built. **Your main job now is T-01** (step 3 below).
+- Honest note for the record: Ammar already ran the tool on the real files on 2026-11-23, before T-01 was written. Write that in the Notes column of T-01. Don't open his results before you write your expected result.
+- The group decided a memo counts only for the supplier in its header; it's in the canvas decision log. Tell Ammar if you disagree.
+
 ## Week 7 (now)
 
 1. **Read** `00_START_HERE_C5` sections 1 to 6 and the whole rule card `RULES/RISK_RULES_RR-C5.md`. You'll know it better than anyone, because every expected result comes from it.
-2. **Set up the test record.** Copy `TEMPLATES/C5_TEST_RECORD.xlsx` from the pack to `04_TESTS/G05_C5_test_record_v01.xlsx`. The five acceptance questions (AQ-1 to AQ-5) are already in it.
+2. ~~Set up the test record~~ **Done:** `04_TESTS/G05_C5_test_record_v01.xlsx`.
 3. **Write the expected result for the first slice, by hand, before Ammar runs anything.** The first slice is one supplier taken through the page (the group picks which one; SUP-01 with its memo is an easy start). Use only the master, the log, that memo and RR-C5. Write the result in row T-01 with the clause it comes from and your name in "Expected written by". **Don't use AI for expected results.** The course says the chat that produced an answer can't be its check.
-4. After Ammar runs the slice, fill in the observed result and the verdict (MATCH, MISMATCH or OBSERVED FAILURE). A mismatch is an honest result; never change it to a pass later.
+4. Then run the slice: load `SUPPLIER_MASTER.csv`, `ASSESSMENT_LOG.csv` and the memo files into the tool, click your supplier in the Coverage tab, and compare. Fill in the observed result and the verdict (MATCH, MISMATCH or OBSERVED FAILURE). A mismatch is an honest result; never change it to a pass later.
+
+**Getting the tool:** it's in the repo at `02_WORK/control_tower.html`. Open it on GitHub, click the download arrow at the top right, then double-click the file to open it in your browser. Always download the latest copy from the repo instead of using an old one from a chat.
 
 ## Week 8 and 9 (next)
 
