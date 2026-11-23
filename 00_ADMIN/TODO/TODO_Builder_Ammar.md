@@ -29,7 +29,7 @@ Follow these steps in order. `PACK/` below means the folder `01_PACK_AS_ISSUED/C
 ## Week 7 (now)
 
 1. **Get the canvas reviewed.** The draft is `00_ADMIN/G05_C5-A_canvas_v01_2026-11-18.md`. Go through it with the group, then show it to the instructor for READY TO BUILD (or REWORK FIELD n).
-2. ~~Settle the memo design question~~ **Done 2026-11-23.** The tutor left it to the group; the decision is in the canvas log. Ask the group to confirm it.
+2. ~~Settle the memo design question~~ **Done 2026-11-23.** The tutor ruled: a memo counts only for the supplier in its header (RR-C5 §2). It's in the canvas decision log. The tutor also suggested a test for this, which is now T-02 in Fatima's file; bring its result to the next checkpoint.
 3. **First slice: built.** Once Fatima has written T-01, run the tool with her for that supplier so she can record the verdict.
 4. **Save version v01** in `03_VERSIONS/` at the end of the meeting.
 
