@@ -87,6 +87,7 @@
   .tag.ok { color: var(--ok); background: var(--ok-bg); }
   .tag.warn { color: var(--warn); background: var(--warn-bg); }
   .tag.bad { color: var(--bad); background: var(--bad-bg); }
+  .tag.info { color: #1d3f86; background: var(--accent-soft); }
   .mono { font-family: ui-monospace, Consolas, Menlo, monospace; font-size: 12px; }
   .scope { color: var(--muted); font-size: 12px; margin-top: 2px; }
   .trace { width: auto; }
@@ -129,7 +130,7 @@
       <div class="tile" id="t-master" data-type="master"><div class="top"><span class="name"><span class="dot"></span>Supplier master</span></div><div class="count"></div><div class="files"></div><div class="foot"><span class="droptext">Drop the file here</span><span class="actions"><button class="btn ghost small" data-choose="master">Choose</button><button class="btn danger small" data-clear="master">Clear</button></span></div><input type="file" id="in-master" hidden></div>
       <div class="tile" id="t-log" data-type="log"><div class="top"><span class="name"><span class="dot"></span>Assessment log</span></div><div class="count"></div><div class="files"></div><div class="foot"><span class="droptext">Drop the file here</span><span class="actions"><button class="btn ghost small" data-choose="log">Choose</button><button class="btn danger small" data-clear="log">Clear</button></span></div><input type="file" id="in-log" hidden></div>
       <div class="tile" id="t-memos" data-type="memos"><div class="top"><span class="name"><span class="dot"></span>Memos</span></div><div class="count"></div><div class="files"></div><div class="foot"><span class="droptext">Drop files here</span><span class="actions"><button class="btn ghost small" data-choose="memos">Choose</button><button class="btn danger small" data-clear="memos">Clear</button></span></div><input type="file" id="in-memos" multiple hidden></div>
-      <div class="tile optional" id="t-extraction" data-type="extraction"><div class="top"><span class="name"><span class="dot"></span>Memo extraction</span></div><div class="count"></div><div class="files"></div><div class="foot"><span class="droptext">Drop files here</span><span class="actions"><button class="btn ghost small" data-choose="extraction">Choose</button><button class="btn danger small" data-clear="extraction">Clear</button></span></div><input type="file" id="in-extraction" multiple hidden></div>
+      <div class="tile" id="t-extraction" data-type="extraction"><div class="top"><span class="name"><span class="dot"></span>Memo extraction</span></div><div class="count"></div><div class="files"></div><div class="foot"><span class="droptext">Drop files here</span><span class="actions"><button class="btn ghost small" data-choose="extraction">Choose</button><button class="btn danger small" data-clear="extraction">Clear</button></span></div><input type="file" id="in-extraction" multiple hidden></div>
     </div>
 
     <div class="toolbar">
@@ -141,13 +142,19 @@
 
   <section class="card">
     <div class="tabs" role="tablist">
-      <button class="tab active" data-tab="coverage">Coverage <span class="badge" id="b-coverage">0</span></button>
+      <button class="tab active" data-tab="scorecard">Scorecard <span class="badge" id="b-scorecard">0</span></button>
+      <button class="tab" data-tab="coverage">Coverage <span class="badge" id="b-coverage">0</span></button>
       <button class="tab" data-tab="matching">Memo matching <span class="badge" id="b-matching">0</span></button>
       <button class="tab" data-tab="detail">Supplier detail</button>
       <button class="tab" data-tab="record">Coverage record</button>
     </div>
 
-    <div class="panel active" id="p-coverage">
+    <div class="panel active" id="p-scorecard">
+      <p class="hint">RR-C5 §4 to §6. One row per master supplier. The page applies the rules; Claude only supplied quotations, and only VERIFIED ones are used. Click a supplier to see every piece of evidence behind its flags.</p>
+      <div id="scorecard"></div>
+    </div>
+
+    <div class="panel" id="p-coverage">
       <p class="hint">RR-C5 §3. Coverage only, kept apart from risk: NO MEMO means the memos can't tell us about that supplier; it is not a flag. Click a supplier to open its detail.</p>
       <div id="coverage"></div>
     </div>
@@ -333,6 +340,207 @@ function classifyFile(name, text) {
   return "unknown";
 }
 
+// ---------- RR-C5 §4 flags, §5 contradictions, §6 status ----------
+
+const INDEMNITY_THRESHOLD_BHD = 50000;
+const QUAL_STATING = ["FAILED", "MUST NOT USE", "QUALIFIED"];
+const IND_STATING = ["NO CLAUSE", "CAP"];
+
+const up = v => String(v ?? "").trim().toUpperCase();
+function isNotStated(v) { const t = up(v); return t === "" || t === "NOT STATED"; }
+function splitFamilies(s) { return String(s ?? "").split(";").map(x => x.trim()).filter(Boolean); }
+
+// Part family names compared without case, punctuation or plural endings ("Gaskets" = "gasket").
+function familyKey(s) {
+  return String(s ?? "").toLowerCase().replace(/[^\p{L}\p{N}\s]/gu, " ").split(/\s+/).filter(Boolean)
+    .map(w => (w.length > 4 && w.endsWith("ies")) ? w.slice(0, -3) + "y" : (w.length > 1 && w.endsWith("s") && !w.endsWith("ss")) ? w.slice(0, -1) : w)
+    .join(" ");
+}
+
+// Which of the supplier's master families an extraction row's part_family means. Never guesses between two.
+function resolveFamily(partFamily, masterFamilies) {
+  if (isNotStated(partFamily)) {
+    if (masterFamilies.length === 1) return { family: masterFamilies[0], how: "the memo names no part family; the supplier has only one in the master (" + masterFamilies[0] + ")" };
+    return { family: null, how: "the memo names no part family and the supplier has " + masterFamilies.length + " families in the master" };
+  }
+  const k = familyKey(partFamily).split(" ");
+  const hits = masterFamilies.filter(f => { const fk = familyKey(f).split(" "); return fk.every(w => k.includes(w)) || k.every(w => fk.includes(w)); });
+  if (hits.length === 1) return { family: hits[0], how: familyKey(hits[0]) === k.join(" ") ? "same family as the master" : '"' + partFamily + '" read as the master family "' + hits[0] + '"' };
+  if (!hits.length) return { family: null, how: '"' + partFamily + '" does not match any master family of this supplier (' + masterFamilies.join("; ") + ")" };
+  return { family: null, how: '"' + partFamily + '" could mean more than one master family (' + hits.join("; ") + ")" };
+}
+
+// Tutor ruling 2026-11-23: a memo counts only for its header supplier. A row about another supplier is not used.
+function aboutHeaderSupplier(row, memo, masterRec) {
+  if (isNotStated(row.statement_about_as_written)) return true;
+  const words = normaliseName(row.statement_about_as_written).key.split(" ").filter(Boolean);
+  if (!words.length) return true;
+  return [memo.supplierAsWritten, masterRec ? masterRec.supplier_name : ""].some(n => {
+    const target = normaliseName(n).key.split(" ").filter(Boolean);
+    return words.length <= target.length && words.every((w, i) => w === target[i]);
+  });
+}
+
+// A cap must be a number, and that number must appear in the quotation (with or without thousands commas).
+function readCap(row) {
+  const raw = String(row.cap_bhd ?? "").replace(/[,\s]/g, "");
+  if (!/^\d+(\.\d+)?$/.test(raw)) return { cap: null, problem: "cap_bhd is empty or not a number, so the cap cannot be read" };
+  const cap = Number(raw);
+  const inQuote = (String(row.quotation).match(/\d[\d,]*(\.\d+)?/g) || []).some(n => Number(n.replace(/,/g, "")) === cap);
+  if (!inQuote) return { cap: null, problem: "cap_bhd " + raw + " does not appear in the quotation" };
+  return { cap, problem: null };
+}
+
+const byNewest = (a, b) => (b.date || "").localeCompare(a.date || "") || b.memo_id.localeCompare(a.memo_id);
+const quoteRef = s => s.memo_id + " (" + s.date + "): \"" + s.quotation + "\"";
+
+function buildScorecard(masterRecords, logRecords, memos, matches, checkedRows) {
+  const memoById = Object.fromEntries(memos.map(m => [m.id, m]));
+  const masterById = Object.fromEntries(masterRecords.map(m => [m.supplier_id, m]));
+  const used = []; const notUsed = [];
+
+  // 1. Decide which extraction rows can be used, and for which supplier.
+  for (const r of checkedRows) {
+    const memo = memoById[r.memo_id];
+    const topic = up(r.topic);
+    if (topic === "NONE") continue;
+    const base = { memo_id: r.memo_id, file: r._file, line: r._line, topic, position: up(r.position), quotation: r.quotation, about: r.statement_about_as_written };
+    if (r.check.status !== "VERIFIED") { notUsed.push({ ...base, why: "quotation " + r.check.status + ": " + r.check.reason }); continue; }
+    const match = matches[r.memo_id];
+    if (!match || match.status !== "MATCH") { notUsed.push({ ...base, why: r.memo_id + " is CANNOT DETERMINE (match), so it is attached to no supplier (RR-C5 §2)" }); continue; }
+    const sup = masterById[match.supplierId];
+    if (!aboutHeaderSupplier(r, memo, sup)) { notUsed.push({ ...base, supplier_id: sup.supplier_id, why: "the sentence is about \"" + r.statement_about_as_written + "\", not the memo's header supplier; a memo counts only for its header supplier (RR-C5 §2, tutor ruling 2026-11-23)" }); continue; }
+    used.push({ ...base, supplier_id: sup.supplier_id, date: memo.date, part_family: r.part_family, cap_bhd: r.cap_bhd });
+  }
+
+  const memoIdsFor = id => memos.filter(m => matches[m.id] && matches[m.id].supplierId === id).map(m => m.id).sort();
+  const extracted = new Set(checkedRows.map(r => r.memo_id));
+  const contradictions = []; const warnings = [];
+
+  // 2. Qualification per supplier and family (§4.2): qualified by default; only the newest stating memo can take it away.
+  const qual = {};   // supplier_id -> family -> { qualified, governing, statements }
+  for (const m of masterRecords) {
+    const fams = splitFamilies(m.part_families);
+    qual[m.supplier_id] = {};
+    fams.forEach(f => { qual[m.supplier_id][f] = { qualified: true, governing: null, statements: [] }; });
+    for (const s of used.filter(u => u.supplier_id === m.supplier_id && u.topic === "QUALIFICATION")) {
+      if (!QUAL_STATING.includes(s.position)) { notUsed.push({ ...s, why: "position " + (s.position || "blank") + " does not state qualification for a family, so it changes nothing (RR-C5 §4.2)" }); continue; }
+      const fam = resolveFamily(s.part_family, fams);
+      if (!fam.family) { notUsed.push({ ...s, why: "part family not resolved: " + fam.how + "; a person must check this sentence" }); warnings.push(m.supplier_id + ": " + s.memo_id + " states " + s.position + " but " + fam.how + ". Not applied; a person must check it."); continue; }
+      qual[m.supplier_id][fam.family].statements.push({ ...s, familyHow: fam.how });
+    }
+    for (const [f, q] of Object.entries(qual[m.supplier_id])) {
+      if (!q.statements.length) continue;
+      q.statements.sort(byNewest);
+      const top = q.statements.filter(s => s.date === q.statements[0].date);
+      const vals = new Set(top.map(s => s.position === "QUALIFIED"));
+      if (vals.size > 1) { warnings.push(m.supplier_id + " " + f + ": memos with the same newest date disagree on qualification (" + top.map(s => s.memo_id).join(", ") + "). CANNOT DETERMINE which governs; left as qualified by default. A person must check."); continue; }
+      q.governing = q.statements[0];
+      q.qualified = q.governing.position === "QUALIFIED";
+      if (new Set(q.statements.map(s => s.position)).size > 1) contradictions.push({ supplier_id: m.supplier_id, topic: "QUALIFICATION", family: f, statements: q.statements, governing: q.governing });
+    }
+  }
+
+  // 3. Family counts (§4.2): only APPROVED suppliers, qualified for that family.
+  const famMap = {};
+  for (const m of masterRecords) {
+    for (const f of splitFamilies(m.part_families)) {
+      const k = familyKey(f);
+      famMap[k] = famMap[k] || { family: f, suppliers: [] };
+      famMap[k].suppliers.push({ supplier_id: m.supplier_id, supplier_name: m.supplier_name, line: m._line, approved: up(m.approval_status) === "APPROVED", family: f, ...qual[m.supplier_id][f] });
+    }
+  }
+  const families = Object.values(famMap).sort((a, b) => a.family.localeCompare(b.family)).map(F => {
+    const qualified = F.suppliers.filter(s => s.approved && s.qualified);
+    const result = qualified.length === 1 ? "SINGLE SOURCE" : qualified.length === 0 ? "NO QUALIFIED SUPPLIER" : qualified.length + " qualified";
+    return { ...F, qualified, result };
+  });
+
+  // 4. One scorecard row per master supplier.
+  const rows = masterRecords.map(m => {
+    const id = m.supplier_id;
+    const approved = up(m.approval_status) === "APPROVED";
+    const memoIds = memoIdsFor(id);
+    const notes = [];
+    const masterRef = "SUPPLIER_MASTER.csv line " + m._line + " (" + id + ", " + (m.approval_status || "no status") + ", " + m.part_families + ")";
+
+    // §4.1 never assessed
+    const logRows = logRecords.filter(l => l.supplier_id === id);
+    const na = !approved
+      ? { flag: false, text: "NOT APPLICABLE: not APPROVED in the master", evidence: masterRef }
+      : logRows.length
+        ? { flag: false, text: "assessed", evidence: logRows.map(l => "ASSESSMENT_LOG.csv line " + l._line + ": " + l.last_assessment_date + ", " + l.result).join("; ") }
+        : { flag: true, text: "NEVER ASSESSED", evidence: masterRef + "; no row for " + id + " in ASSESSMENT_LOG.csv (" + logRecords.length + " data rows, as of " + AS_OF + ")" };
+
+    // §4.2 single source
+    const ssFams = families.filter(F => F.result === "SINGLE SOURCE" && F.qualified[0].supplier_id === id);
+    const ss = { flag: ssFams.length > 0, families: ssFams.map(F => F.family), evidence: ssFams.map(F => {
+      const others = F.suppliers.filter(s => s.supplier_id !== id);
+      const why = others.map(o => !o.approved ? o.supplier_id + " not APPROVED (master line " + o.line + ")" : o.supplier_id + " not qualified: " + quoteRef(o.governing));
+      return F.family + ": the only approved, qualified supplier among " + F.suppliers.length + " master supplier(s) listing it (master lines " + F.suppliers.map(s => s.line).join(", ") + ")" + (why.length ? "; " + why.join("; ") : "");
+    }) };
+    for (const [f, q] of Object.entries(qual[id])) {
+      if (q.governing && !q.qualified) notes.push("Not qualified for " + f + " (" + q.governing.position + "): " + quoteRef(q.governing));
+    }
+
+    // §4.3 indemnity: newest memo that states a position
+    const indRows = used.filter(u => u.supplier_id === id && u.topic === "INDEMNITY").sort(byNewest);
+    const stated = indRows.filter(s => IND_STATING.includes(s.position)).map(s => {
+      if (s.position === "NO CLAUSE") return { ...s, result: "GAP", rule: "no indemnity clause" };
+      const c = readCap(s);
+      if (c.problem) return { ...s, result: "CANNOT DETERMINE", rule: c.problem };
+      return { ...s, cap: c.cap, result: c.cap < INDEMNITY_THRESHOLD_BHD ? "GAP" : "NO GAP", rule: "cap BHD " + c.cap.toLocaleString("en-US") + (c.cap < INDEMNITY_THRESHOLD_BHD ? " is below" : " is at or above") + " BHD 50,000" };
+    });
+    let ind;
+    const memoScope = memoIds.length ? memoIds.length + " memo(s) matched to " + id + " (" + memoIds.join(", ") + ")" : "NO MEMO: no memo matched " + id + " among " + memos.length + " memos read";
+    if (!stated.length) {
+      const said = indRows.map(s => s.memo_id + " says " + (s.position || "nothing usable") + ": \"" + s.quotation + "\"");
+      ind = { result: "CANNOT DETERMINE", governing: null, evidence: "no memo about " + id + " states an indemnity position; searched " + memoScope + ", as of " + AS_OF + (said.length ? ". Not a position (RR-C5 §4.3): " + said.join("; ") : "") };
+    } else {
+      const top = stated.filter(s => s.date === stated[0].date);
+      const results = new Set(top.map(s => s.result));
+      if (results.size > 1) {
+        ind = { result: "CANNOT DETERMINE", governing: null, evidence: "memos with the same newest date disagree: " + top.map(s => quoteRef(s) + " = " + s.result).join("; ") };
+      } else {
+        const g = top[0];
+        ind = { result: g.result, governing: g, evidence: quoteRef(g) + " (" + g.rule + ")" };
+        const newerSilent = indRows.filter(s => !IND_STATING.includes(s.position) && byNewest(s, g) < 0);
+        if (newerSilent.length) ind.evidence += ". Newer, but not a position so it does not change this (RR-C5 §4.3): " + newerSilent.map(quoteRef).join("; ");
+      }
+      if (new Set(stated.map(s => s.position + "|" + (s.cap ?? ""))).size > 1) contradictions.push({ supplier_id: id, topic: "INDEMNITY", family: "", statements: stated, governing: ind.governing });
+    }
+
+    // memos about this supplier that nobody has extracted yet
+    const missing = memoIds.filter(x => !extracted.has(x));
+    if (missing.length) notes.push("No extraction rows yet for " + missing.join(", ") + ", so memo-based results for " + id + " may be incomplete");
+
+    // §6 status
+    const gap = ind.result === "GAP";
+    let status, statusWhy;
+    if (ss.flag && (gap || na.flag)) { status = "RED"; statusWhy = "SINGLE SOURCE and " + [gap && "INDEMNITY GAP", na.flag && "NEVER ASSESSED"].filter(Boolean).join(" and "); }
+    else if (ss.flag || gap || na.flag) { status = "AMBER"; statusWhy = [ss.flag && "SINGLE SOURCE", gap && "INDEMNITY GAP", na.flag && "NEVER ASSESSED"].filter(Boolean).join(", ") + " (one flag, not the RED combination)"; }
+    else if (ind.result === "CANNOT DETERMINE") { status = "CANNOT DETERMINE"; statusWhy = "no flag, but the indemnity position is CANNOT DETERMINE"; }
+    else { status = "GREEN"; statusWhy = "no flag and indemnity NO GAP"; }
+
+    return { supplier_id: id, supplier_name: m.supplier_name, part_families: m.part_families, master_line: m._line, approved, memoIds, ss, ind, na, status, statusWhy, notes };
+  });
+
+  const famFindings = families.filter(F => F.result === "NO QUALIFIED SUPPLIER");
+  return { rows, families, famFindings, contradictions, used, notUsed, warnings, unextracted: memos.map(m => m.id).filter(x => !extracted.has(x)) };
+}
+
+// The pack's scorecard template, filled in.
+const SCORECARD_HEADER = ["supplier_id","supplier_name","part_families","single_source (Y/N)","single_source_evidence","indemnity (GAP / NO GAP / CANNOT DETERMINE)","indemnity_evidence (memo ID + quotation)","never_assessed (Y/N)","never_assessed_evidence + scope","status (RED / AMBER / CANNOT DETERMINE / GREEN)","notes"];
+function scorecardTable(sc) {
+  return [SCORECARD_HEADER].concat(sc.rows.map(r => [
+    r.supplier_id, r.supplier_name, r.part_families,
+    r.ss.flag ? "Y" : "N", r.ss.flag ? r.ss.evidence.join(" | ") : "",
+    r.ind.result, r.ind.evidence,
+    r.na.flag ? "Y" : (r.approved ? "N" : "NOT APPLICABLE"), r.na.evidence,
+    r.status, r.notes.join(" | ")
+  ]));
+}
+
 // LOGIC-END
 
 
@@ -346,7 +554,7 @@ const state = {
   notes: [],             // messages from the last load
   search: "",
   selected: "",
-  tab: "coverage"
+  tab: "scorecard"
 };
 
 const $ = id => document.getElementById(id);
@@ -523,14 +731,15 @@ function computed() {
   }
   const checked = checkExtraction(extraction, byId);
   const coverage = (state.master && state.log) ? buildCoverage(masterRecs, logRecs, memos, matches) : [];
-  return { memos, byId, duplicateNotes, masterRecs, logRecs, matches, extraction, extractionFiles, checked, coverage };
+  const sc = (state.master && state.log && memos.length) ? buildScorecard(masterRecs, logRecs, memos, matches, checked) : null;
+  return { memos, byId, duplicateNotes, masterRecs, logRecs, matches, extraction, extractionFiles, checked, coverage, sc };
 }
 
 // ----- drawing -----
 
 function render() {
   const c = computed();
-  renderTiles(c); renderMessages(c); renderCoverage(c); renderMatching(c); renderPicker(c); renderDetail(c); renderRecord(c);
+  renderTiles(c); renderMessages(c); renderScorecard(c); renderCoverage(c); renderMatching(c); renderPicker(c); renderDetail(c); renderRecord(c);
 }
 
 function setTile(id, done, count, files) {
@@ -549,7 +758,7 @@ function renderTiles(c) {
     state.memoFiles.length ? pl(c.memos.length, "distinct memo") + (gaps.length ? ' · <span class="tag warn">' + gaps.length + ' missing</span>' : "") : '<span class="hint">waiting for the memo files</span>',
     state.memoFiles.length ? state.memoFiles.length + " file(s): " + state.memoFiles.map(f => f.name).join(", ") : "");
   setTile("t-extraction", state.extractionFiles.length > 0,
-    state.extractionFiles.length ? pl(c.extraction.length, "row") : '<span class="hint">from the memo batch runs (Week 8)</span>',
+    state.extractionFiles.length ? pl(c.extraction.length, "row") : '<span class="hint">the batch CSVs: needed for memo-based flags</span>',
     state.extractionFiles.map(f => f.name).join(", "));
   const parts = [];
   if (state.master) parts.push(pl(state.master.records.length, "supplier"));
@@ -559,6 +768,7 @@ function renderTiles(c) {
   $("activity").textContent = parts.length ? "Loaded: " + parts.join(" · ") : "Nothing loaded yet.";
   $("clear-all").disabled = !parts.length;
   $("b-coverage").textContent = c.coverage.length;
+  $("b-scorecard").textContent = c.sc ? c.sc.rows.length : 0;
   $("b-matching").textContent = c.memos.length;
 }
 
@@ -591,6 +801,44 @@ function renderCoverage(c) {
   s.addEventListener("input", () => { state.search = s.value; const pos = s.selectionStart; renderCoverage(computed()); const n = $("search"); n.focus(); n.setSelectionRange(pos, pos); });
   $("dl-coverage").addEventListener("click", downloadCoverage);
   document.querySelectorAll("#coverage tr.click").forEach(tr => tr.addEventListener("click", () => openSupplier(tr.dataset.sup)));
+}
+
+const STATUS_KIND = { RED: "bad", AMBER: "warn", GREEN: "ok", "CANNOT DETERMINE": "info" };
+const statusTag = s => '<span class="tag ' + (STATUS_KIND[s] || "info") + '">' + esc(s) + '</span>';
+const shortQuote = (s, n) => { s = String(s ?? ""); return s.length > (n || 110) ? s.slice(0, n || 110) + "…" : s; };
+
+function renderScorecard(c) {
+  if (!c.sc) { $("scorecard").innerHTML = waiting("Load the master, the log and the memos (and the extraction CSVs for memo-based flags) to see the scorecard."); return; }
+  const sc = c.sc;
+  let h = "";
+  if (!c.extraction.length) h += '<div class="msg bad">No memo extraction loaded. Indemnity and lost qualification come only from the extraction, so every memo-based result below is incomplete.</div>';
+  else if (sc.unextracted.length) h += '<div class="msg warn">' + sc.unextracted.length + ' memo(s) have no extraction row yet: ' + esc(sc.unextracted.join(", ")) + '. Results for their suppliers may be incomplete.</div>';
+  sc.warnings.forEach(w => { h += '<div class="msg warn">' + esc(w) + '</div>'; });
+  const count = s => sc.rows.filter(r => r.status === s).length;
+  h += '<div class="bar"><span class="stats">' + ["RED", "AMBER", "CANNOT DETERMINE", "GREEN"].map(s => statusTag(s) + " <b>" + count(s) + "</b>").join(" &nbsp; ") + '</span>' +
+    '<button class="btn ghost" id="dl-scorecard">Download scorecard CSV</button></div>';
+  const body = sc.rows.map(r => {
+    const ss = r.ss.flag ? tag("SINGLE SOURCE", "bad") + '<div class="scope">' + esc(r.ss.families.join("; ")) + '</div>' : '<span class="hint">no</span>';
+    const indKind = r.ind.result === "GAP" ? "bad" : r.ind.result === "NO GAP" ? "ok" : "info";
+    const ind = tag(r.ind.result, indKind) + (r.ind.governing ? '<div class="scope">' + esc(r.ind.governing.memo_id + ': "' + shortQuote(r.ind.governing.quotation) + '"') + '</div>' : '');
+    const na = r.na.flag ? tag("NEVER ASSESSED", "bad") : r.approved ? '<span class="hint">assessed</span>' : '<span class="hint">NOT APPLICABLE</span>';
+    return '<tr class="click" data-sup="' + esc(r.supplier_id) + '"><td><b>' + esc(r.supplier_id) + '</b></td><td>' + esc(r.supplier_name) + '<div class="scope">' + esc(r.part_families) + '</div></td><td>' + ss + '</td><td>' + ind + '</td><td>' + na + '</td><td>' + statusTag(r.status) + '</td><td>' + (r.notes.length ? '<span class="scope">' + esc(r.notes.length + " note(s)") + '</span>' : '') + '</td></tr>';
+  }).join("");
+  h += '<div class="scroll"><table><thead><tr><th>ID</th><th>Supplier</th><th>Single source §4.2</th><th>Indemnity §4.3</th><th>Never assessed §4.1</th><th>Status §6</th><th>Notes</th></tr></thead><tbody>' + body + '</tbody></table></div>';
+
+  h += '<h3 style="margin:22px 0 6px;font-size:15px">Part families (§4.2)</h3><p class="hint">Approved means qualified for every family listed in the master, unless the newest memo about that supplier that states its qualification for the family says it failed or must not be used.</p>';
+  h += '<div class="scroll"><table><thead><tr><th>Part family</th><th>Suppliers in the master</th><th>Qualified</th><th>Result</th></tr></thead><tbody>' + sc.families.map(F =>
+    '<tr><td><b>' + esc(F.family) + '</b></td><td>' + F.suppliers.map(s => esc(s.supplier_id) + (s.approved ? "" : " (not approved)") + (s.approved && !s.qualified ? ' <span class="tag warn">not qualified</span><div class="scope">' + esc(quoteRef(s.governing)) + '</div>' : "")).join("<br>") + '</td><td>' + esc(F.qualified.map(s => s.supplier_id).join(", ") || "none") + '</td><td>' +
+    (F.result === "SINGLE SOURCE" ? tag("SINGLE SOURCE", "bad") + " on " + esc(F.qualified[0].supplier_id) : F.result === "NO QUALIFIED SUPPLIER" ? tag("NO QUALIFIED SUPPLIER", "warn") + '<div class="scope">a finding, not a flag on any supplier</div>' : esc(F.result)) + '</td></tr>').join("") + '</tbody></table></div>';
+
+  h += '<h3 style="margin:22px 0 6px;font-size:15px">Contradictions (§5)</h3><p class="hint">Where memos about the same supplier state different positions, the newer one governs. Both quotations are shown with their dates.</p>';
+  h += sc.contradictions.length ? sc.contradictions.map(x => '<div class="memo-block"><b>' + esc(x.supplier_id) + '</b> · ' + esc(x.topic) + (x.family ? " · " + esc(x.family) : "") +
+    x.statements.map(s => '<div style="margin-top:6px">' + (x.governing && s.memo_id === x.governing.memo_id && s.quotation === x.governing.quotation ? tag("GOVERNS (newest)", "ok") : tag("older, not used", "warn")) + ' ' + esc(s.memo_id + " · " + s.date + " · " + s.position + (s.cap != null ? " " + s.cap : "")) + '<blockquote>' + esc(s.quotation) + '</blockquote></div>').join("") +
+    (x.governing ? "" : '<div class="msg warn">Same newest date: CANNOT DETERMINE which governs.</div>') + '</div>').join("")
+    : '<p class="empty">No contradictions among the verified quotations loaded in this run.</p>';
+  $("scorecard").innerHTML = h;
+  $("dl-scorecard").addEventListener("click", downloadScorecard);
+  document.querySelectorAll("#scorecard tr.click").forEach(tr => tr.addEventListener("click", () => openSupplier(tr.dataset.sup)));
 }
 
 function traceTable(steps) {
@@ -630,6 +878,17 @@ function renderDetail(c) {
   let h = '<h3>' + esc(m.supplier_id + " · " + m.supplier_name) + '</h3>';
   h += '<p><b>Master row</b><br><span class="mono">SUPPLIER_MASTER.csv line ' + m._line + ': ' + esc([m.supplier_id, m.supplier_name, m.part_families, m.approval_status, m.spend_band].join(" | ")) + '</span></p>';
   h += '<p><b>Assessment log</b><br>' + (cov ? esc(cov.log_detail) : '<span class="hint">load the log to see this</span>') + '</p>';
+  const r = c.sc ? c.sc.rows.find(x => x.supplier_id === id) : null;
+  if (r) {
+    h += '<div class="memo-block"><p style="margin:0 0 6px"><b>Status: </b>' + statusTag(r.status) + ' <span class="scope">' + esc(r.statusWhy) + ' (RR-C5 §6)</span></p>';
+    h += '<p style="margin:6px 0"><b>Single source (§4.2): </b>' + (r.ss.flag ? tag("SINGLE SOURCE", "bad") : "no") + '</p>' + r.ss.evidence.map(e => '<div class="scope">' + esc(e) + '</div>').join("");
+    h += '<p style="margin:10px 0 4px"><b>Indemnity (§4.3): </b>' + esc(r.ind.result) + '</p>' + (r.ind.governing ? '<blockquote>' + esc(r.ind.governing.quotation) + '</blockquote>' : '') + '<div class="scope">' + esc(r.ind.evidence) + '</div>';
+    h += '<p style="margin:10px 0 4px"><b>Never assessed (§4.1): </b>' + esc(r.na.flag ? "NEVER ASSESSED" : r.na.text) + '</p><div class="scope">' + esc(r.na.evidence) + '</div>';
+    if (r.notes.length) h += '<p style="margin:10px 0 4px"><b>Notes</b></p>' + r.notes.map(n => '<div class="scope">' + esc(n) + '</div>').join("");
+    const nu = c.sc.notUsed.filter(x => x.supplier_id === id);
+    if (nu.length) h += '<p style="margin:10px 0 4px"><b>Rows from its memos not used for flags</b></p>' + nu.map(x => '<div class="scope">' + esc(x.memo_id + ': "' + x.quotation + '" (' + x.why + ')') + '</div>').join("");
+    h += '</div>';
+  }
   const memos = c.memos.filter(x => c.matches[x.id].supplierId === id);
   h += '<p><b>Memos matched (RR-C5 §2)</b></p>';
   if (!c.memos.length) h += '<p class="hint">Load the memos to see this.</p>';
@@ -638,6 +897,10 @@ function renderDetail(c) {
     h += '<div class="memo-block"><b>' + esc(x.id) + '</b> · ' + esc(x.date) + ' · as written: "' + esc(x.supplierAsWritten) + '" · from ' + esc(x.source);
     h += '<details><summary>§2 working</summary><p>Memo header:</p>' + traceTable(c.matches[x.id].memoNorm.steps) + '<p>Master name:</p>' + traceTable(normaliseName(m.supplier_name).steps) + '</details>';
     const rows = c.checked.filter(r => r.memo_id === x.id);
+    if (rows.length) {
+      const said = t => rows.filter(r => r.check.status === "VERIFIED" && up(r.topic) === t && c.sc && !c.sc.notUsed.some(n => n.memo_id === r.memo_id && n.quotation === r.quotation && /header supplier/.test(n.why)));
+      h += '<div class="scope" style="margin-top:6px">In this memo, about this supplier: qualification ' + (said("QUALIFICATION").length ? esc(said("QUALIFICATION").map(r => r.position).join(", ")) : "NOT STATED") + ' · indemnity ' + (said("INDEMNITY").length ? esc(said("INDEMNITY").map(r => r.position).join(", ")) : "NOT STATED") + '</div>';
+    } else if (c.extraction.length) h += '<p class="msg warn">No extraction row for ' + esc(x.id) + ' yet.</p>';
     if (!c.extraction.length) h += '<p class="hint" style="margin:6px 0 0">No extraction loaded yet, so there are no quotations to show.</p>';
     rows.forEach(r => {
       const kind = r.check.status === "VERIFIED" ? "ok" : r.check.status === "NONE ROW" ? "warn" : "bad";
@@ -675,6 +938,11 @@ function recordText(c) {
     L.push("Memos with no extraction row (not yet read by Claude, or skipped): " + (noRows.length ? noRows.join(", ") : "none"));
     c.checked.filter(r => r.check.status === "REJECTED").forEach(r => L.push("REJECTED " + r._file + " line " + r._line + ": " + r.check.reason));
   }
+  if (c.sc) {
+    L.push("");
+    L.push("ROWS USED FOR FLAGS: " + c.sc.used.length + " · rows read but not used: " + c.sc.notUsed.length);
+    c.sc.notUsed.forEach(n => L.push("NOT USED " + n.file + " line " + n.line + " (" + n.memo_id + "): " + n.why));
+  }
   return L.join("\n");
 }
 
@@ -696,6 +964,11 @@ function download(name, text, type) {
 }
 const csvCell = v => /[",\n]/.test(String(v)) ? '"' + String(v).replace(/"/g, '""') + '"' : String(v);
 const today = () => new Date().toISOString().slice(0, 10);
+function downloadScorecard() {
+  const c = computed();
+  if (!c.sc) return;
+  download("G05_C5_scorecard_" + today() + ".csv", scorecardTable(c.sc).map(r => r.map(csvCell).join(",")).join("\n"), "text/csv");
+}
 function downloadCoverage() {
   const c = computed();
   const head = ["supplier_id", "supplier_name", "memos_found (IDs or NO MEMO)", "assessment_log_row (yes / no)", "scope searched", "notes"];
