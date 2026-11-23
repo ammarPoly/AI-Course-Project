@@ -15,7 +15,7 @@
 1. **Check your own copy of the pack.** Unzip the pack zip on your laptop, open `PACK_INVENTORY.md` and compare it with the folder: same file names, same number of files. The copy in the repo was checked on 2026-11-18 and all files matched their fingerprints. Optional on a Mac: in Terminal inside the pack folder, run `shasum -a 256 -c PACK_SHA256SUMS.txt` (every line should say OK).
 2. **Read** `00_START_HERE_C5` sections 1 to 6 and the whole rule card `RULES/RISK_RULES_RR-C5.md`.
 3. **Open the data files** in Excel (`INPUTS/SUPPLIER_MASTER.csv` and `INPUTS/ASSESSMENT_LOG.csv`) and get to know them. You'll be the person the group asks about them.
-4. ~~Take one source question to the consult queue~~ **Done 2026-11-23.** For the record, the question was: RR-C5 says to use "the newest memo **about the supplier**". Some memos are written about one supplier but also contain a sentence about another one. Ask the tutor whether a sentence like that counts as a memo "about" the second supplier. The answer is in the canvas decision log.
+4. ~~Take one source question to the consult queue~~ **Done 2026-11-23.** For the record, the question was: RR-C5 says to use "the newest memo **about the supplier**". Some memos are written about one supplier but also contain a sentence about another one. Does a sentence like that count as a memo "about" the second supplier? The answer is in the canvas decision log.
 
 ## Week 8 (next)
 
