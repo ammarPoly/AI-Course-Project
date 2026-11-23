@@ -5,13 +5,32 @@
 **Covering for:** Maryam (evidence lead), if she's absent.
 **Your core step in your own account:** the independent check (tracing flags back to their sources in a fresh chat).
 
-## Status (updated 2026-11-23)
+## Status (updated 2026-11-23, evening)
 
-- The test record is ready: `04_TESTS/G05_C5_test_record_v01.xlsx` (and `.md`). AQ-1 to AQ-5 are in it; T-01 is empty for you.
-- The first part of the tool is built. **Your main job now is T-01** (step 3 below).
-- Honest note for the record: Ammar already ran the tool on the real files on 2026-11-23, before T-01 was written. Write that in the Notes column of T-01. Don't open his results before you write your expected result.
-- The tutor ruled that a memo counts only for the supplier in its header (RR-C5 §2). It's in the canvas decision log.
-- **New from the tutor: T-02** (step 5 under Week 7). Write its expected result before anyone runs it, and bring the result to the next checkpoint.
+- The tutor (Mr Ali Darwish) initialled the canvas READY TO BUILD. He wants to see your tests at the **next meeting** (list below).
+- All three memo batches are done and in the repo. The tool now also shows flags, status and a Scorecard tab, so **don't open it until your expected results are written**, or you'll see the answers first.
+- Honest note for T-01: Ammar already ran the tool on the real files on 2026-11-23, before T-01 was written. Write that in T-01's Notes.
+- The tutor ruled that a memo counts only for the supplier in its header (RR-C5 §2).
+
+## For the next meeting (the tutor's list, about 1 to 2 hours)
+
+Do these in order. Expected results are always written **by you, by hand, before** anything is run.
+
+1. **T-01** (about 15 min): pick one supplier (SUP-01 is easiest). Write which memos match it under §2, and whether it has a row in `ASSESSMENT_LOG.csv` (§3). Then run it in the tool with Ammar and record MATCH or MISMATCH. This is the "slice's output" the tutor asked for.
+2. **T-02** (about 15 min): a memo whose header names one supplier but whose text mentions another (the tutor used MEMO-01). Write the expected coverage for **both** suppliers, citing §2 and §3. Then run it and record the result. For the flags part, write the expected result too and note "flags part checked later" if you run out of time.
+3. **2 or 3 test cases for the part-family summary** (about 20 to 30 min). The summary isn't built yet, so you only write the cases and their expected results now. The summary will show, for each part family: how many approved suppliers it has, how many are still qualified after the memos, and which ones lost qualification (with the memo quote). Example of a case you could write: "Part family X has two approved suppliers and one memo saying one of them failed requalification. Expected: 2 approved, 1 still qualified, lists the one that lost it, with its quote (RR-C5 §4.2)." Use invented families and suppliers, or real ones worked out by hand from the pack.
+4. The sweep log is already done (Maryam).
+
+When you're done, upload the test record to `04_TESTS/` (or send it to Ammar).
+
+## Also from the tutor: re-read memos (independent check, after the meeting items)
+
+The tutor asked how we'd notice a sentence Claude **missed**. Our answer is two checks, and you're one of them:
+
+- Pick **at least two memos from each batch** (6 in total), read them yourself, and list every sentence about qualification or indemnity.
+- Check each sentence has a row in the batch CSV in `02_WORK/extraction/`.
+- Write one INDEPENDENT CHECK line per memo in the test record: MATCH if nothing is missing, MISMATCH with the missed sentence if something is.
+- **Don't open `05_EVIDENCE/G05_AI_crosscheck_extraction_2026-11-23.md` before you finish.** That's the AI's check; yours only counts if you do it without seeing it first.
 
 ## Step by step: from where to where
 
