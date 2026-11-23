@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>C5-A Supplier Risk Control Tower (Group 5, slice 1)</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  :root {
+    --ink: #1d2433; --muted: #5b6475; --line: #d9dde5; --bg: #f6f7f9; --card: #ffffff;
+    --ok: #1f7a4d; --ok-bg: #e5f4ec; --warn: #8a5a00; --warn-bg: #fdf3dc; --bad: #a3242f; --bad-bg: #fbe7e9;
+    --accent: #2453a6;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; font: 15px/1.5 system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif; color: var(--ink); background: var(--bg); }
+  header { background: var(--ink); color: #fff; padding: 18px 28px; }
+  header h1 { margin: 0; font-size: 20px; font-weight: 600; }
+  header p { margin: 4px 0 0; color: #c7cdd8; font-size: 13px; }
+  main { max-width: 1200px; margin: 0 auto; padding: 20px 28px 60px; }
+  section { background: var(--card); border: 1px solid var(--line); border-radius: 8px; padding: 18px 20px; margin-bottom: 18px; }
+  h2 { margin: 0 0 4px; font-size: 17px; }
+  h3 { margin: 18px 0 6px; font-size: 15px; }
+  .hint { color: var(--muted); font-size: 13px; margin: 0 0 12px; }
+  .loaders { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 12px; }
+  .loader { border: 1px dashed var(--line); border-radius: 6px; padding: 10px 12px; }
+  .loader label { display: block; font-weight: 600; font-size: 14px; margin-bottom: 6px; }
+  .loader .status { font-size: 12px; color: var(--muted); margin-top: 6px; }
+  table { border-collapse: collapse; width: 100%; font-size: 13px; }
+  th, td { border-bottom: 1px solid var(--line); padding: 6px 8px; text-align: left; vertical-align: top; }
+  th { background: #eef0f4; font-weight: 600; position: sticky; top: 0; }
+  .scroll { max-height: 520px; overflow: auto; border: 1px solid var(--line); border-radius: 6px; }
+  .tag { display: inline-block; padding: 1px 7px; border-radius: 10px; font-size: 12px; font-weight: 600; white-space: nowrap; }
+  .tag.ok { color: var(--ok); background: var(--ok-bg); }
+  .tag.warn { color: var(--warn); background: var(--warn-bg); }
+  .tag.bad { color: var(--bad); background: var(--bad-bg); }
+  .mono { font-family: ui-monospace, Consolas, Menlo, monospace; font-size: 12px; }
+  .trace td:first-child { white-space: nowrap; color: var(--muted); }
+  blockquote { margin: 6px 0; padding: 6px 10px; border-left: 3px solid var(--accent); background: #f2f5fb; }
+  button { font: inherit; font-size: 13px; padding: 6px 12px; border: 1px solid var(--accent); color: var(--accent); background: #fff; border-radius: 5px; cursor: pointer; }
+  button:hover { background: #eef3fc; }
+  select { font: inherit; padding: 5px 8px; }
+  .msg { padding: 8px 12px; border-radius: 6px; margin: 8px 0; font-size: 13px; }
+  .msg.warn { background: var(--warn-bg); color: var(--warn); }
+  .msg.bad { background: var(--bad-bg); color: var(--bad); }
+  .msg.ok { background: var(--ok-bg); color: var(--ok); }
+  footer { color: var(--muted); font-size: 12px; text-align: center; padding: 10px; }
+  .empty { color: var(--muted); font-style: italic; }
+</style>
+</head>
+<body>
+<header>
+  <h1>Supplier Risk Control Tower</h1>
+  <p>Group 5 · C5-A · prototype slice 1 (load, match, coverage) · rules: RR-C5 as of 2026-10-31 · works offline, nothing leaves this computer</p>
+</header>
+
+<main>
+  <section>
+    <h2>1. Load the sources</h2>
+    <p class="hint">Use the files from <span class="mono">01_PACK_AS_ISSUED/.../INPUTS/</span>. For memos you can select the 24 single memo files, the three batch files, or both (duplicates are merged). The extraction CSV is optional in this slice.</p>
+    <div class="loaders">
+      <div class="loader"><label for="f-master">Supplier master (CSV)</label><input type="file" id="f-master" accept=".csv"><div class="status" id="s-master">not loaded</div></div>
+      <div class="loader"><label for="f-log">Assessment log (CSV)</label><input type="file" id="f-log" accept=".csv"><div class="status" id="s-log">not loaded</div></div>
+      <div class="loader"><label for="f-memos">Memos (.md, select several)</label><input type="file" id="f-memos" accept=".md,.txt" multiple><div class="status" id="s-memos">not loaded</div></div>
+      <div class="loader"><label for="f-extract">Memo extraction (CSV, optional)</label><input type="file" id="f-extract" accept=".csv" multiple><div class="status" id="s-extract">not loaded</div></div>
+    </div>
+    <div id="load-messages"></div>
+  </section>
+
+  <section>
+    <h2>2. Memo matching (RR-C5 §2)</h2>
+    <p class="hint">Each memo's "Supplier (as written)" header goes through the five §2 steps in order. A memo is attached to a supplier only when the result is identical to exactly one master supplier. Click "show steps" to see every step.</p>
+    <div id="matching"><p class="empty">Load the master and the memos.</p></div>
+  </section>
+
+  <section>
+    <h2>3. Source coverage (RR-C5 §3)</h2>
+    <p class="hint">Coverage only. These are not risk flags: NO MEMO means the memos can't tell us about that supplier.</p>
+    <div id="coverage"><p class="empty">Load the master, the log and the memos.</p></div>
+    <p style="margin-top:10px"><button id="dl-coverage">Download coverage table (CSV)</button></p>
+  </section>
+
+  <section>
+    <h2>4. Supplier detail</h2>
+    <p class="hint">Pick one supplier to see its master row, its log row, the memos matched to it with the §2 working, and any verified quotations.</p>
+    <select id="pick"><option value="">Choose a supplier</option></select>
+    <div id="detail"></div>
+  </section>
+
+  <section>
+    <h2>5. Coverage record (what this run read)</h2>
+    <p class="hint">Proof of what was actually read: every file, every memo ID and every quotation check.</p>
+    <div id="record"><p class="empty">Nothing loaded yet.</p></div>
+    <p style="margin-top:10px"><button id="dl-record">Download coverage record (TXT)</button></p>
+  </section>
+</main>
+
+<footer>The tool shows evidence. The category director and the buyers decide what to do about any supplier. SYNTHETIC classroom data.</footer>
+
+<script>
+// LOGIC-START  (plain functions, no page code; tested on their own)
+
+const AS_OF = "2026-10-31";
+const LEGAL_SUFFIXES = ["wll", "co", "company", "ltd", "llc", "fze"];
+const EXTRACTION_HEADER = ["memo_id","memo_date","header_supplier_as_written","statement_about_as_written","topic","part_family","position","cap_bhd","quotation"];
+
+// Read CSV text into rows. Handles quoted fields, commas and doubled quotes inside quotes.
+function parseCSV(text) {
+  text = text.replace(/^﻿/, "");
+  const rows = []; let row = []; let field = ""; let inQuotes = false;
+  for (let i = 0; i < text.length; i++) {
+    const c = text[i];
+    if (inQuotes) {
+      if (c === '"') {
+        if (text[i + 1] === '"') { field += '"'; i++; } else { inQuotes = false; }
+      } else { field += c; }
+    } else if (c === '"') { inQuotes = true; }
+    else if (c === ",") { row.push(field); field = ""; }
+    else if (c === "\n" || c === "\r") {
+      if (c === "\r" && text[i + 1] === "\n") i++;
+      row.push(field); rows.push(row); row = []; field = "";
+    } else { field += c; }
+  }
+  if (field !== "" || row.length) { row.push(field); rows.push(row); }
+  return rows.filter(r => !(r.length === 1 && r[0].trim() === ""));
+}
+
+// Turn CSV rows into objects. Each object remembers its line in the file (header = line 1).
+function csvToRecords(text) {
+  const rows = parseCSV(text);
+  if (!rows.length) return { header: [], records: [] };
+  const header = rows[0].map(h => h.trim());
+  const records = rows.slice(1).map((r, i) => {
+    const obj = { _line: i + 2 };
+    header.forEach((h, j) => { obj[h] = (r[j] ?? "").trim(); });
+    return obj;
+  });
+  return { header, records };
+}
+
+// Split a memo file into memos. Works for one memo per file and for the batch files.
+function parseMemoFile(text, fileName) {
+  text = text.replace(/^﻿/, "").replace(/\r\n?/g, "\n");
+  const chunks = text.split(/^(?=# MEMO-\d+)/m).filter(c => /^# MEMO-\d+/.test(c));
+  return chunks.map(chunk => {
+    const id = (chunk.match(/^# (MEMO-\d+)/) || [])[1] || null;
+    const date = (chunk.match(/\*\*Date:\*\*\s*(\d{4}-\d{2}-\d{2})/) || [])[1] || null;
+    const sup = chunk.match(/\*\*Supplier \(as written\):\*\*\s*([^·\n]*)/);
+    const supplierAsWritten = sup ? sup[1].trim() : null;
+    // keep the memo text without the classroom footer (after the --- line)
+    const body = chunk.split(/^---\s*$/m)[0].trim();
+    return { id, date, supplierAsWritten, text: body, source: fileName };
+  });
+}
+
+// RR-C5 §2: the five steps, in order. Returns every step so a person can check it.
+function normaliseName(name) {
+  const steps = [];
+  let s = String(name ?? "");
+  steps.push(["As written", s]);
+  s = s.replace(/\./g, "");
+  steps.push(["1. Remove full stops", s]);
+  s = s.replace(/[^\p{L}\p{N}\s]/gu, " ");
+  steps.push(["2. Other punctuation to a space", s]);
+  s = s.toLowerCase();
+  steps.push(["3. Ignore letter case", s]);
+  let words = s.split(/\s+/).filter(Boolean);
+  words = words.filter(w => !LEGAL_SUFFIXES.includes(w));
+  steps.push(["4. Remove legal suffixes (WLL, Co, Company, Ltd, LLC, FZE)", words.join(" ")]);
+  if (words.length) {
+    const last = words[words.length - 1];
+    if (last.length > 1 && last.endsWith("s")) words[words.length - 1] = last.slice(0, -1);
+  }
+  const key = words.join(" ");
+  steps.push(["5. Ignore a plural \"s\" on the last word", key]);
+  return { key, steps };
+}
+
+// Match one memo header name to the master. Exactly one identical result = match.
+function matchMemo(memo, masterRecords) {
+  const memoNorm = normaliseName(memo.supplierAsWritten);
+  const hits = masterRecords.filter(m => normaliseName(m.supplier_name).key === memoNorm.key);
+  if (!memo.supplierAsWritten) {
+    return { status: "CANNOT DETERMINE (match)", reason: "the memo has no Supplier (as written) line", supplierId: null, memoNorm, hits: [] };
+  }
+  if (hits.length === 1) {
+    return { status: "MATCH", reason: "identical to exactly one master supplier after the §2 steps", supplierId: hits[0].supplier_id, memoNorm, hits };
+  }
+  if (hits.length === 0) {
+    return { status: "CANNOT DETERMINE (match)", reason: "no master supplier name is identical after the §2 steps", supplierId: null, memoNorm, hits };
+  }
+  return { status: "CANNOT DETERMINE (match)", reason: "more than one master supplier is identical after the §2 steps: " + hits.map(h => h.supplier_id).join(", "), supplierId: null, memoNorm, hits };
+}
+
+// Collapse runs of spaces and line breaks so a quotation split over two lines still counts as word for word.
+function squash(s) { return String(s ?? "").replace(/\s+/g, " ").trim(); }
+
+// Check each extraction row against the memo it cites.
+function checkExtraction(rows, memosById) {
+  return rows.map(r => {
+    const memo = memosById[r.memo_id];
+    let check;
+    if (!memo) check = { status: "REJECTED", reason: r.memo_id + " was not loaded in this run" };
+    else if ((r.topic || "").toUpperCase() === "NONE") check = { status: "NONE ROW", reason: "memo read, no qualification or indemnity sentence reported" };
+    else if (!r.quotation) check = { status: "REJECTED", reason: "no quotation given" };
+    else if (squash(memo.text).includes(squash(r.quotation))) check = { status: "VERIFIED", reason: "quotation found word for word in " + r.memo_id };
+    else check = { status: "REJECTED", reason: "quotation not found word for word in " + r.memo_id };
+    return { ...r, check };
+  });
+}
+
+// RR-C5 §3: coverage for every master supplier, kept apart from risk.
+function buildCoverage(masterRecords, logRecords, memos, matches) {
+  const logRowCount = logRecords.length;
+  const memoCount = memos.length;
+  return masterRecords.map(m => {
+    const memoIds = memos.filter(x => matches[x.id] && matches[x.id].supplierId === m.supplier_id).map(x => x.id).sort();
+    const logRows = logRecords.filter(l => l.supplier_id === m.supplier_id);
+    return {
+      supplier_id: m.supplier_id,
+      supplier_name: m.supplier_name,
+      master_line: m._line,
+      memos: memoIds.length ? memoIds.join("; ") : "NO MEMO",
+      memo_scope: memoIds.length ? "" : "no memo matched " + m.supplier_id + " among " + memoCount + " memos read in this run (RR-C5 §2), as of " + AS_OF,
+      log_row: logRows.length ? "yes" : "no",
+      log_detail: logRows.length
+        ? logRows.map(l => "ASSESSMENT_LOG.csv line " + l._line + ": " + l.last_assessment_date + ", " + l.result).join("; ")
+        : "no row for " + m.supplier_id + " in ASSESSMENT_LOG.csv (" + logRowCount + " data rows, as of " + AS_OF + ")"
+    };
+  });
+}
+
+// Memo numbers that are missing from the run (gaps between MEMO-01 and the highest number read).
+function memoNumberGaps(ids) {
+  const nums = ids.map(i => parseInt(i.replace("MEMO-", ""), 10)).filter(n => !isNaN(n));
+  if (!nums.length) return [];
+  const max = Math.max(...nums); const have = new Set(nums); const gaps = [];
+  for (let n = 1; n <= max; n++) if (!have.has(n)) gaps.push("MEMO-" + String(n).padStart(2, "0"));
+  return gaps;
+}
+
+// LOGIC-END
+
+// ---------- page code: reading files and drawing the tables ----------
+
+const state = { master: null, log: null, memos: [], memoFiles: [], duplicateNotes: [], extraction: [], extractionFiles: [], extractionErrors: [] };
+
+const $ = id => document.getElementById(id);
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const tag = (text, kind) => '<span class="tag ' + kind + '">' + esc(text) + '</span>';
+const readFile = f => f.text();
+
+$("f-master").addEventListener("change", async e => {
+  const f = e.target.files[0]; if (!f) return;
+  const { header, records } = csvToRecords(await readFile(f));
+  state.master = { name: f.name, header, records, size: f.size };
+  $("s-master").textContent = f.name + ": " + records.length + " data rows";
+  render();
+});
+
+$("f-log").addEventListener("change", async e => {
+  const f = e.target.files[0]; if (!f) return;
+  const { header, records } = csvToRecords(await readFile(f));
+  state.log = { name: f.name, header, records, size: f.size };
+  $("s-log").textContent = f.name + ": " + records.length + " data rows";
+  render();
+});
+
+$("f-memos").addEventListener("change", async e => {
+  const files = [...e.target.files]; if (!files.length) return;
+  const byId = {}; state.memoFiles = []; state.duplicateNotes = [];
+  for (const f of files) {
+    const memos = parseMemoFile(await readFile(f), f.name);
+    state.memoFiles.push({ name: f.name, size: f.size, memoIds: memos.map(m => m.id) });
+    for (const m of memos) {
+      if (!m.id) continue;
+      if (byId[m.id]) {
+        const same = squash(byId[m.id].text) === squash(m.text);
+        state.duplicateNotes.push(m.id + " appears in " + byId[m.id].source + " and " + f.name + (same ? " (same text, merged)" : " (TEXT DIFFERS, first copy kept: check this)"));
+        if (!byId[m.id].alsoIn) byId[m.id].alsoIn = [];
+        byId[m.id].alsoIn.push(f.name);
+      } else { byId[m.id] = m; }
+    }
+  }
+  state.memos = Object.values(byId).sort((a, b) => a.id.localeCompare(b.id));
+  $("s-memos").textContent = files.length + " file(s), " + state.memos.length + " distinct memos";
+  render();
+});
+
+$("f-extract").addEventListener("change", async e => {
+  const files = [...e.target.files]; if (!files.length) return;
+  state.extraction = []; state.extractionFiles = []; state.extractionErrors = [];
+  for (const f of files) {
+    const { header, records } = csvToRecords(await readFile(f));
+    if (header.join(",") !== EXTRACTION_HEADER.join(",")) {
+      state.extractionErrors.push(f.name + ": header does not match 02_WORK/EXTRACTION_FORMAT.md, file not used");
+      continue;
+    }
+    records.forEach(r => { r._file = f.name; });
+    state.extraction.push(...records);
+    state.extractionFiles.push({ name: f.name, rows: records.length });
+  }
+  $("s-extract").textContent = state.extractionFiles.length + " file(s), " + state.extraction.length + " rows";
+  render();
+});
+
+function computed() {
+  const masterRecs = state.master ? state.master.records : [];
+  const logRecs = state.log ? state.log.records : [];
+  const matches = {};
+  state.memos.forEach(m => { matches[m.id] = matchMemo(m, masterRecs); });
+  const memosById = Object.fromEntries(state.memos.map(m => [m.id, m]));
+  const checked = checkExtraction(state.extraction, memosById);
+  const coverage = (state.master && state.log) ? buildCoverage(masterRecs, logRecs, state.memos, matches) : [];
+  return { masterRecs, logRecs, matches, memosById, checked, coverage };
+}
+
+function render() {
+  const c = computed();
+  renderMessages(c); renderMatching(c); renderCoverage(c); renderPicker(c); renderDetail(c); renderRecord(c);
+}
+
+function renderMessages(c) {
+  const out = [];
+  if (state.master) {
+    const need = ["supplier_id", "supplier_name", "part_families", "approval_status"];
+    const missing = need.filter(h => !state.master.header.includes(h));
+    if (missing.length) out.push('<div class="msg bad">Master is missing columns: ' + esc(missing.join(", ")) + '</div>');
+  }
+  if (state.log) {
+    const need = ["supplier_id", "last_assessment_date", "result"];
+    const missing = need.filter(h => !state.log.header.includes(h));
+    if (missing.length) out.push('<div class="msg bad">Log is missing columns: ' + esc(missing.join(", ")) + '</div>');
+  }
+  state.memos.filter(m => !m.date || !m.supplierAsWritten).forEach(m => out.push('<div class="msg warn">' + esc(m.id) + ': header is missing ' + (!m.date ? "the Date" : "") + (!m.date && !m.supplierAsWritten ? " and " : "") + (!m.supplierAsWritten ? "the Supplier (as written) line" : "") + '</div>'));
+  state.duplicateNotes.filter(n => n.includes("DIFFERS")).forEach(n => out.push('<div class="msg bad">' + esc(n) + '</div>'));
+  state.extractionErrors.forEach(e => out.push('<div class="msg bad">' + esc(e) + '</div>'));
+  $("load-messages").innerHTML = out.join("");
+}
+
+function traceTable(steps) {
+  return '<table class="trace">' + steps.map(s => '<tr><td>' + esc(s[0]) + '</td><td class="mono">' + esc(s[1]) + '</td></tr>').join("") + '</table>';
+}
+
+function renderMatching(c) {
+  if (!state.master || !state.memos.length) { $("matching").innerHTML = '<p class="empty">Load the master and the memos.</p>'; return; }
+  const rows = state.memos.map(m => {
+    const r = c.matches[m.id];
+    const kind = r.status === "MATCH" ? "ok" : "warn";
+    const target = r.supplierId ? esc(r.supplierId) + " " + esc(c.masterRecs.find(x => x.supplier_id === r.supplierId).supplier_name) : "";
+    const masterTraces = r.hits.map(h => '<p><b>Master ' + esc(h.supplier_id) + '</b> (SUPPLIER_MASTER.csv line ' + h._line + ')</p>' + traceTable(normaliseName(h.supplier_name).steps)).join("");
+    return '<tr><td>' + esc(m.id) + '</td><td>' + esc(m.date) + '</td><td>' + esc(m.supplierAsWritten) + '</td><td class="mono">' + esc(r.memoNorm.key) + '</td><td>' + tag(r.status, kind) + '</td><td>' + target + '</td>' +
+      '<td><details><summary>show steps</summary><p><b>Memo header</b></p>' + traceTable(r.memoNorm.steps) + masterTraces + '<p>' + esc(r.reason) + '</p></details></td></tr>';
+  }).join("");
+  const unmatched = state.memos.filter(m => c.matches[m.id].status !== "MATCH").length;
+  $("matching").innerHTML = '<p>' + state.memos.length + ' memos read · ' + (state.memos.length - unmatched) + ' matched · ' + unmatched + ' CANNOT DETERMINE (match)</p>' +
+    '<div class="scroll"><table><thead><tr><th>Memo</th><th>Date</th><th>Supplier (as written)</th><th>After §2 steps</th><th>Result</th><th>Master supplier</th><th>Working</th></tr></thead><tbody>' + rows + '</tbody></table></div>';
+}
+
+function renderCoverage(c) {
+  if (!c.coverage.length) { $("coverage").innerHTML = '<p class="empty">Load the master, the log and the memos.</p>'; return; }
+  const rows = c.coverage.map(r => '<tr><td>' + esc(r.supplier_id) + '</td><td>' + esc(r.supplier_name) + '</td><td>' + (r.memos === "NO MEMO" ? tag("NO MEMO", "warn") + '<div class="hint">' + esc(r.memo_scope) + '</div>' : esc(r.memos)) + '</td><td>' + (r.log_row === "yes" ? tag("yes", "ok") : tag("no", "warn")) + '</td><td>' + esc(r.log_detail) + '</td></tr>').join("");
+  $("coverage").innerHTML = '<p>' + c.coverage.length + ' master suppliers · ' + c.coverage.filter(r => r.memos === "NO MEMO").length + ' with NO MEMO · ' + c.coverage.filter(r => r.log_row === "no").length + ' with no log row</p>' +
+    '<div class="scroll"><table><thead><tr><th>ID</th><th>Supplier</th><th>Memos found</th><th>Log row</th><th>Log evidence or scope searched</th></tr></thead><tbody>' + rows + '</tbody></table></div>';
+}
+
+function renderPicker(c) {
+  const sel = $("pick"); const keep = sel.value;
+  sel.innerHTML = '<option value="">Choose a supplier</option>' + c.masterRecs.map(m => '<option value="' + esc(m.supplier_id) + '">' + esc(m.supplier_id + " " + m.supplier_name) + '</option>').join("");
+  sel.value = keep;
+}
+$("pick").addEventListener("change", () => renderDetail(computed()));
+
+function renderDetail(c) {
+  const id = $("pick").value;
+  if (!id) { $("detail").innerHTML = ""; return; }
+  const m = c.masterRecs.find(x => x.supplier_id === id);
+  const cov = c.coverage.find(x => x.supplier_id === id);
+  let h = '<h3>Master row</h3><p class="mono">SUPPLIER_MASTER.csv line ' + m._line + ': ' + esc([m.supplier_id, m.supplier_name, m.part_families, m.approval_status, m.spend_band].join(" | ")) + '</p>';
+  h += '<h3>Assessment log</h3><p>' + (cov ? esc(cov.log_detail) : '<span class="empty">load the log</span>') + '</p>';
+  const memos = state.memos.filter(x => c.matches[x.id].supplierId === id);
+  h += '<h3>Memos matched (RR-C5 §2)</h3>';
+  if (!memos.length) h += '<p>' + tag("NO MEMO", "warn") + ' ' + esc(cov ? cov.memo_scope : "") + '</p>';
+  memos.forEach(x => {
+    h += '<p><b>' + esc(x.id) + '</b> · ' + esc(x.date) + ' · as written: "' + esc(x.supplierAsWritten) + '" · from ' + esc(x.source) + '</p>';
+    h += '<details><summary>§2 working</summary>' + traceTable(c.matches[x.id].memoNorm.steps) + '<p>Master name:</p>' + traceTable(normaliseName(m.supplier_name).steps) + '</details>';
+    const rows = c.checked.filter(r => r.memo_id === x.id);
+    if (!state.extraction.length) h += '<p class="hint">No extraction loaded yet, so no quotations to show.</p>';
+    rows.forEach(r => {
+      const kind = r.check.status === "VERIFIED" ? "ok" : r.check.status === "NONE ROW" ? "warn" : "bad";
+      h += '<div>' + tag(r.check.status, kind) + ' ' + esc(r.topic) + (r.position ? " · " + esc(r.position) : "") + (r.part_family ? " · " + esc(r.part_family) : "") + ' · about: ' + esc(r.statement_about_as_written) +
+        (r.quotation ? '<blockquote>' + esc(r.quotation) + '</blockquote>' : '') + '<div class="hint">' + esc(r.check.reason) + ' (' + esc(r._file) + ' line ' + r._line + ')</div></div>';
+    });
+  });
+  $("detail").innerHTML = h;
+}
+
+function recordText(c) {
+  const lines = [];
+  lines.push("COVERAGE RECORD, C5-A Supplier Risk Control Tower, Group 5 (slice 1)");
+  lines.push("Run at: " + new Date().toISOString() + " · rules RR-C5 as of " + AS_OF);
+  lines.push("");
+  lines.push("FILES READ");
+  if (state.master) lines.push("- " + state.master.name + ": " + state.master.records.length + " data rows");
+  if (state.log) lines.push("- " + state.log.name + ": " + state.log.records.length + " data rows");
+  state.memoFiles.forEach(f => lines.push("- " + f.name + ": " + f.memoIds.length + " memo(s): " + f.memoIds.join(", ")));
+  state.extractionFiles.forEach(f => lines.push("- " + f.name + ": " + f.rows + " extraction rows"));
+  lines.push("");
+  lines.push("MEMOS READ: " + state.memos.length + " distinct");
+  lines.push(state.memos.map(m => m.id).join(", ") || "(none)");
+  const gaps = memoNumberGaps(state.memos.map(m => m.id));
+  lines.push("Missing numbers in the sequence: " + (gaps.length ? gaps.join(", ") : "none"));
+  state.duplicateNotes.forEach(n => lines.push("Duplicate: " + n));
+  if (state.extraction.length) {
+    const covered = new Set(state.extraction.map(r => r.memo_id));
+    const noRows = state.memos.filter(m => !covered.has(m.id)).map(m => m.id);
+    lines.push("");
+    lines.push("EXTRACTION CHECK");
+    const count = s => c.checked.filter(r => r.check.status === s).length;
+    lines.push("Verified quotations: " + count("VERIFIED") + " · NONE rows: " + count("NONE ROW") + " · rejected: " + count("REJECTED"));
+    lines.push("Memos with no extraction row (not yet read by Claude, or skipped): " + (noRows.length ? noRows.join(", ") : "none"));
+    c.checked.filter(r => r.check.status === "REJECTED").forEach(r => lines.push("REJECTED " + r._file + " line " + r._line + ": " + r.check.reason));
+  }
+  return lines.join("\n");
+}
+
+function renderRecord(c) {
+  if (!state.master && !state.log && !state.memos.length) { $("record").innerHTML = '<p class="empty">Nothing loaded yet.</p>'; return; }
+  const gaps = memoNumberGaps(state.memos.map(m => m.id));
+  const warn = gaps.length ? '<div class="msg warn">Memo numbers missing from this run: ' + esc(gaps.join(", ")) + '. A run that missed a memo must be recorded and repeated.</div>' : '';
+  $("record").innerHTML = warn + '<pre class="mono" style="white-space:pre-wrap;margin:0">' + esc(recordText(c)) + '</pre>';
+}
+
+function download(name, text, type) {
+  const blob = new Blob([text], { type });
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob); a.download = name; document.body.appendChild(a); a.click();
+  setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 500);
+}
+const csvCell = v => /[",\n]/.test(String(v)) ? '"' + String(v).replace(/"/g, '""') + '"' : String(v);
+const today = () => new Date().toISOString().slice(0, 10);
+
+$("dl-coverage").addEventListener("click", () => {
+  const c = computed(); if (!c.coverage.length) return alertMsg("Load the master, the log and the memos first.");
+  const head = ["supplier_id", "supplier_name", "memos_found (IDs or NO MEMO)", "assessment_log_row (yes / no)", "scope searched", "notes"];
+  const rows = c.coverage.map(r => [r.supplier_id, r.supplier_name, r.memos, r.log_row, [r.log_detail, r.memo_scope].filter(Boolean).join(" | "), ""]);
+  download("G05_C5_coverage_" + today() + ".csv", [head, ...rows].map(r => r.map(csvCell).join(",")).join("\n"), "text/csv");
+});
+$("dl-record").addEventListener("click", () => download("G05_C5_coverage_record_" + today() + ".txt", recordText(computed()), "text/plain"));
+function alertMsg(t) { $("load-messages").innerHTML = '<div class="msg warn">' + esc(t) + '</div>'; }
+</script>
+</body>
+</html>
