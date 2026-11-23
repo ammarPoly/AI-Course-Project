@@ -7,7 +7,7 @@
 
 ## Status (updated 2026-11-23)
 
-- Your tutor question is answered: the tutor left it to the group, and the decision is in the canvas decision log (a memo counts only for the supplier in its header; a mention of another supplier is shown as a note). Read it and tell Ammar if you disagree.
+- Your tutor question is answered. The tutor ruled that a memo counts only for the supplier in its header (RR-C5 §2: the supplier "as the buyer wrote it"). So MEMO-01 is a Corranby memo only, and its sentence about Talbeck isn't used for Talbeck. It's in the canvas decision log.
 - **Your main job now is memo batch 1** (below, under Week 8). Please run it soon: the flags can't be built until the batch CSVs exist.
 
 ## Step by step: from where to where

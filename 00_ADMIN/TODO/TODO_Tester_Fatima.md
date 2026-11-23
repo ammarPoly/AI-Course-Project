@@ -10,7 +10,8 @@
 - The test record is ready: `04_TESTS/G05_C5_test_record_v01.xlsx` (and `.md`). AQ-1 to AQ-5 are in it; T-01 is empty for you.
 - The first part of the tool is built. **Your main job now is T-01** (step 3 below).
 - Honest note for the record: Ammar already ran the tool on the real files on 2026-11-23, before T-01 was written. Write that in the Notes column of T-01. Don't open his results before you write your expected result.
-- The group decided a memo counts only for the supplier in its header; it's in the canvas decision log. Tell Ammar if you disagree.
+- The tutor ruled that a memo counts only for the supplier in its header (RR-C5 §2). It's in the canvas decision log.
+- **New from the tutor: T-02** (step 5 under Week 7). Write its expected result before anyone runs it, and bring the result to the next checkpoint.
 
 ## Step by step: from where to where
 
@@ -36,6 +37,14 @@ Follow these steps in order. `PACK/` below means the folder `01_PACK_AS_ISSUED/C
 4. Then run the slice: load `SUPPLIER_MASTER.csv`, `ASSESSMENT_LOG.csv` and the memo files into the tool, click your supplier in the Coverage tab, and compare. Fill in the observed result and the verdict (MATCH, MISMATCH or OBSERVED FAILURE). A mismatch is an honest result; never change it to a pass later.
 
 **Getting the tool:** it's in the repo at `02_WORK/control_tower.html`. Open it on GitHub, click the download arrow at the top right, then double-click the file to open it in your browser. Always download the latest copy from the repo instead of using an old one from a chat.
+
+5. **T-02, suggested by the tutor (write it before it's run).** Pick a memo whose header names one supplier and whose body also mentions another supplier (the tutor used MEMO-01 as the example). In row T-02 write, **by hand from the rule card**:
+   - the input: the memo ID, the header supplier and the other supplier it mentions
+   - the expected coverage for **both** suppliers (which memos each one gets), citing RR-C5 §2 and §3
+   - the expected flags for both suppliers, citing §4.2 and §4.3 (the flags part can only be checked once the flags are built in Week 8, so write "to run when flags are built" in the notes)
+   - your name in "Expected written by"
+
+   Then run the coverage part in the tool, fill in the observed result and verdict, and bring it to the next checkpoint.
 
 ## Week 8 and 9 (next)
 
