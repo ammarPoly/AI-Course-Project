@@ -11,6 +11,19 @@
 - Done: first slice of the tool built (load files, §2 matching, coverage, coverage record). You ran it on the real files on 2026-11-23: 26 suppliers, 23 log rows, 24 memos, none missing. The coverage record is in `05_EVIDENCE/`.
 - Waiting for: Fatima's expected result for T-01, the three memo batch CSVs, the instructor's READY TO BUILD initial on the canvas, and the group confirming the memo decision.
 
+## From where to where
+
+| What | From | To |
+|---|---|---|
+| The tool `control_tower.html` | repo: `02_WORK/` (Claude Code edits it there) | your computer to run it, by double-clicking |
+| Files to load into the tool | repo: `01_PACK_AS_ISSUED/C5-A_SUPPLIER_RISK_CONTROL_TOWER_PACK_V1_2_EXPLORATORY_DRAFT_V1/INPUTS/` | the tool's boxes, or drop the whole INPUTS folder |
+| Batch CSVs `BATCH_1/2/3_*.csv` | Hussain, Marwan, Maryam | repo: `02_WORK/extraction/`, then the tool's **Memo extraction** box |
+| Coverage record the tool downloads | the tool (Coverage record tab) | repo: `05_EVIDENCE/` (or give it to Maryam) |
+| Fatima's T-01 verdict | Fatima | test record in repo: `04_TESTS/` |
+
+**How to put a file in the repo:** on GitHub, open the folder named in the "To" column, click **Add file → Upload files**, drag the file in, then click **Commit changes**. **How to make a CSV from Claude's answer:** copy the CSV block, paste it into Notepad (or TextEdit in plain text mode), and save it with the name shown and `.csv` at the end.
+
+
 ## Week 7 (now)
 
 1. **Get the canvas reviewed.** The draft is `00_ADMIN/G05_C5-A_canvas_v01_2026-11-18.md`. Go through it with the group, then show it to the instructor for READY TO BUILD (or REWORK FIELD n).

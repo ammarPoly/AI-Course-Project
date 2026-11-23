@@ -10,6 +10,29 @@
 - The first part of the tool works (loading files, memo matching, coverage). **Your main job now is memo batch 2** (below, under Week 8). Please run it soon: the flags can't be built until the batch CSVs exist.
 - The group decided a memo counts only for the supplier in its header; it's in the canvas decision log. Tell Ammar if you disagree.
 
+## From where to where
+
+| Step | What | From | To |
+|---|---|---|---|
+| 1 | The pack zip `C5-A_SUPPLIER_RISK_CONTROL_TOWER_PACK_V1_2_EXPLORATORY_DRAFT_V1.zip` | inside `Group_5_C5_Supplier_Risk_Control_Tower.zip` (the instructor's message) | a new Claude Project in your own account (name it "G05 C5 batch 2"), as a Project file |
+| 1 (backup) | If Claude can't open the zip: `MEMOS_BATCH_2.md` and `RISK_RULES_RR-C5.md` | repo: `01_PACK_AS_ISSUED/C5-A_SUPPLIER_RISK_CONTROL_TOWER_PACK_V1_2_EXPLORATORY_DRAFT_V1/INPUTS/` and repo: `01_PACK_AS_ISSUED/C5-A_SUPPLIER_RISK_CONTROL_TOWER_PACK_V1_2_EXPLORATORY_DRAFT_V1/RULES/` | the same Claude Project, as Project files |
+| 2 | The batch prompt | this file (the grey box under "Memo batch 2") | a **new chat** in that Project |
+| 3 | The CSV block Claude gives you | that chat | a file named `BATCH_2_Marwan_<YYYY-MM-DD>.csv` in repo `02_WORK/extraction/` (or send it to Ammar) |
+| 4 | The whole chat, exported (Week 2 route) | your Claude | Maryam, who saves it in repo `05_EVIDENCE/` |
+| 5 | Date, your name, batch 2, memo IDs echoed back and the count | the `MEMOS READ` line at the end of Claude's answer | Maryam, for the sweep log |
+
+**How to put a file in the repo:** on GitHub, open the folder named in the "To" column, click **Add file → Upload files**, drag the file in, then click **Commit changes**. **How to make a CSV from Claude's answer:** copy the CSV block, paste it into Notepad (or TextEdit in plain text mode), and save it with the name shown and `.csv` at the end.
+
+
+**For your six answers (Week 7):**
+
+| What | From | To |
+|---|---|---|
+| The canvas `G05_C5-A_canvas_v01_2026-11-18.md` | repo: `00_ADMIN/` | a new chat in your own Claude |
+| The six-answers prompt | this file (grey box under Week 7, step 3) | the same chat |
+| Claude's draft answers | that chat | repo: `06_SHOWCASE/six_answers_draft_v01.md` |
+| The tool `control_tower.html` (for demo practice, later) | repo: `02_WORK/` | your computer, then double-click to open |
+
 ## Week 7 (now)
 
 1. **Read** `00_START_HERE_C5` sections 1 to 6 (section 6 is the showcase, so read it twice) and the rule card `RULES/RISK_RULES_RR-C5.md`.
