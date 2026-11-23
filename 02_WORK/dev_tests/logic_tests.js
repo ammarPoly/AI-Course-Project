@@ -1,7 +1,7 @@
 const fs=require('fs');const vm=require('vm');
 const html=fs.readFileSync(process.argv[2],'utf8');
 const code=html.split('// LOGIC-START')[1].replace(/^[^\n]*/,'').split('// LOGIC-END')[0];
-const ctx={};vm.createContext(ctx);vm.runInContext(code+';this.f={parseCSV,csvToRecords,parseMemoFile,normaliseName,matchMemo,checkExtraction,buildCoverage,memoNumberGaps,squash};',ctx);
+const ctx={};vm.createContext(ctx);vm.runInContext(code+';this.f={parseCSV,csvToRecords,parseMemoFile,normaliseName,matchMemo,checkExtraction,buildCoverage,memoNumberGaps,squash,classifyFile};',ctx);
 const f=ctx.f;let fails=0;const eq=(a,b,m)=>{const ok=JSON.stringify(a)===JSON.stringify(b);if(!ok){fails++;console.log('FAIL',m,'\n got',JSON.stringify(a),'\n want',JSON.stringify(b));}else console.log('ok  ',m);};
 // made-up suppliers only
 eq(f.normaliseName("Zephyr Valve Co.").key,"zephyr valve","suffix Co. removed after full stop");
@@ -35,3 +35,13 @@ const dir=process.argv[3];const all=[];for(const fn of fs.readdirSync(dir+'/MEMO
 const b=[];for(const n of [1,2,3])b.push(...f.parseMemoFile(fs.readFileSync(dir+'/MEMOS_BATCH_'+n+'.md','utf8'),'B'+n));
 console.log('real pack parse: single files',all.length,'with id+date+supplier',all.filter(x=>x.id&&x.date&&x.supplierAsWritten).length,'| batch memos',b.length,'| batch text same as single files',b.every(x=>{const s=all.find(y=>y.id===x.id);return s&&f.squash(s.text)===f.squash(x.text)}));
 console.log('master rows',f.csvToRecords(fs.readFileSync(dir+'/SUPPLIER_MASTER.csv','utf8')).records.length,'log rows',f.csvToRecords(fs.readFileSync(dir+'/ASSESSMENT_LOG.csv','utf8')).records.length);
+// file type detection (made-up files)
+const cf=f.classifyFile; let bad=0;
+[[cf("a.csv","supplier_id,supplier_name,part_families,approval_status,spend_band\n"),"master"],
+ [cf("b.csv","﻿supplier_id,last_assessment_date,result\nX,1,P"),"log"],
+ [cf("c.csv","memo_id,memo_date,header_supplier_as_written,statement_about_as_written,topic,part_family,position,cap_bhd,quotation\n"),"extraction"],
+ [cf("d.csv","supplier_id,supplier_name,part_families,single_source (Y/N)\n"),"unknown"],
+ [cf("e.md","# MEMO-07 — x\n\n**Date:** 2025-01-01 · **Supplier (as written):** Y\n"),"memos"],
+ [cf("f.md","# Some notes\nMEMO-07 is mentioned here"),"unknown"],
+ [cf("g.pdf","x"),"unknown"]].forEach(([g,w],i)=>{if(g!==w){bad++;console.log("FAIL classify",i,g,w)}});
+console.log(bad?"classify FAILED":"classify ok");
