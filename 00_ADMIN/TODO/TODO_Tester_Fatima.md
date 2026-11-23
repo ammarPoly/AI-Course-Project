@@ -12,19 +12,21 @@
 - Honest note for the record: Ammar already ran the tool on the real files on 2026-11-23, before T-01 was written. Write that in the Notes column of T-01. Don't open his results before you write your expected result.
 - The group decided a memo counts only for the supplier in its header; it's in the canvas decision log. Tell Ammar if you disagree.
 
-## From where to where
+## Step by step: from where to where
+
+Follow these steps in order. `PACK/` below means the folder `01_PACK_AS_ISSUED/C5-A_SUPPLIER_RISK_CONTROL_TOWER_PACK_V1_2_EXPLORATORY_DRAFT_V1/` in the repo.
 
 | Step | What | From | To |
 |---|---|---|---|
-| T-01 expected result | `SUPPLIER_MASTER.csv`, `ASSESSMENT_LOG.csv`, the supplier's memo, `RISK_RULES_RR-C5.md` (read only, **no AI**) | repo: `01_PACK_AS_ISSUED/C5-A_SUPPLIER_RISK_CONTROL_TOWER_PACK_V1_2_EXPLORATORY_DRAFT_V1/INPUTS/` and repo: `01_PACK_AS_ISSUED/C5-A_SUPPLIER_RISK_CONTROL_TOWER_PACK_V1_2_EXPLORATORY_DRAFT_V1/RULES/` | your head and the test record |
-| Test record `G05_C5_test_record_v01.xlsx` | repo: `04_TESTS/` | your computer (download, fill in T-01, save), then back to repo: `04_TESTS/` (upload the same name) |
-| The tool `control_tower.html` (only **after** T-01 is written) | repo: `02_WORK/` | your computer, then double-click to open |
-| Files to load into the tool | repo: `01_PACK_AS_ISSUED/C5-A_SUPPLIER_RISK_CONTROL_TOWER_PACK_V1_2_EXPLORATORY_DRAFT_V1/INPUTS/` (`SUPPLIER_MASTER.csv`, `ASSESSMENT_LOG.csv`, the `MEMOS` folder) | the tool's boxes, or drop the whole INPUTS folder on it |
-| Pack zip `C5-A_SUPPLIER_RISK_CONTROL_TOWER_PACK_V1_2_EXPLORATORY_DRAFT_V1.zip` (Week 8: extension cases and flag check) | inside `Group_5_C5_Supplier_Risk_Control_Tower.zip` (the instructor's message) | a **fresh chat** in your own Claude |
-| Each flag check result | that chat | test record: one INDEPENDENT CHECK line per flag |
+| 1 | `SUPPLIER_MASTER.csv`, `ASSESSMENT_LOG.csv`, your supplier's memo and `RISK_RULES_RR-C5.md` (read them yourself, **no AI**) | Repo: `PACK/INPUTS/` and `PACK/RULES/` | Your expected result for T-01 |
+| 2 | Test record `G05_C5_test_record_v01.xlsx` | Repo: `04_TESTS/` | Your computer: fill in T-01, then upload it back to `04_TESTS/` with the same name |
+| 3 | The tool (**only after T-01 is written**) | Repo: `02_WORK/control_tower.html` | Your computer, then double-click to open |
+| 4 | Files to load into the tool | Repo: `PACK/INPUTS/` (`SUPPLIER_MASTER.csv`, `ASSESSMENT_LOG.csv`, the `MEMOS` folder) | The tool's boxes, or drop the whole INPUTS folder on it |
+| 5 | Pack zip `C5-A_SUPPLIER_RISK_CONTROL_TOWER_PACK_V1_2_EXPLORATORY_DRAFT_V1.zip` (Week 8: extension cases and flag check) | Inside the instructor's Group 5 zip | A fresh chat in your own Claude, with the prompts under **Week 8 and 9** in this file |
+| 6 | Each flag check result | That chat | The test record: one INDEPENDENT CHECK line per flag |
 
-**How to put a file in the repo:** on GitHub, open the folder named in the "To" column, click **Add file → Upload files**, drag the file in, then click **Commit changes**. **How to make a CSV from Claude's answer:** copy the CSV block, paste it into Notepad (or TextEdit in plain text mode), and save it with the name shown and `.csv` at the end.
-
+**To upload a file to the repo:** open the folder on GitHub, click **Add file → Upload files**, drag the file in, then click **Commit changes**.
+**To make a CSV from Claude's answer:** copy the CSV block, paste it into Notepad (or TextEdit in plain text mode), and save it with the name shown, ending in `.csv`.
 
 ## Week 7 (now)
 

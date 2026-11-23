@@ -10,28 +10,25 @@
 - The first part of the tool works (loading files, memo matching, coverage). **Your main job now is memo batch 2** (below, under Week 8). Please run it soon: the flags can't be built until the batch CSVs exist.
 - The group decided a memo counts only for the supplier in its header; it's in the canvas decision log. Tell Ammar if you disagree.
 
-## From where to where
+## Step by step: from where to where
+
+Follow these steps in order. `PACK/` below means the folder `01_PACK_AS_ISSUED/C5-A_SUPPLIER_RISK_CONTROL_TOWER_PACK_V1_2_EXPLORATORY_DRAFT_V1/` in the repo.
 
 | Step | What | From | To |
 |---|---|---|---|
-| 1 | The pack zip `C5-A_SUPPLIER_RISK_CONTROL_TOWER_PACK_V1_2_EXPLORATORY_DRAFT_V1.zip` | inside `Group_5_C5_Supplier_Risk_Control_Tower.zip` (the instructor's message) | a new Claude Project in your own account (name it "G05 C5 batch 2"), as a Project file |
-| 1 (backup) | If Claude can't open the zip: `MEMOS_BATCH_2.md` and `RISK_RULES_RR-C5.md` | repo: `01_PACK_AS_ISSUED/C5-A_SUPPLIER_RISK_CONTROL_TOWER_PACK_V1_2_EXPLORATORY_DRAFT_V1/INPUTS/` and repo: `01_PACK_AS_ISSUED/C5-A_SUPPLIER_RISK_CONTROL_TOWER_PACK_V1_2_EXPLORATORY_DRAFT_V1/RULES/` | the same Claude Project, as Project files |
-| 2 | The batch prompt | this file (the grey box under "Memo batch 2") | a **new chat** in that Project |
-| 3 | The CSV block Claude gives you | that chat | a file named `BATCH_2_Marwan_<YYYY-MM-DD>.csv` in repo `02_WORK/extraction/` (or send it to Ammar) |
-| 4 | The whole chat, exported (Week 2 route) | your Claude | Maryam, who saves it in repo `05_EVIDENCE/` |
-| 5 | Date, your name, batch 2, memo IDs echoed back and the count | the `MEMOS READ` line at the end of Claude's answer | Maryam, for the sweep log |
+| 1 | Pack zip `C5-A_SUPPLIER_RISK_CONTROL_TOWER_PACK_V1_2_EXPLORATORY_DRAFT_V1.zip` | Inside the instructor's Group 5 zip | A new Claude Project in your own account called "G05 C5 batch 2", as a Project file |
+| 1 (backup) | If Claude can't open the zip: `MEMOS_BATCH_2.md` and `RISK_RULES_RR-C5.md` | Repo: `PACK/INPUTS/` and `PACK/RULES/` | The same Claude Project |
+| 2 | The batch 2 prompt | This file: the grey box under **Memo batch 2** | A new chat in that Project |
+| 3 | The CSV Claude gives you | That chat | Repo: `02_WORK/extraction/BATCH_2_Marwan_<YYYY-MM-DD>.csv` (or send it to Ammar) |
+| 4 | The whole chat, exported (Week 2 route) | Your Claude | Maryam, for repo `05_EVIDENCE/` |
+| 5 | The `MEMOS READ` line (memo IDs and count) | The end of Claude's answer | Maryam, for the sweep log |
+| 6 | The canvas `G05_C5-A_canvas_v01_2026-11-18.md` | Repo: `00_ADMIN/` | A new chat in your own Claude |
+| 7 | The six-answers prompt | This file: the grey box under **Week 7, step 3** | The same chat |
+| 8 | Claude's six answers | That chat | Repo: `06_SHOWCASE/six_answers_draft_v01.md` |
+| 9 | The tool (later, for demo practice) | Repo: `02_WORK/control_tower.html` | Your computer, then double-click to open |
 
-**How to put a file in the repo:** on GitHub, open the folder named in the "To" column, click **Add file → Upload files**, drag the file in, then click **Commit changes**. **How to make a CSV from Claude's answer:** copy the CSV block, paste it into Notepad (or TextEdit in plain text mode), and save it with the name shown and `.csv` at the end.
-
-
-**For your six answers (Week 7):**
-
-| What | From | To |
-|---|---|---|
-| The canvas `G05_C5-A_canvas_v01_2026-11-18.md` | repo: `00_ADMIN/` | a new chat in your own Claude |
-| The six-answers prompt | this file (grey box under Week 7, step 3) | the same chat |
-| Claude's draft answers | that chat | repo: `06_SHOWCASE/six_answers_draft_v01.md` |
-| The tool `control_tower.html` (for demo practice, later) | repo: `02_WORK/` | your computer, then double-click to open |
+**To upload a file to the repo:** open the folder on GitHub, click **Add file → Upload files**, drag the file in, then click **Commit changes**.
+**To make a CSV from Claude's answer:** copy the CSV block, paste it into Notepad (or TextEdit in plain text mode), and save it with the name shown, ending in `.csv`.
 
 ## Week 7 (now)
 

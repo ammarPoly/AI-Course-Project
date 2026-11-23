@@ -12,30 +12,25 @@
 - **Your main job now is memo batch 3** (below, under Week 8), plus logging Hussain's and Marwan's batch runs in the sweep log.
 - The group decided a memo counts only for the supplier in its header; it's in the canvas decision log. Tell Ammar if you disagree.
 
-## From where to where
+## Step by step: from where to where
+
+Follow these steps in order. `PACK/` below means the folder `01_PACK_AS_ISSUED/C5-A_SUPPLIER_RISK_CONTROL_TOWER_PACK_V1_2_EXPLORATORY_DRAFT_V1/` in the repo.
 
 | Step | What | From | To |
 |---|---|---|---|
-| 1 | The pack zip `C5-A_SUPPLIER_RISK_CONTROL_TOWER_PACK_V1_2_EXPLORATORY_DRAFT_V1.zip` | inside `Group_5_C5_Supplier_Risk_Control_Tower.zip` (the instructor's message) | a new Claude Project in your own account (name it "G05 C5 batch 3"), as a Project file |
-| 1 (backup) | If Claude can't open the zip: `MEMOS_BATCH_3.md` and `RISK_RULES_RR-C5.md` | repo: `01_PACK_AS_ISSUED/C5-A_SUPPLIER_RISK_CONTROL_TOWER_PACK_V1_2_EXPLORATORY_DRAFT_V1/INPUTS/` and repo: `01_PACK_AS_ISSUED/C5-A_SUPPLIER_RISK_CONTROL_TOWER_PACK_V1_2_EXPLORATORY_DRAFT_V1/RULES/` | the same Claude Project, as Project files |
-| 2 | The batch prompt | this file (the grey box under "Memo batch 3") | a **new chat** in that Project |
-| 3 | The CSV block Claude gives you | that chat | a file named `BATCH_3_Maryam_<YYYY-MM-DD>.csv` in repo `02_WORK/extraction/` (or send it to Ammar) |
-| 4 | The whole chat, exported (Week 2 route) | your Claude | Maryam, who saves it in repo `05_EVIDENCE/` |
-| 5 | Date, your name, batch 3, memo IDs echoed back and the count | the `MEMOS READ` line at the end of Claude's answer | Maryam, for the sweep log |
+| 1 | Pack zip `C5-A_SUPPLIER_RISK_CONTROL_TOWER_PACK_V1_2_EXPLORATORY_DRAFT_V1.zip` | Inside the instructor's Group 5 zip | A new Claude Project in your own account called "G05 C5 batch 3", as a Project file |
+| 1 (backup) | If Claude can't open the zip: `MEMOS_BATCH_3.md` and `RISK_RULES_RR-C5.md` | Repo: `PACK/INPUTS/` and `PACK/RULES/` | The same Claude Project |
+| 2 | The batch 3 prompt | This file: the grey box under **Memo batch 3** | A new chat in that Project |
+| 3 | The CSV Claude gives you | That chat | Repo: `02_WORK/extraction/BATCH_3_Maryam_<YYYY-MM-DD>.csv` (or send it to Ammar) |
+| 4 | Usage card template `K-07_USAGE_BUDGET_CARD.md` | Repo: `00_ADMIN/W07_STUDENT_LAUNCH_PACKAGE/` | Repo: `00_ADMIN/G05_usage_budget_v01.md` (your filled copy) |
+| 5 | Sweep log template `C5_SWEEP_LOG_TEMPLATE.csv` | Repo: `PACK/TEMPLATES/` | Repo: `05_EVIDENCE/C5_sweep_log.csv` (fill it in Excel, save as CSV) |
+| 6 | CP-7 template `K-10_CHECKPOINT_CP-7.md` | Repo: `00_ADMIN/W07_STUDENT_LAUNCH_PACKAGE/` | Repo: `00_ADMIN/G05_C5-A_CP-7_<date>.md` |
+| 7 | Exported chats and `MEMOS READ` lines | Hussain, Marwan and your own batch run | Repo: `05_EVIDENCE/` and the sweep log |
+| 8 | Coverage records the tool downloads | Whoever ran the tool | Repo: `05_EVIDENCE/` |
+| 9 | End-of-week copy (v01) | Repo: `02_WORK/` and `04_TESTS/` | Repo: `03_VERSIONS/v01_<date>/` |
 
-**How to put a file in the repo:** on GitHub, open the folder named in the "To" column, click **Add file → Upload files**, drag the file in, then click **Commit changes**. **How to make a CSV from Claude's answer:** copy the CSV block, paste it into Notepad (or TextEdit in plain text mode), and save it with the name shown and `.csv` at the end.
-
-
-**For your evidence jobs:**
-
-| What | From | To |
-|---|---|---|
-| Usage budget card template `K-07_USAGE_BUDGET_CARD.md` | repo: `00_ADMIN/W07_STUDENT_LAUNCH_PACKAGE/` | repo: `00_ADMIN/G05_usage_budget_v01.md` (your filled copy) |
-| Sweep log template `C5_SWEEP_LOG_TEMPLATE.csv` | repo: `01_PACK_AS_ISSUED/C5-A_SUPPLIER_RISK_CONTROL_TOWER_PACK_V1_2_EXPLORATORY_DRAFT_V1/TEMPLATES/` | repo: `05_EVIDENCE/C5_sweep_log.csv` (open in Excel, fill, save as CSV) |
-| CP-7 template `K-10_CHECKPOINT_CP-7.md` | repo: `00_ADMIN/W07_STUDENT_LAUNCH_PACKAGE/` | repo: `00_ADMIN/G05_C5-A_CP-7_<date>.md` |
-| Exported chats from Hussain, Marwan and you | each person | repo: `05_EVIDENCE/` |
-| Coverage records the tool downloads | whoever ran the tool | repo: `05_EVIDENCE/` |
-| End-of-week copy of everything (v01) | repo: `02_WORK/` and `04_TESTS/` | repo: `03_VERSIONS/v01_<date>/` |
+**To upload a file to the repo:** open the folder on GitHub, click **Add file → Upload files**, drag the file in, then click **Commit changes**.
+**To make a CSV from Claude's answer:** copy the CSV block, paste it into Notepad (or TextEdit in plain text mode), and save it with the name shown, ending in `.csv`.
 
 ## Week 7 (now)
 

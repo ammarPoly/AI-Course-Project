@@ -11,18 +11,20 @@
 - Done: first slice of the tool built (load files, §2 matching, coverage, coverage record). You ran it on the real files on 2026-11-23: 26 suppliers, 23 log rows, 24 memos, none missing. The coverage record is in `05_EVIDENCE/`.
 - Waiting for: Fatima's expected result for T-01, the three memo batch CSVs, the instructor's READY TO BUILD initial on the canvas, and the group confirming the memo decision.
 
-## From where to where
+## Step by step: from where to where
 
-| What | From | To |
-|---|---|---|
-| The tool `control_tower.html` | repo: `02_WORK/` (Claude Code edits it there) | your computer to run it, by double-clicking |
-| Files to load into the tool | repo: `01_PACK_AS_ISSUED/C5-A_SUPPLIER_RISK_CONTROL_TOWER_PACK_V1_2_EXPLORATORY_DRAFT_V1/INPUTS/` | the tool's boxes, or drop the whole INPUTS folder |
-| Batch CSVs `BATCH_1/2/3_*.csv` | Hussain, Marwan, Maryam | repo: `02_WORK/extraction/`, then the tool's **Memo extraction** box |
-| Coverage record the tool downloads | the tool (Coverage record tab) | repo: `05_EVIDENCE/` (or give it to Maryam) |
-| Fatima's T-01 verdict | Fatima | test record in repo: `04_TESTS/` |
+Follow these steps in order. `PACK/` below means the folder `01_PACK_AS_ISSUED/C5-A_SUPPLIER_RISK_CONTROL_TOWER_PACK_V1_2_EXPLORATORY_DRAFT_V1/` in the repo.
 
-**How to put a file in the repo:** on GitHub, open the folder named in the "To" column, click **Add file → Upload files**, drag the file in, then click **Commit changes**. **How to make a CSV from Claude's answer:** copy the CSV block, paste it into Notepad (or TextEdit in plain text mode), and save it with the name shown and `.csv` at the end.
+| Step | What | From | To |
+|---|---|---|---|
+| 1 | The tool `control_tower.html` | Repo: `02_WORK/` | Your computer, then double-click to open |
+| 2 | Files to load into the tool | Repo: `PACK/INPUTS/` | The tool's boxes, or drop the whole INPUTS folder |
+| 3 | Batch CSVs | Hussain, Marwan, Maryam | Repo: `02_WORK/extraction/`, then the tool's **Memo extraction** box |
+| 4 | Coverage record the tool downloads | The tool's **Coverage record** tab | Repo: `05_EVIDENCE/` (or give it to Maryam) |
+| 5 | T-01 verdict | Fatima | The test record in `04_TESTS/` |
 
+**To upload a file to the repo:** open the folder on GitHub, click **Add file → Upload files**, drag the file in, then click **Commit changes**.
+**To make a CSV from Claude's answer:** copy the CSV block, paste it into Notepad (or TextEdit in plain text mode), and save it with the name shown, ending in `.csv`.
 
 ## Week 7 (now)
 
