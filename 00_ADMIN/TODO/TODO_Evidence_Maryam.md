@@ -9,7 +9,8 @@
 
 Newest first. Whenever someone's Claude finishes or changes something that affects you, it adds a line here (see `CLAUDE.md`). The full log for everyone is in `00_ADMIN/TEAM_NOTES.md`.
 
-- 2026-11-25, from Fatema: T-01 done (SUP-01, MATCH), screenshot in `05_EVIDENCE/T-01_coverage_SUP-01_2026-11-24_Fatema.png`. Please mark **CP-7 line 5 YES** and finish the CP-7 sheet (date and rename). CP-7 is then complete.
+- 2026-11-25, from Ammar: T-01's date corrected from 24 to 25 Nov (Fatema's Claude used UTC time; she did it on 25 Nov, Bahrain time). Screenshot renamed to `T-01_coverage_SUP-01_2026-11-25_Fatema.png`.
+- 2026-11-25, from Fatema: T-01 done (SUP-01, MATCH), screenshot in `05_EVIDENCE/T-01_coverage_SUP-01_2026-11-25_Fatema.png`. Please mark **CP-7 line 5 YES** and finish the CP-7 sheet (date and rename). CP-7 is then complete.
 - 2026-11-25, from Ammar: v01 can be saved in `03_VERSIONS/` now that CP-7 is complete (Ammar's Claude will do it when Ammar says).
 
 ## Status (updated 2026-11-23)
