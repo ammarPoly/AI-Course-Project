@@ -5,6 +5,13 @@
 **Covering for:** Maryam (evidence lead), if she's absent.
 **Your core step in your own account:** the independent check (tracing flags back to their sources in a fresh chat).
 
+## Notes for you
+
+Newest first. Whenever someone's Claude finishes or changes something that affects you, it adds a line here (see `CLAUDE.md`). The full log for everyone is in `00_ADMIN/TEAM_NOTES.md`.
+
+- 2026-11-25, from Ammar: T-01 looks good, thank you. Next: **T-02** (expected result first, citing §2 and §3), then the part-family summary test cases. Please confirm you wrote T-01's expected result before looking at the tool.
+- 2026-11-25, from Ammar: the memo extraction files are in `02_WORK/extraction/` (you don't need them for T-01 or T-02, only later for the full scorecard and your memo re-read).
+
 ## Status (updated 2026-11-23, evening)
 
 - The tutor (Mr Ali Darwish) initialled the canvas READY TO BUILD. He wants to see your tests at the **next meeting** (list below).

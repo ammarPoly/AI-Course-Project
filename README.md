@@ -16,6 +16,8 @@ Keep **one canonical folder** wherever your group already shares files. **Every 
 ## Where things are
 
 - `00_ADMIN/TODO/`: one to-do file per member, with the prompts to paste into your own Claude
+- `00_ADMIN/TEAM_NOTES.md`: the team's notes log (who did what, who needs to do what next). Each to-do file also starts with **Notes for you**
+- `CLAUDE.md`: rules every member's Claude reads automatically, including leaving notes for the team
 
 - `00_ADMIN/MESSAGE_TO_GROUP_5.txt`: the instructor's message to the group
 - `00_ADMIN/W07_STUDENT_LAUNCH_PACKAGE/`: the Week 7 studio kit (K-01 to K-14). Read `00_START_HERE_STUDENTS_WEEK07` first.
