@@ -9,7 +9,7 @@
 
 - Done: canvas drafted, roles set, to-do files, memo decision recorded in the canvas decision log (header supplier only; other mentions are notes), pull request #1 merged.
 - Done: first slice of the tool built (load files, §2 matching, coverage, coverage record). You ran it on the real files on 2026-11-23: 26 suppliers, 23 log rows, 24 memos, none missing. The coverage record is in `05_EVIDENCE/`.
-- Waiting for: Fatima's expected result for T-01, the three memo batch CSVs, the instructor's READY TO BUILD initial on the canvas, and the group confirming the memo decision.
+- Waiting for: Fatema's expected result for T-01, the three memo batch CSVs, the instructor's READY TO BUILD initial on the canvas, and the group confirming the memo decision.
 
 ## Step by step: from where to where
 
@@ -21,7 +21,7 @@ Follow these steps in order. `PACK/` below means the folder `01_PACK_AS_ISSUED/C
 | 2 | Files to load into the tool | Repo: `PACK/INPUTS/` | The tool's boxes, or drop the whole INPUTS folder |
 | 3 | Batch CSVs | Hussain, Marwan, Maryam | Repo: `02_WORK/extraction/`, then the tool's **Memo extraction** box |
 | 4 | Coverage record the tool downloads | The tool's **Coverage record** tab | Repo: `05_EVIDENCE/` (or give it to Maryam) |
-| 5 | T-01 verdict | Fatima | The test record in `04_TESTS/` |
+| 5 | T-01 verdict | Fatema | The test record in `04_TESTS/` |
 
 **To upload a file to the repo:** open the folder on GitHub, click **Add file → Upload files**, drag the file in, then click **Commit changes**.
 **To make a CSV from Claude's answer:** copy the CSV block, paste it into Notepad (or TextEdit in plain text mode), and save it with the name shown, ending in `.csv`.
@@ -29,8 +29,8 @@ Follow these steps in order. `PACK/` below means the folder `01_PACK_AS_ISSUED/C
 ## Week 7 (now)
 
 1. **Get the canvas reviewed.** The draft is `00_ADMIN/G05_C5-A_canvas_v01_2026-11-18.md`. Go through it with the group, then show it to the instructor for READY TO BUILD (or REWORK FIELD n).
-2. ~~Settle the memo design question~~ **Done 2026-11-23.** The tutor ruled: a memo counts only for the supplier in its header (RR-C5 §2). It's in the canvas decision log. The tutor also suggested a test for this, which is now T-02 in Fatima's file; bring its result to the next checkpoint.
-3. **First slice: built.** Once Fatima has written T-01, run the tool with her for that supplier so she can record the verdict.
+2. ~~Settle the memo design question~~ **Done 2026-11-23.** The tutor ruled: a memo counts only for the supplier in its header (RR-C5 §2). It's in the canvas decision log. The tutor also suggested a test for this, which is now T-02 in Fatema's file; bring its result to the next checkpoint.
+3. **First slice: built.** Once Fatema has written T-01, run the tool with her for that supplier so she can record the verdict.
 4. **Save version v01** in `03_VERSIONS/` at the end of the meeting.
 
 ## How to build (your Claude)
@@ -53,7 +53,7 @@ Build the FIRST SLICE of 02_WORK/control_tower.html: one self-contained HTML fil
 Do not apply flags or status yet. Ask me before adding anything the canvas does not mention. Explain the code in plain words so every group member can explain it.
 ```
 
-After the slice works and Fatima has recorded the verdict, the later steps (all 26 suppliers, the three flags, contradictions, status, new memo intake, CSV export) each get their own small prompt, one step at a time, with a test written first.
+After the slice works and Fatema has recorded the verdict, the later steps (all 26 suppliers, the three flags, contradictions, status, new memo intake, CSV export) each get their own small prompt, one step at a time, with a test written first.
 
 ## Week 8 (next)
 

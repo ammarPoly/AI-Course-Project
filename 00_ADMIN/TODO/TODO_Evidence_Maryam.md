@@ -1,14 +1,14 @@
 # To do: Maryam, Evidence / documentation lead
 
 **Your role:** you look after the evidence folder, version notes, exported chats and checkpoint sheets.
-**Your cover:** Fatima steps in if you're absent.
-**Covering for:** Fatima (tester), if she's absent.
+**Your cover:** Fatema steps in if you're absent.
+**Covering for:** Fatema (tester), if she's absent.
 **Your core step in your own account:** memo batch 3 (MEMO-17 to MEMO-24).
 
 ## Status (updated 2026-11-23)
 
 - First evidence saved: `05_EVIDENCE/G05_C5_coverage_record_2026-11-23_Ammar.txt`, the tool's record of Ammar's first run on the real files (26 suppliers, 23 log rows, all 24 memos, none missing). Add it to the evidence list.
-- The test record is set up in `04_TESTS/` for Fatima.
+- The test record is set up in `04_TESTS/` for Fatema.
 - **Your main job now is memo batch 3** (below, under Week 8), plus logging Hussain's and Marwan's batch runs in the sweep log.
 - The group decided a memo counts only for the supplier in its header; it's in the canvas decision log. Tell Ammar if you disagree.
 
@@ -35,7 +35,7 @@ Follow these steps in order. `PACK/` below means the folder `01_PACK_AS_ISSUED/C
 ## Week 7 (now)
 
 1. **Read** `00_START_HERE_C5` sections 1 to 6 and the rule card `RULES/RISK_RULES_RR-C5.md`.
-2. **Start the usage budget card** (`00_ADMIN/W07_STUDENT_LAUNCH_PACKAGE/K-07_USAGE_BUDGET_CARD.md`). Copy it to `00_ADMIN/G05_usage_budget_v01.md` and plan the big runs: three memo batches (Hussain, Marwan, you) and Fatima's independent check. Everyone tells you before a long run.
+2. **Start the usage budget card** (`00_ADMIN/W07_STUDENT_LAUNCH_PACKAGE/K-07_USAGE_BUDGET_CARD.md`). Copy it to `00_ADMIN/G05_usage_budget_v01.md` and plan the big runs: three memo batches (Hussain, Marwan, you) and Fatema's independent check. Everyone tells you before a long run.
 3. **Start the sweep log.** Copy `TEMPLATES/C5_SWEEP_LOG_TEMPLATE.csv` from the pack to `05_EVIDENCE/C5_sweep_log.csv`. One line per memo-reading run: date, member, batch, prompt file, output file, memo IDs echoed back and the count. This is how we prove all 24 memos were read.
 4. **Fill in CP-7 at the end of Week 7** (`K-10_CHECKPOINT_CP-7.md`), save it as `00_ADMIN/G05_C5-A_CP-7_<date>.md`, and make sure everything is saved as `v01` in `03_VERSIONS/`. Writing NOT YET is allowed if it comes with a Week 8 target and an owner.
 5. **Collect evidence as it happens:** exported chats (the Week 2 route) and cropped screenshots only when a result exists only on screen. Never include passwords, emails or uncropped account screenshots.
