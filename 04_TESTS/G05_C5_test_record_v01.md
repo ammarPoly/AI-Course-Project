@@ -9,7 +9,7 @@ Write the expected result and its rule or clause **before** the run. The chat th
 | AQ-3 | ACCEPTANCE | Which part families depend on a single qualified supplier, and what evidence shows it (RR-C5 §4.2)? | | | | | | | |
 | AQ-4 | ACCEPTANCE | Where memos contradict each other, which statement your scorecard uses and why (RR-C5 §5). | | | | | | | |
 | AQ-5 | ACCEPTANCE | Which indemnity positions cannot be determined from the memos (RR-C5 §4.3) — and, separately, which suppliers have no memo at all (coverage, §3). | | | | | | | |
-| T-01 | ACCEPTANCE | SUPPLIER_MASTER.csv row SUP-01 (Corranby Foundry Works W.L.L.); ASSESSMENT_LOG.csv (all rows); MEMOS/ (all 24 memo headers) | SUP-01: Memos MEMO-01 (RR-C5 §2, all 24 memo headers checked). Log row: yes, 2025-09-14 PASS (§3). | Fatema | Coverage tab: SUP-01, memos MEMO-01, log row yes (ASSESSMENT_LOG.csv line 2: 2025-09-14, PASS). | MATCH | 05_EVIDENCE/T-01_coverage_SUP-01_2026-11-24_Fatema.png | 02_WORK/control_tower.html, main, downloaded 2026-11-24 | Ammar ran the tool on the real files on 2026-11-23, before this expected result was written. |
+| T-01 | ACCEPTANCE | SUPPLIER_MASTER.csv row SUP-01 (Corranby Foundry Works W.L.L.); ASSESSMENT_LOG.csv (all rows); MEMOS/ (all 24 memo headers) | SUP-01: Memos MEMO-01 (RR-C5 §2, all 24 memo headers checked). Log row: yes, 2025-09-14 PASS (§3). | Fatema | Coverage tab: SUP-01, memos MEMO-01, log row yes (ASSESSMENT_LOG.csv line 2: 2025-09-14, PASS). | MATCH | 05_EVIDENCE/T-01_coverage_SUP-01_2026-11-25_Fatema.png | 02_WORK/control_tower.html, main, downloaded 2026-11-25 | Ammar ran the tool on the real files on 2026-11-23, before this expected result was written. |
 | T-02 | | | | | | | | | |
 | T-03 | | | | | | | | | |
 | T-04 | | | | | | | | | |

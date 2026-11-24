@@ -4,7 +4,8 @@ One line per change, newest first. Every member's Claude adds a line here (and i
 
 Format: `- YYYY-MM-DD, for <member>, from <member>: what was done. What to do now.`
 
-- 2026-11-25, for Maryam, from Fatema: T-01 done (SUP-01, MATCH), screenshot in `05_EVIDENCE/T-01_coverage_SUP-01_2026-11-24_Fatema.png`. Please mark **CP-7 line 5 YES** and finish the CP-7 sheet (date and rename). CP-7 is then complete.
+- 2026-11-25, for Fatema and Maryam, from Ammar: T-01's date corrected from 24 to 25 Nov (Fatema's Claude used UTC time; she did it on 25 Nov, Bahrain time). Screenshot renamed to `T-01_coverage_SUP-01_2026-11-25_Fatema.png`.
+- 2026-11-25, for Maryam, from Fatema: T-01 done (SUP-01, MATCH), screenshot in `05_EVIDENCE/T-01_coverage_SUP-01_2026-11-25_Fatema.png`. Please mark **CP-7 line 5 YES** and finish the CP-7 sheet (date and rename). CP-7 is then complete.
 - 2026-11-25, for Maryam, from Ammar: v01 can be saved in `03_VERSIONS/` now that CP-7 is complete (Ammar's Claude will do it when Ammar says).
 - 2026-11-25, for Fatema, from Ammar: T-01 looks good, thank you. Next: **T-02** (expected result first, citing §2 and §3), then the part-family summary test cases. Please confirm you wrote T-01's expected result before looking at the tool.
 - 2026-11-25, for Fatema, from Ammar: the memo extraction files are in `02_WORK/extraction/` (you don't need them for T-01 or T-02, only later for the full scorecard and your memo re-read).
