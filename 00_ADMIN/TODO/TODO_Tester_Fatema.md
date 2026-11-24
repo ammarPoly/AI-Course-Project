@@ -1,4 +1,4 @@
-# To do: Fatima, Tester
+# To do: Fatema, Tester
 
 **Your role:** you own the test record. The expected result is written before every run, and after every change the old cases are rerun (regression). Everyone adds tests, but you keep the record.
 **Your cover:** Maryam steps in if you're absent.

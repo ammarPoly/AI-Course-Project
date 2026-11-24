@@ -6,7 +6,7 @@ This repository is Group 5's canonical group folder (K-04 layout).
 |---|---|
 | Group | Group 5 |
 | Project and variant | C5-A Supplier Risk Control Tower |
-| Members (first names or the codes the instructor uses) | Ammar (build lead), Hussain (data / input lead), Fatima (tester), Maryam (evidence lead), Marwan (presenter) |
+| Members (first names or the codes the instructor uses) | Ammar (build lead), Hussain (data / input lead), Fatema (tester), Maryam (evidence lead), Marwan (presenter) |
 | Where the current working version is | `02_WORK/control_tower.html` (open it in a browser; works offline) |
 | Latest saved version | `03_VERSIONS/` … |
 | Frozen showcase version (from feature freeze) | |

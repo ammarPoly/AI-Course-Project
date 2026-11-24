@@ -10,7 +10,7 @@ The course's per-group budget card, written as a budget of **runs** — the allo
 | 7 | Memo batch 1 (MEMO-01 to MEMO-08), one run · status: DONE 2026-11-23 (confirmed by Hussain); output `02_WORK/extraction/BATCH_1_Hussain_2026-11-23.csv`; sweep log SW-02 | Hussain | Opus 5.5 | | |
 | 7 | Memo batch 3 (MEMO-17 to MEMO-24), one run · status: DONE 2026-11-23; output `02_WORK/extraction/BATCH_3_Maryam_2026-11-23.csv`; sweep log SW-03 | Maryam | Opus 5.5 | | |
 | 8 | | | | | |
-| 9 | Independent check: trace at least five flags to their sources in a fresh chat (once the scorecard exists) · status: PLANNED | Fatima | | | |
+| 9 | Independent check: trace at least five flags to their sources in a fresh chat (once the scorecard exists) · status: PLANNED | Fatema | | | |
 | 10 | | | | | |
 
 **At a limit, our plan is:** ☐ pair with a member who has headroom ☐ wait for the reset the screen shows ☐ switch to the Excel or manual step.
