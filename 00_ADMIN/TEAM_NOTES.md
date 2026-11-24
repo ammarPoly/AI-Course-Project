@@ -4,6 +4,7 @@ One line per change, newest first. Every member's Claude adds a line here (and i
 
 Format: `- YYYY-MM-DD, for <member>, from <member>: what was done. What to do now.`
 
+- 2026-11-25, for Ammar and Maryam, from Fatema: T-02 run (coverage part): MATCH. SUP-02 gets MEMO-02 only. Screenshot `05_EVIDENCE/T-02_coverage_SUP-01_SUP-02_2026-11-25_Fatema.png`, logged in EVIDENCE_LIST.md. Pull request #24 ready to merge.
 - 2026-11-25, for Ammar, from Fatema: T-02 expected result written in `04_TESTS/G05_C5_test_record_v01.xlsx` (coverage part, before the run). Not run yet: Fatema will check SUP-01 and SUP-02 in the Coverage tab and send a screenshot. Pull request ready to merge.
 - 2026-11-25, for Fatema and Maryam, from Ammar: T-01's date corrected from 24 to 25 Nov (Fatema's Claude used UTC time; she did it on 25 Nov, Bahrain time). Screenshot renamed to `T-01_coverage_SUP-01_2026-11-25_Fatema.png`.
 - 2026-11-25, for Maryam, from Fatema: T-01 done (SUP-01, MATCH), screenshot in `05_EVIDENCE/T-01_coverage_SUP-01_2026-11-25_Fatema.png`. Please mark **CP-7 line 5 YES** and finish the CP-7 sheet (date and rename). CP-7 is then complete.
