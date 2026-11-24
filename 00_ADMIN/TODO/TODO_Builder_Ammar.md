@@ -9,6 +9,10 @@
 
 Newest first. Whenever someone's Claude finishes or changes something that affects you, it adds a line here (see `CLAUDE.md`). The full log for everyone is in `00_ADMIN/TEAM_NOTES.md`.
 
+- 2026-11-25, from Fatema: T-02 flags part run: MATCH (SUP-02 indemnity taken from MEMO-02, not MEMO-01). T-02 is complete. Pull request #24 ready to merge.
+- 2026-11-25, from Fatema: T-02 flags expected result added (SUP-01 and SUP-02, §4.2 and §4.3), not run yet. Pull request #24 updated and ready to merge.
+- 2026-11-25, from Fatema: T-02 run: MATCH (coverage part). Pull request #24 is ready to merge.
+- 2026-11-25, from Fatema: T-02 expected result written (coverage part). Pull request ready to merge.
 - 2026-11-25, from Fatema: T-01 done and merged (pull request #21), verdict MATCH. Fatema also corrected her name's spelling across the repo.
 - 2026-11-25, from Ammar: still to do: send the build chat its prompt (batch check, memo intake, CSV export, part-family summary).
 
