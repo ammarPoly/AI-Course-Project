@@ -5,6 +5,13 @@
 **Covering for:** Marwan (presenter), if he's absent.
 **Your core step in your own account:** building the page and running it on the inputs.
 
+## Notes for you
+
+Newest first. Whenever someone's Claude finishes or changes something that affects you, it adds a line here (see `CLAUDE.md`). The full log for everyone is in `00_ADMIN/TEAM_NOTES.md`.
+
+- 2026-11-25, from Fatema: T-01 done and merged (pull request #21), verdict MATCH. Fatema also corrected her name's spelling across the repo.
+- 2026-11-25, from Ammar: still to do: send the build chat its prompt (batch check, memo intake, CSV export, part-family summary).
+
 ## Status (updated 2026-11-23)
 
 - Done: canvas drafted, roles set, to-do files, memo decision recorded in the canvas decision log (header supplier only; other mentions are notes), pull request #1 merged.

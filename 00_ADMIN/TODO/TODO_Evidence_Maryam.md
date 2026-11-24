@@ -5,6 +5,13 @@
 **Covering for:** Fatema (tester), if she's absent.
 **Your core step in your own account:** memo batch 3 (MEMO-17 to MEMO-24).
 
+## Notes for you
+
+Newest first. Whenever someone's Claude finishes or changes something that affects you, it adds a line here (see `CLAUDE.md`). The full log for everyone is in `00_ADMIN/TEAM_NOTES.md`.
+
+- 2026-11-25, from Fatema: T-01 done (SUP-01, MATCH), screenshot in `05_EVIDENCE/T-01_coverage_SUP-01_2026-11-24_Fatema.png`. Please mark **CP-7 line 5 YES** and finish the CP-7 sheet (date and rename). CP-7 is then complete.
+- 2026-11-25, from Ammar: v01 can be saved in `03_VERSIONS/` now that CP-7 is complete (Ammar's Claude will do it when Ammar says).
+
 ## Status (updated 2026-11-23)
 
 - First evidence saved: `05_EVIDENCE/G05_C5_coverage_record_2026-11-23_Ammar.txt`, the tool's record of Ammar's first run on the real files (26 suppliers, 23 log rows, all 24 memos, none missing). Add it to the evidence list.

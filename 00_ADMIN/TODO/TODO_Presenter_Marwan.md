@@ -5,6 +5,12 @@
 **Covering for:** Hussain (data lead), if he's absent.
 **Your core step in your own account:** memo batch 2 (MEMO-09 to MEMO-16).
 
+## Notes for you
+
+Newest first. Whenever someone's Claude finishes or changes something that affects you, it adds a line here (see `CLAUDE.md`). The full log for everyone is in `00_ADMIN/TEAM_NOTES.md`.
+
+- 2026-11-25, from Ammar: no action needed right now. Coming up: one extension case (expected result first), then the run of show and demo insurance after the freeze.
+
 ## Status (updated 2026-11-23)
 
 - The first part of the tool works (loading files, memo matching, coverage). **Your main job now is memo batch 2** (below, under Week 8). Please run it soon: the flags can't be built until the batch CSVs exist.

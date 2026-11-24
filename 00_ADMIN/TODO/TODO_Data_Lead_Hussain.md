@@ -5,6 +5,13 @@
 **Covering for:** Ammar (build lead), if he's absent.
 **Your core step in your own account:** memo batch 1 (MEMO-01 to MEMO-08).
 
+## Notes for you
+
+Newest first. Whenever someone's Claude finishes or changes something that affects you, it adds a line here (see `CLAUDE.md`). The full log for everyone is in `00_ADMIN/TEAM_NOTES.md`.
+
+- 2026-11-25, from Ammar: your next tasks are in your file: review the rule choices in `02_WORK/dev_tests/README.md`, draft the industrial gap (K-11), and write one extension case with its expected result.
+- 2026-11-25, from Ammar: your old branch with the extra batch 1 copy in `03_VERSIONS/` was deleted on purpose. Your batch 1 is safe in `02_WORK/extraction/`.
+
 ## Status (updated 2026-11-23)
 
 - Your tutor question is answered. The tutor ruled that a memo counts only for the supplier in its header (RR-C5 §2: the supplier "as the buyer wrote it"). So MEMO-01 is a Corranby memo only, and its sentence about Talbeck isn't used for Talbeck. It's in the canvas decision log.
