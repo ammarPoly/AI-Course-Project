@@ -9,6 +9,7 @@
 
 Newest first. Whenever someone's Claude finishes or changes something that affects you, it adds a line here (see `CLAUDE.md`). The full log for everyone is in `00_ADMIN/TEAM_NOTES.md`.
 
+- 2026-11-25, from Fatema: T-02 complete: coverage MATCH and flags MATCH, both screenshots in 05_EVIDENCE.
 - 2026-11-25, from Fatema: T-02 flags expected result written. Next: load the 3 extraction CSVs into the tool, check SUP-01 and SUP-02 in the Scorecard tab, and send a screenshot.
 - 2026-11-25, from Fatema: T-02 coverage part run: MATCH, screenshot in 05_EVIDENCE. Flags part still to do when flags are built.
 - 2026-11-25, from Fatema: T-02 expected result written (coverage part). Next: open the tool, check SUP-01 and SUP-02 in the Coverage tab, fill in observed result and verdict, and save a screenshot.
@@ -28,7 +29,7 @@ Newest first. Whenever someone's Claude finishes or changes something that affec
 Do these in order. Expected results are always written **by you, by hand, before** anything is run.
 
 1. **T-01** (about 15 min): pick one supplier (SUP-01 is easiest). Write which memos match it under §2, and whether it has a row in `ASSESSMENT_LOG.csv` (§3). Then run it in the tool with Ammar and record MATCH or MISMATCH. This is the "slice's output" the tutor asked for.
-2. **T-02** (about 15 min): a memo whose header names one supplier but whose text mentions another (the tutor used MEMO-01). Write the expected coverage for **both** suppliers, citing §2 and §3. Then run it and record the result. For the flags part, write the expected result too and note "flags part checked later" if you run out of time.
+2. **T-02: done 2026-11-25 (coverage MATCH, flags MATCH).** (about 15 min): a memo whose header names one supplier but whose text mentions another (the tutor used MEMO-01). Write the expected coverage for **both** suppliers, citing §2 and §3. Then run it and record the result. For the flags part, write the expected result too and note "flags part checked later" if you run out of time.
 3. **2 or 3 test cases for the part-family summary** (about 20 to 30 min). The summary isn't built yet, so you only write the cases and their expected results now. The summary will show, for each part family: how many approved suppliers it has, how many are still qualified after the memos, and which ones lost qualification (with the memo quote). Example of a case you could write: "Part family X has two approved suppliers and one memo saying one of them failed requalification. Expected: 2 approved, 1 still qualified, lists the one that lost it, with its quote (RR-C5 §4.2)." Use invented families and suppliers, or real ones worked out by hand from the pack.
 4. The sweep log is already done (Maryam).
 
@@ -95,7 +96,7 @@ Working it out on paper first is fine, but the final answer goes in `04_TESTS/G0
 
 **Getting the tool:** it's in the repo at `02_WORK/control_tower.html`. Open it on GitHub, click the download arrow at the top right, then double-click the file to open it in your browser. Always download the latest copy from the repo instead of using an old one from a chat.
 
-5. **T-02, suggested by the tutor (write it before it's run).** Pick a memo whose header names one supplier and whose body also mentions another supplier (the tutor used MEMO-01 as the example). In row T-02 write, **by hand from the rule card**:
+5. **T-02, suggested by the tutor (write it before it's run).** **Done 2026-11-25 (coverage MATCH, flags MATCH).** Pick a memo whose header names one supplier and whose body also mentions another supplier (the tutor used MEMO-01 as the example). In row T-02 write, **by hand from the rule card**:
    - the input: the memo ID, the header supplier and the other supplier it mentions
    - the expected coverage for **both** suppliers (which memos each one gets), citing RR-C5 §2 and §3
    - the expected flags for both suppliers, citing §4.2 and §4.3 (the flags part can only be checked once the flags are built in Week 8, so write "to run when flags are built" in the notes)
