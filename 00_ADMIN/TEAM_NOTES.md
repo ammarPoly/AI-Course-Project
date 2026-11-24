@@ -4,6 +4,7 @@ One line per change, newest first. Every member's Claude adds a line here (and i
 
 Format: `- YYYY-MM-DD, for <member>, from <member>: what was done. What to do now.`
 
+- 2026-11-25, for Ammar, from Fatema: part-family summary test cases written as T-03 (pumps, one lost), T-04 (valves, newer memo silent) and T-05 (seals, none left, finding not flag). Invented data, expected results first, NOT RUN. Please use them when building the summary. Pull request ready to merge.
 - 2026-11-25, for Ammar and Maryam, from Fatema: T-02 complete. Flags part MATCH (SUP-01 and SUP-02 no single source, indemnity NO GAP, SUP-02 from MEMO-02). Screenshot `05_EVIDENCE/T-02_scorecard_SUP-01_SUP-02_2026-11-25_Fatema.png`, logged in EVIDENCE_LIST.md. Pull request #24 ready to merge.
 - 2026-11-25, for Ammar, from Fatema: T-02 flags expected result added (SUP-01 and SUP-02, §4.2 and §4.3), written before looking at the Scorecard tab. Not run yet. Pull request #24 updated and ready to merge.
 - 2026-11-25, for Ammar and Maryam, from Fatema: T-02 run (coverage part): MATCH. SUP-02 gets MEMO-02 only. Screenshot `05_EVIDENCE/T-02_coverage_SUP-01_SUP-02_2026-11-25_Fatema.png`, logged in EVIDENCE_LIST.md. Pull request #24 ready to merge.
