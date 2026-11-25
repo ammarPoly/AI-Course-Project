@@ -4,6 +4,7 @@ One line per change, newest first. Every member's Claude adds a line here (and i
 
 Format: `- YYYY-MM-DD, for <member>, from <member>: what was done. What to do now.`
 
+- 2026-11-25, for Marwan, from Ammar: V2 update: the robot can be dragged anywhere (double-click sends him back to the top right), and on narrow screens his message box stays beside or under him instead of covering the colour cards. Same file, same rules.
 - 2026-11-25, for Ammar, from Ammar: V2 of the tool is in `02_WORK/control_tower.html` (built in the general chat, not the build chat). Rule logic unchanged, all dev tests pass. v01 and v02 saved in `03_VERSIONS/` with CHANGES.md. Put the V2 index.html on a new Netlify site (keep the V1 site as it is). The built-in data, robot, dark mode and background were your additions, so add a line to the canvas decision log if the tutor asks.
 - 2026-11-25, for Fatema, from Ammar: V2 is ready. It opens straight onto the real scorecard, so write AQ-1 to AQ-5 in the test record BEFORE you open V2 or the Netlify link. Then run T-03 to T-05: press "Use my own files" and drop your invented files in the hero box.
 - 2026-11-25, for Maryam, from Ammar: new evidence for K-05: `03_VERSIONS/v01_2026-11-25/` (tool plus the test record as it stood after T-01 and T-02), `03_VERSIONS/v02_2026-11-25/` (V2 tool) and `03_VERSIONS/CHANGES.md` (one line per version). This also covers your end-of-week v01 copy (task 9). Please log them in EVIDENCE_LIST.md.
