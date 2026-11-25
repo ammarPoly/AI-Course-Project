@@ -9,6 +9,8 @@
 
 Newest first. Whenever someone's Claude finishes or changes something that affects you, it adds a line here (see `CLAUDE.md`). The full log for everyone is in `00_ADMIN/TEAM_NOTES.md`.
 
+- 2026-11-25, from Ammar: V2 is live at https://riskcontroltowerv2.netlify.app/ (V1 stays at https://riskcontroltowerv1.netlify.app/). Fatema: write AQ-1 to AQ-5 before you open the V2 link.
+- 2026-11-25, from Ammar: Ammar has finished building V2. Your next steps, in this order: 1) write the expected results for AQ-1 to AQ-5 in the test record BEFORE you open V2 or the Netlify link, because V2 opens on the real results; 2) run T-03 to T-05 in V2 with "Use my own files" and your invented files, record MATCH or MISMATCH with a screenshot each and send them to Maryam; 3) then the memo re-read the tutor asked for.
 - 2026-11-25, from Ammar: V2 fix: dropping a new memo plus its extraction CSV now adds it to the memos already loaded instead of replacing them. Relevant if you test new memo intake later. Your T-03 to T-05 still use "Use my own files" as before.
 - 2026-11-25, from Ammar: V2 is ready. It opens straight onto the real scorecard, so write AQ-1 to AQ-5 in the test record BEFORE you open V2 or the Netlify link. Then run T-03 to T-05: press "Use my own files" and drop your invented files in the hero box.
 - 2026-11-25, from Fatema: part-family summary test cases T-03 to T-05 written (NOT RUN). Run them once Ammar builds the summary.
