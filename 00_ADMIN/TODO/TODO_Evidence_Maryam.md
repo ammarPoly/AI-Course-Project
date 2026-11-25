@@ -9,6 +9,7 @@
 
 Newest first. Whenever someone's Claude finishes or changes something that affects you, it adds a line here (see `CLAUDE.md`). The full log for everyone is in `00_ADMIN/TEAM_NOTES.md`.
 
+- 2026-11-25, from Ammar: Ammar has finished building V2. Please log `03_VERSIONS/v01_2026-11-25/`, `03_VERSIONS/v02_2026-11-25/` and `03_VERSIONS/CHANGES.md` in EVIDENCE_LIST.md (K-05). Coming next for you: Fatema's T-03 to T-05 screenshots and her AQ-1 to AQ-5 results, and the V2 Netlify link from Ammar.
 - 2026-11-25, from Ammar: new evidence for K-05: `03_VERSIONS/v01_2026-11-25/` (tool plus the test record as it stood after T-01 and T-02), `03_VERSIONS/v02_2026-11-25/` (V2 tool) and `03_VERSIONS/CHANGES.md` (one line per version). This also covers your end-of-week v01 copy (task 9). Please log them in EVIDENCE_LIST.md.
 - 2026-11-25, from Fatema: T-02 flags part done (MATCH), new screenshot `05_EVIDENCE/T-02_scorecard_SUP-01_SUP-02_2026-11-25_Fatema.png`, line added to EVIDENCE_LIST.md. Please log it.
 - 2026-11-25, from Fatema: T-02 done (MATCH), new screenshot `05_EVIDENCE/T-02_coverage_SUP-01_SUP-02_2026-11-25_Fatema.png`, line added to EVIDENCE_LIST.md. Please log it.
