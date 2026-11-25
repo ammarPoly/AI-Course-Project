@@ -9,6 +9,7 @@
 
 Newest first. Whenever someone's Claude finishes or changes something that affects you, it adds a line here (see `CLAUDE.md`). The full log for everyone is in `00_ADMIN/TEAM_NOTES.md`.
 
+- 2026-11-25, from Maryam: the tutor told the group in class that Opus 5.5 is fine for the memo batches (class date not recorded). Recorded on the usage card `00_ADMIN/G05_usage_budget_v01.md`.
 - 2026-11-25, from Maryam: CP-7 complete and renamed to `00_ADMIN/G05_C5-A_CP-7_2026-11-25.md`; Ammar's version folders and CHANGES.md, the tutor reply and the AI cross-check logged in EVIDENCE_LIST.md. Next: log Fatema's T-03 to T-05 screenshots and AQ-1 to AQ-5 results when they arrive; CP-8 at the end of Week 8.
 - 2026-11-25, from Ammar: V2 is live at https://riskcontroltowerv2.netlify.app/ (V1 stays at https://riskcontroltowerv1.netlify.app/). Fatema: write AQ-1 to AQ-5 before you open the V2 link.
 - 2026-11-25, from Ammar: Ammar has finished building V2. Please log `03_VERSIONS/v01_2026-11-25/`, `03_VERSIONS/v02_2026-11-25/` and `03_VERSIONS/CHANGES.md` in EVIDENCE_LIST.md (K-05). Coming next for you: Fatema's T-03 to T-05 screenshots and her AQ-1 to AQ-5 results, and the V2 Netlify link from Ammar.

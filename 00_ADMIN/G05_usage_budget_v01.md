@@ -17,4 +17,6 @@ The course's per-group budget card, written as a budget of **runs** — the allo
 
 **Note:** everyone tells Maryam before starting a long run, so she can log it on this card.
 
+**Model:** the tutor told the group in class that Opus 5.5 is fine for the memo batches (class date not recorded; reported by Maryam on 2026-11-25). The brief (section 4, studio rules) says to start on the balanced / general model, so this is the reason the batches used Opus 5.5.
+
 *Week 7 student launch package · Artificial Intelligence in Logistics · studio kit Version V1.2 · 2026-11-08. Templates and guidance only — no answers, no marks.*
