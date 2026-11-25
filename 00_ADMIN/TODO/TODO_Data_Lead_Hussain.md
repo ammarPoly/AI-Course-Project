@@ -9,6 +9,7 @@
 
 Newest first. Whenever someone's Claude finishes or changes something that affects you, it adds a line here (see `CLAUDE.md`). The full log for everyone is in `00_ADMIN/TEAM_NOTES.md`.
 
+- 2026-11-25, from Ammar: V2 is in the repo. Its Part families tab shows a warning for MEMO-20: it says Quillmarsh (SUP-20) is QUALIFIED for the "bronze range", but the master lists Quillmarsh for "impellers", so the tool does not apply it (no result changes). Please check you agree, it is a good refusal example for the demo. Your rule review is still open.
 - 2026-11-25, from Ammar: your next tasks are in your file: review the rule choices in `02_WORK/dev_tests/README.md`, draft the industrial gap (K-11), and write one extension case with its expected result.
 - 2026-11-25, from Ammar: your old branch with the extra batch 1 copy in `03_VERSIONS/` was deleted on purpose. Your batch 1 is safe in `02_WORK/extraction/`.
 
