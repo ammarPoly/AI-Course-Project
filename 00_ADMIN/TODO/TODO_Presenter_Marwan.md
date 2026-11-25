@@ -9,6 +9,7 @@
 
 Newest first. Whenever someone's Claude finishes or changes something that affects you, it adds a line here (see `CLAUDE.md`). The full log for everyone is in `00_ADMIN/TEAM_NOTES.md`.
 
+- 2026-11-25, from Ammar: V2 is the tool you will demo. No action yet, but have a look at the tabs, the colour and flag cards (click them to filter) and the robot that explains what the mouse points at.
 - 2026-11-25, from Ammar: no action needed right now. Coming up: one extension case (expected result first), then the run of show and demo insurance after the freeze.
 
 ## Status (updated 2026-11-23)

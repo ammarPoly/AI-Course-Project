@@ -1,0 +1,925 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Supplier Risk Control Tower V2</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700;800&family=Inter:wght@400;500;600&display=swap">
+<style>
+/* VOICE: a calm logistics control room; confident, quiet, every colour means something.
+   IDEA: an air-traffic style control tower watching a supplier network.
+   PICTURE: a live supplier network (particles joined by routes) behind glass panels.
+   COLOUR and TYPE: harbour teal accent on clean white / night slate; status colours only for status. Manrope + Inter, system fonts offline.
+   LAYOUT: sticky tower bar, summary, sources strip, then one big glass console with sliding tabs. */
+:root{color-scheme:light dark;
+ --bg:light-dark(#eef3f5,#060d16);--bg2:light-dark(#ffffff,#0b1624);
+ --ink:light-dark(#0f1c2b,#e6edf5);--muted:light-dark(#566577,#8fa0b3);
+ --glass:light-dark(rgba(255,255,255,.74),rgba(14,27,43,.64));--line:light-dark(rgba(15,28,43,.10),rgba(230,237,245,.10));
+ --accent:light-dark(#0b7f86,#2cc6c0);--accent2:light-dark(#0a5f8f,#4ea9ff);--glow:light-dark(rgba(11,127,134,.30),rgba(44,198,192,.38));
+ --red:light-dark(#c62f45,#ff5d72);--amber:light-dark(#b8740d,#ffb547);--green:light-dark(#18874a,#3ddc84);--cd:light-dark(#5b6676,#9aa7b6);
+ --hover:light-dark(#f3fafa,#102235);--shadow:light-dark(0 10px 30px rgba(15,28,43,.08),0 14px 40px rgba(0,0,0,.45));--r:16px}
+:root[data-theme=light]{color-scheme:light}:root[data-theme=dark]{color-scheme:dark}
+*{box-sizing:border-box;min-width:0}
+html{scroll-padding-top:80px}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.55 Inter,"Segoe UI",system-ui,-apple-system,sans-serif;overflow-x:clip;min-height:100vh}
+#net{position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none}
+.wrap{position:relative;z-index:1;max-width:1240px;margin:0 auto;padding:0 max(3vw,14px) 60px}
+h1,h2,h3{font-family:Manrope,Inter,"Segoe UI",sans-serif;margin:0;letter-spacing:-.01em}
+.bar{position:sticky;top:0;z-index:5;backdrop-filter:blur(14px) saturate(1.3);-webkit-backdrop-filter:blur(14px) saturate(1.3);background:light-dark(rgba(238,243,245,.74),rgba(6,13,22,.68));border-bottom:1px solid var(--line)}
+.bar .in{max-width:1240px;margin:0 auto;padding:12px max(3vw,14px);display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.logo{width:34px;height:34px;flex:none}
+.brand h1{font-size:19px;font-weight:800}
+.brand small{display:block;color:var(--muted);font-size:12.5px}
+.sp{flex:1}
+.pill{display:inline-flex;align-items:center;gap:6px;padding:5px 11px;border-radius:999px;font-size:12.5px;font-weight:600;border:1px solid var(--line);background:var(--glass);white-space:nowrap}
+.pill .d{width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 0 3px light-dark(rgba(24,135,74,.15),rgba(61,220,132,.18))}
+.pill.own .d{background:var(--accent2)}
+.ver{background:var(--accent);color:light-dark(#fff,#04121a);border-color:transparent}
+.iconbtn{width:40px;height:40px;border-radius:12px;border:1px solid var(--line);background:var(--glass);color:var(--ink);display:grid;place-items:center;cursor:pointer;position:relative;overflow:hidden;transition:border-color .2s,transform .2s}
+.iconbtn:hover{border-color:var(--accent);transform:translateY(-1px)}
+.iconbtn svg{width:19px;height:19px}
+.iconbtn[aria-pressed=false]{opacity:.55}
+.card{position:relative;background:var(--glass);backdrop-filter:blur(12px) saturate(1.2);-webkit-backdrop-filter:blur(12px) saturate(1.2);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);overflow:hidden;isolation:isolate}
+.card::before{content:"";position:absolute;inset:-1px;border-radius:inherit;padding:1px;background:radial-gradient(260px circle at var(--mx,50%) var(--my,-40%),var(--accent),transparent 60%);-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;opacity:0;transition:opacity .25s;pointer-events:none}
+.card:hover::before{opacity:1}
+.card::after{content:"";position:absolute;inset:0;background:radial-gradient(420px circle at var(--mx,50%) var(--my,-40%),var(--glow),transparent 55%);opacity:0;transition:opacity .25s;pointer-events:none;z-index:-1}
+.card:hover::after{opacity:.35}
+.hero{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:18px;margin-top:22px}
+.hero>.card{padding:22px 24px}
+.hero h2{font-size:clamp(26px,3.3vw,40px);line-height:1.08;font-weight:800;text-wrap:balance}
+.hero p{color:var(--muted);margin:10px 0 0;max-width:60ch}
+.kpis{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.kpi{padding:14px 16px;cursor:pointer}
+.kpi b{font:800 clamp(26px,3vw,36px)/1 Manrope,"Segoe UI",sans-serif;display:block}
+.kpi span{color:var(--muted);font-size:13px}
+.kpi.RED b{color:var(--red)}.kpi.AMBER b{color:var(--amber)}.kpi.GREEN b{color:var(--green)}.kpi.CD b{color:var(--cd)}
+.sec{display:flex;align-items:end;justify-content:space-between;gap:12px;margin:28px 0 10px;flex-wrap:wrap}
+.sec h3{font-size:18px;font-weight:700}
+.sec p{margin:2px 0 0;color:var(--muted);font-size:13.5px}
+.btn{position:relative;overflow:hidden;font:600 14px Inter,"Segoe UI",sans-serif;padding:10px 16px;min-height:42px;border-radius:12px;border:1px solid var(--accent);background:var(--accent);color:light-dark(#fff,#04121a);cursor:pointer;transition:transform .15s,box-shadow .2s}
+.btn:hover{box-shadow:0 8px 22px var(--glow);transform:translateY(-1px)}
+.btn.ghost{background:transparent;color:var(--accent)}
+.btn.small{padding:6px 12px;min-height:34px;font-size:13px}
+.btn.danger{border-color:light-dark(rgba(198,47,69,.35),rgba(255,93,114,.35));background:transparent;color:var(--red)}
+.btn:disabled{opacity:.4;cursor:default;transform:none;box-shadow:none}
+.rip{position:absolute;border-radius:50%;transform:scale(0);background:currentColor;opacity:.28;animation:rip .6s ease-out forwards;pointer-events:none}
+@keyframes rip{to{transform:scale(4);opacity:0}}
+.tiles{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.tile{padding:16px;display:flex;flex-direction:column;gap:6px;min-height:156px;transition:transform .2s}
+.tile:hover{transform:translateY(-2px)}
+.tile.drag{outline:2px dashed var(--accent);outline-offset:-6px;animation:dash 1s linear infinite}
+@keyframes dash{50%{outline-offset:-9px}}
+.tile .t{display:flex;align-items:center;gap:8px;font-weight:700;font-family:Manrope,"Segoe UI",sans-serif}
+.tick{width:22px;height:22px;border-radius:50%;background:var(--green);display:grid;place-items:center;color:#fff;flex:none;animation:pop .45s cubic-bezier(.2,1.6,.4,1)}
+.tick.off{background:var(--line);animation:none}
+.tick svg{width:13px;height:13px}
+@keyframes pop{from{transform:scale(0)}}
+.tile .n{font:800 24px Manrope,"Segoe UI",sans-serif}
+.tile .f{color:var(--muted);font-size:12.5px;overflow-wrap:anywhere}
+.tile .src{margin-top:auto;display:flex;gap:6px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+.tag{font-size:12px;font-weight:600;padding:3px 9px;border-radius:999px;background:light-dark(rgba(11,127,134,.10),rgba(44,198,192,.14));color:var(--accent);white-space:nowrap}
+.tag.own{background:light-dark(rgba(10,95,143,.10),rgba(78,169,255,.14));color:var(--accent2)}
+.tag.none{background:var(--line);color:var(--muted)}
+.msgs{margin-top:10px;display:grid;gap:6px}
+.msg{padding:9px 14px;border-radius:12px;font-size:13.5px;border:1px solid var(--line);background:var(--glass)}
+.msg.ok{color:var(--green)}.msg.warn{color:var(--amber)}.msg.bad{color:var(--red)}
+.console{margin-top:26px}
+.tabs{position:relative;display:flex;gap:2px;padding:8px 10px 0;border-bottom:1px solid var(--line);overflow-x:auto;scrollbar-width:none}
+.tab{position:relative;overflow:hidden;font:600 14px Inter,"Segoe UI",sans-serif;color:var(--muted);background:none;border:0;padding:12px 16px 14px;border-radius:12px 12px 0 0;cursor:pointer;white-space:nowrap;transition:color .2s,background .2s}
+.tab::after{content:"";position:absolute;top:0;bottom:0;left:-80%;width:55%;background:linear-gradient(105deg,transparent,light-dark(rgba(255,255,255,.9),rgba(255,255,255,.22)),transparent);transform:skewX(-18deg);pointer-events:none}
+.tab:hover{color:var(--ink);background:light-dark(rgba(11,127,134,.06),rgba(44,198,192,.07))}
+.tab:hover::after{animation:shine .75s ease}
+@keyframes shine{to{left:130%}}
+.tab[aria-selected=true]{color:var(--ink)}
+.tab .c{font-size:11.5px;background:var(--line);border-radius:999px;padding:1px 7px;margin-left:6px;color:var(--muted)}
+.ink{position:absolute;bottom:-1px;height:3px;border-radius:3px;background:linear-gradient(90deg,var(--accent),var(--accent2));box-shadow:0 0 14px var(--glow),0 0 4px var(--accent);transition:left .35s cubic-bezier(.3,1.3,.5,1),width .35s cubic-bezier(.3,1.3,.5,1)}
+.panel{padding:20px 22px 24px;display:none}
+.panel.on{display:block;animation:fade .3s ease}
+@keyframes fade{from{opacity:0;transform:translateY(4px)}}
+.tools{display:flex;gap:10px;flex-wrap:wrap;align-items:center;justify-content:space-between;margin-bottom:12px}
+.hint{color:var(--muted);font-size:13.5px;margin:0 0 12px}
+input[type=search],select{font:16px Inter,"Segoe UI",sans-serif;padding:9px 14px;border-radius:12px;border:1px solid var(--line);background:var(--bg2);color:var(--ink);min-width:240px;outline:none;transition:border-color .2s,box-shadow .2s}
+input[type=search]:focus,select:focus{border-color:var(--accent);box-shadow:0 0 0 4px var(--glow)}
+.legend{display:flex;gap:8px;flex-wrap:wrap}
+.scroll{overflow-x:auto}
+table{width:100%;border-collapse:separate;border-spacing:0 6px;font-size:14px}
+th{text-align:left;font-weight:600;color:var(--muted);font-size:12.5px;padding:4px 12px}
+td{padding:12px;background:var(--bg2);border-top:1px solid var(--line);border-bottom:1px solid var(--line);transition:background .2s;vertical-align:top}
+td:first-child{border-left:4px solid var(--line);border-radius:10px 0 0 10px}
+td:last-child{border-right:1px solid var(--line);border-radius:0 10px 10px 0}
+tr.RED td:first-child{border-left-color:var(--red)}tr.AMBER td:first-child{border-left-color:var(--amber)}tr.GREEN td:first-child{border-left-color:var(--green)}tr.CD td:first-child{border-left-color:var(--cd)}
+tbody tr.click{cursor:pointer}
+tbody tr.click:hover td{background:var(--hover)}
+.st{display:inline-block;font-weight:700;font-size:12px;padding:3px 10px;border-radius:999px;white-space:nowrap}
+.st.RED{background:light-dark(rgba(198,47,69,.12),rgba(255,93,114,.16));color:var(--red)}
+.st.AMBER{background:light-dark(rgba(184,116,13,.13),rgba(255,181,71,.16));color:var(--amber)}
+.st.GREEN{background:light-dark(rgba(24,135,74,.12),rgba(61,220,132,.15));color:var(--green)}
+.st.CD{background:light-dark(rgba(91,102,118,.12),rgba(154,167,182,.15));color:var(--cd)}
+.flag{display:inline-block;font-size:12px;font-weight:600;padding:2px 8px;border-radius:8px;border:1px solid var(--line);margin:0 4px 4px 0;white-space:nowrap}
+.q{color:var(--muted);font-size:12.5px;margin-top:4px;overflow-wrap:anywhere}
+.mono{font-family:ui-monospace,Consolas,Menlo,monospace;font-size:12.5px}
+blockquote{margin:8px 0;padding:8px 12px;border-left:3px solid var(--accent);background:light-dark(rgba(11,127,134,.06),rgba(44,198,192,.08));border-radius:0 10px 10px 0}
+.fam{display:grid;grid-template-columns:minmax(0,190px) minmax(0,1fr) auto;gap:14px;align-items:start;padding:14px;border-radius:12px;background:var(--bg2);border:1px solid var(--line);margin-bottom:8px}
+.meter{height:12px;border-radius:999px;background:var(--line);overflow:hidden;display:flex;margin-top:4px}
+.meter i{display:block;height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));transition:width .8s cubic-bezier(.2,.9,.3,1)}
+.meter i.lost{background:var(--red);opacity:.75}
+.meter i.na{background:var(--cd);opacity:.5}
+.fam b{font-family:Manrope,"Segoe UI",sans-serif}
+.who{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.who span{font-size:12.5px;padding:2px 9px;border-radius:8px;border:1px solid var(--line)}
+.who .ok{border-color:light-dark(rgba(24,135,74,.35),rgba(61,220,132,.35))}
+.who .lost{border-color:light-dark(rgba(198,47,69,.4),rgba(255,93,114,.4));color:var(--red)}
+.who .na{color:var(--muted);border-style:dashed}
+.steps td{padding:8px 12px}
+.steps .same{color:var(--green);font-weight:700}
+.detail h3{font-size:22px}
+.box{padding:14px 16px;border-radius:12px;background:var(--bg2);border:1px solid var(--line);margin-top:10px}
+.box h4{margin:0 0 6px;font:700 14px Manrope,"Segoe UI",sans-serif}
+pre.rec{white-space:pre-wrap;margin:0;padding:14px 16px;border-radius:12px;background:var(--bg2);border:1px solid var(--line);font:12.5px/1.6 ui-monospace,Consolas,Menlo,monospace;overflow-wrap:anywhere}
+.empty{padding:34px;text-align:center;color:var(--muted)}
+details summary{cursor:pointer;color:var(--accent);font-size:13px;font-weight:600}
+.ico{width:16px;height:16px;vertical-align:-3px;flex:none}
+.btn .ico{margin-right:6px}
+.tab .ico{margin-right:7px;opacity:.85}
+.tile .t .ico{width:18px;height:18px;color:var(--accent)}
+.box h4 .ico{margin-right:6px;color:var(--accent)}
+.drop{margin-top:16px;border:2px dashed light-dark(rgba(11,127,134,.45),rgba(44,198,192,.45));border-radius:14px;padding:20px;display:flex;align-items:center;gap:16px;flex-wrap:wrap;background:light-dark(rgba(11,127,134,.04),rgba(44,198,192,.05));transition:background .2s,border-color .2s}
+.drop.over{background:light-dark(rgba(11,127,134,.12),rgba(44,198,192,.14));border-color:var(--accent);animation:dash 1s linear infinite}
+.drop .up{width:52px;height:52px;border-radius:14px;display:grid;place-items:center;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;flex:none;animation:bob 2.4s ease-in-out infinite}
+.drop .up svg{width:26px;height:26px}
+@keyframes bob{50%{transform:translateY(-4px)}}
+.drop[hidden]{display:none}
+.drop b{display:block;font-family:Manrope,"Segoe UI",sans-serif;font-size:16px}
+.drop span{color:var(--muted);font-size:13px}
+.key{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin-bottom:12px}
+.key button{all:unset;cursor:pointer;padding:10px 12px;border-radius:12px;background:var(--bg2);border:1px solid var(--line);transition:border-color .2s,transform .2s}
+.key button:hover{transform:translateY(-1px)}
+.key button[aria-pressed=true]{border-color:var(--accent);box-shadow:0 0 0 3px var(--glow)}
+.key .top{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.key .num{font:800 22px Manrope,"Segoe UI",sans-serif}
+.key .RED .num{color:var(--red)}.key .AMBER .num{color:var(--amber)}.key .GREEN .num{color:var(--green)}.key .CD .num{color:var(--cd)}
+.key p{margin:6px 0 0;font-size:12.5px;color:var(--muted);line-height:1.45}
+.flagkey{margin:4px 0 16px;padding:14px;border-radius:14px;border:1px solid light-dark(rgba(184,116,13,.35),rgba(255,181,71,.35));background:light-dark(rgba(184,116,13,.07),rgba(255,181,71,.07))}
+.flagkey h4{display:flex;align-items:center;gap:8px;margin:0 0 10px;font-size:14px;color:var(--amber)}
+.flagkey .fk{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.flagkey button{display:flex;gap:12px;align-items:flex-start;text-align:left;font:inherit;color:var(--ink);padding:12px 14px;border-radius:12px;border:1px solid var(--line);border-left:4px solid var(--amber);background:var(--bg2);cursor:pointer;transition:transform .15s,box-shadow .2s}
+.flagkey button:hover,.flagkey button[aria-pressed=true]{transform:translateY(-2px);box-shadow:var(--shadow)}
+.flagkey button[aria-pressed=true]{outline:2px solid var(--amber)}
+.flagkey .fi{flex:none;display:grid;place-items:center;width:34px;height:34px;border-radius:10px;background:light-dark(rgba(184,116,13,.14),rgba(255,181,71,.16));color:var(--amber)}
+.flagkey .fn{font-size:22px;font-weight:700;color:var(--amber);margin-left:auto;padding-left:8px}
+.flagkey b{display:block;font-size:14px;margin-bottom:2px}
+.flagkey small{display:block;font-size:12.5px;color:var(--muted);line-height:1.4}
+@media (max-width:820px){.flagkey .fk{grid-template-columns:1fr}}
+/* robot */
+#bot{position:fixed;top:112px;right:22px;z-index:6;width:120px;height:140px;cursor:default;filter:drop-shadow(0 12px 18px light-dark(rgba(15,28,43,.22),rgba(0,0,0,.55)))}
+#bot svg{width:100%;height:100%;overflow:visible}
+#bot .float{animation:float 4s ease-in-out infinite;transform-origin:60px 70px}
+@keyframes float{50%{transform:translateY(-4px)}}
+#bot .head{transition:transform .25s ease-out;transform-origin:60px 60px}
+#bot .eye{transition:transform .08s linear}
+#bot .lids{transform-origin:60px 55px;transform:scaleY(0);transition:transform .08s}
+#bot.blink .lids{transform:scaleY(1)}
+#bot .tip{animation:pulse 2s ease-in-out infinite}
+@keyframes pulse{50%{opacity:.45}}
+#bubble{position:fixed;top:134px;right:150px;z-index:6;max-width:280px;padding:10px 14px;border-radius:14px 14px 4px 14px;background:var(--glass);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:1px solid var(--line);box-shadow:var(--shadow);font-size:13.5px;line-height:1.4;opacity:0;transform:translateY(-4px) scale(.98);transition:opacity .2s,transform .2s;pointer-events:none}
+#bubble.show{opacity:1;transform:none}
+#bubble b{color:var(--accent)}
+footer{position:relative;z-index:1;text-align:center;color:var(--muted);font-size:12.5px;padding:10px 0 30px}
+:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+@media (max-width:900px){.hero{grid-template-columns:minmax(0,1fr)}.tiles{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:900px){.key{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:700px){#bot{width:64px;height:76px;top:auto;bottom:14px;right:10px}#bubble{top:auto;bottom:40px;right:82px;max-width:200px}}
+@media (max-width:600px){.tiles{grid-template-columns:minmax(0,1fr)}.brand small{display:none}.fam{grid-template-columns:minmax(0,1fr)}table{font-size:13px}.hide-s{display:none}input[type=search]{min-width:0;width:100%}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<canvas id="net" aria-hidden="true"></canvas>
+<div id="bot" aria-hidden="true"><svg viewBox="0 0 120 140">
+ <defs>
+  <linearGradient id="metal" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="light-dark(#ffffff,#3a4b5f)"/><stop offset=".55" stop-color="light-dark(#dfe7ee,#243447)"/><stop offset="1" stop-color="light-dark(#b9c6d2,#162434)"/></linearGradient>
+  <linearGradient id="metal2" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="light-dark(#eef3f7,#2d3e52)"/><stop offset="1" stop-color="light-dark(#aab8c6,#132131)"/></linearGradient>
+  <radialGradient id="visor" cx=".5" cy=".35" r=".8"><stop offset="0" stop-color="#16314a"/><stop offset="1" stop-color="#050c16"/></radialGradient>
+  <radialGradient id="eyeg" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#e9fffd"/><stop offset=".35" stop-color="#5ff2e6"/><stop offset="1" stop-color="rgba(44,198,192,0)"/></radialGradient>
+  <radialGradient id="tipg" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#ffffff"/><stop offset=".4" stop-color="#3fe0d6"/><stop offset="1" stop-color="rgba(44,198,192,0)"/></radialGradient>
+ </defs>
+ <ellipse cx="60" cy="134" rx="26" ry="4" fill="light-dark(rgba(15,28,43,.18),rgba(0,0,0,.45))"/>
+ <g class="float">
+  <g class="body">
+   <path d="M38 100 Q60 92 82 100 L78 126 Q60 132 42 126 Z" fill="url(#metal)" stroke="light-dark(rgba(15,28,43,.18),rgba(255,255,255,.12))"/>
+   <rect x="52" y="106" width="16" height="10" rx="4" fill="#0a1a2a"/><rect x="55" y="109" width="10" height="4" rx="2" fill="#2cc6c0" class="tip"/>
+   <path d="M44 104 Q60 98 76 104" stroke="rgba(255,255,255,.55)" stroke-width="1.5" fill="none"/>
+  </g>
+  <g class="head">
+   <line x1="60" y1="22" x2="60" y2="8" stroke="light-dark(#8797a6,#5d7084)" stroke-width="3" stroke-linecap="round"/>
+   <circle cx="60" cy="7" r="9" fill="url(#tipg)" class="tip"/><circle cx="60" cy="7" r="3.2" fill="#c9fffb"/>
+   <rect x="11" y="44" width="10" height="22" rx="5" fill="url(#metal2)"/><rect x="99" y="44" width="10" height="22" rx="5" fill="url(#metal2)"/>
+   <rect x="16" y="20" width="88" height="72" rx="28" fill="url(#metal)" stroke="light-dark(rgba(15,28,43,.18),rgba(255,255,255,.14))"/>
+   <path d="M30 28 Q60 18 90 28" stroke="rgba(255,255,255,.75)" stroke-width="3" fill="none" stroke-linecap="round" opacity=".7"/>
+   <rect x="25" y="36" width="70" height="40" rx="19" fill="url(#visor)"/>
+   <rect x="29" y="39" width="62" height="10" rx="5" fill="rgba(255,255,255,.07)"/>
+   <g class="eyes">
+    <g class="eye" id="eL"><circle cx="46" cy="55" r="11" fill="url(#eyeg)"/><circle cx="46" cy="55" r="4.6" fill="#e9fffd"/></g>
+    <g class="eye" id="eR"><circle cx="74" cy="55" r="11" fill="url(#eyeg)"/><circle cx="74" cy="55" r="4.6" fill="#e9fffd"/></g>
+    <g class="lids"><rect x="33" y="43" width="26" height="24" rx="12" fill="#081422"/><rect x="61" y="43" width="26" height="24" rx="12" fill="#081422"/></g>
+   </g>
+   <path id="mouth" d="M52 69 Q60 73 68 69" stroke="#3fe0d6" stroke-width="2" fill="none" stroke-linecap="round" opacity=".85"/>
+  </g>
+ </g>
+</svg></div>
+<div id="bubble" role="status" aria-live="polite"></div>
+
+<header class="bar"><div class="in">
+  <svg class="logo" viewBox="0 0 40 40" aria-hidden="true"><defs><linearGradient id="lg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="var(--accent)"/><stop offset="1" stop-color="var(--accent2)"/></linearGradient></defs><rect width="40" height="40" rx="11" fill="url(#lg)"/><path d="M20 8l3.5 7h-7zM17 15h6l2 17h-10z" fill="#fff" opacity=".95"/><circle cx="20" cy="11.5" r="1.6" fill="url(#lg)"/><path d="M9 14a14 14 0 0 1 4-4M31 14a14 14 0 0 0-4-4" stroke="#fff" stroke-width="1.6" fill="none" stroke-linecap="round" opacity=".8"/></svg>
+  <div class="brand"><h1>Supplier Risk Control Tower</h1><small>Group 5, C5-A. Rules RR-C5 as of 2026-10-31. Works offline.</small></div>
+  <div class="sp"></div>
+  <span class="pill" id="dataPill" data-tip="Shows whether the tool is using the built-in pack or files you loaded."><span class="d"></span><span id="dataPillT">Built-in data</span></span>
+  <span class="pill ver">V2</span>
+  <button class="iconbtn" id="tBtn" data-tip="Switch between dark and light mode. Your choice is remembered." aria-label="Switch dark or light mode" title="Dark or light mode"><svg id="tIco" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"></svg></button>
+</div></header>
+
+<main class="wrap">
+  <section class="hero">
+    <div class="card"><h2>Which suppliers could stop the line, and what proves it.</h2>
+      <p>The tower reads the supplier master, the assessment log and every buyer memo, applies RR-C5, and links each flag to the exact sentence or record behind it.</p>
+      <div style="margin-top:16px;display:flex;gap:10px;flex-wrap:wrap"><button class="btn" id="goScore" data-tip="Jump to the scorecard: one row per supplier with its flags and status.">Open scorecard</button><button class="btn ghost" id="ownBtn" data-tip="Remove the built-in pack and load your own files instead.">Use my own files</button></div>
+      <div class="drop" id="heroDrop" hidden data-tip="Drop the master, the log, memos and extraction CSVs here. The tool sorts them by what is inside."><div class="up"><i data-ic="upload" data-c="big"></i></div><div style="flex:1"><b>Drop your files here</b><span>Master, assessment log, memos and extraction CSVs, all at once. The tool works out which file is which.</span></div><button class="btn small" id="heroPick">Choose files</button></div>
+    </div>
+    <div class="kpis" id="kpis"></div>
+  </section>
+
+  <div class="sec"><div><h3>Sources</h3><p id="srcHint">Loaded from the pack as issued. Drop a file on a box to replace it, or drop several anywhere on the page.</p></div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn ghost small" id="builtBtn" data-tip="Reload the pack exactly as issued, plus the group's three batch files."><i data-ic="refresh"></i>Back to built-in data</button><button class="btn danger small" id="clearAll" data-tip="Remove every loaded file and start empty."><i data-ic="trash"></i>Clear all files</button></div></div>
+  <div class="tiles" id="tiles"></div>
+  <div class="msgs" id="msgs"></div>
+  <input type="file" id="pickAny" multiple hidden>
+
+  <section class="card console">
+    <div class="tabs" role="tablist" id="tabs">
+      <button class="tab" role="tab" aria-selected="true" data-p="sc" data-tip="Scorecard: every supplier with its flags, evidence and RED, AMBER, GREEN or CANNOT DETERMINE status."><i data-ic="table"></i>Scorecard<span class="c" id="c-sc">0</span></button>
+      <button class="tab" role="tab" aria-selected="false" data-p="pf" data-tip="Part families: how many qualified suppliers each family really has. This is our visible addition."><i data-ic="bars"></i>Part families<span class="c" id="c-pf">0</span></button>
+      <button class="tab" role="tab" aria-selected="false" data-p="cv" data-tip="Coverage: which memos and log rows exist for each supplier. Evidence only, not risk."><i data-ic="shield"></i>Coverage</button>
+      <button class="tab" role="tab" aria-selected="false" data-p="mm" data-tip="Memo matching: how each memo is linked to a supplier with the five RR-C5 section 2 steps."><i data-ic="link"></i>Memo matching<span class="c" id="c-mm">0</span></button>
+      <button class="tab" role="tab" aria-selected="false" data-p="sd" data-tip="Supplier detail: everything about one supplier, with the exact quotes behind each flag."><i data-ic="user"></i>Supplier detail</button>
+      <button class="tab" role="tab" aria-selected="false" data-p="cr" data-tip="Coverage record: proof of every file and memo this run read, plus a log of every change."><i data-ic="doc"></i>Coverage record</button>
+      <span class="ink" id="ink"></span>
+    </div>
+    <div class="panel on" id="p-sc"></div>
+    <div class="panel" id="p-pf"></div>
+    <div class="panel" id="p-cv"></div>
+    <div class="panel" id="p-mm"></div>
+    <div class="panel" id="p-sd"></div>
+    <div class="panel" id="p-cr"></div>
+  </section>
+</main>
+<footer>V2, 2026-11-25. The tool shows evidence; the category director and buyers decide what to do. SYNTHETIC classroom data.</footer>
+
+<script type="application/json" id="builtin">{"master": {"name": "SUPPLIER_MASTER.csv", "text": "supplier_id,supplier_name,part_families,approval_status,spend_band\nSUP-01,Corranby Foundry Works W.L.L.,castings,APPROVED,A\nSUP-02,Talbeck Castings Co.,castings,APPROVED,B\nSUP-03,Vellmoor Motors W.L.L.,motors; machined shafts,APPROVED,A\nSUP-04,Ostrand Electric Drives LLC,motors,APPROVED,B\nSUP-05,Kestrelwire Electronics FZE,PCB assemblies,APPROVED,A\nSUP-06,Halvard Bearings Trading W.L.L.,bearings,APPROVED,B\nSUP-07,Marrowgate Impellers Ltd,impellers,APPROVED,A\nSUP-08,Linnetbrook Cables W.L.L.,cables,APPROVED,C\nSUP-09,Tidewell Seal Systems Co.,mechanical seals,APPROVED,A\nSUP-10,Gannetstone Fasteners W.L.L.,fasteners,APPROVED,C\nSUP-11,Peltrove Gasket Supply,gaskets,APPROVED,C\nSUP-12,Gulfreach Fasteners Company W.L.L.,fasteners,APPROVED,B\nSUP-13,Brindlecourt Bearing Supply,bearings,APPROVED,C\nSUP-14,Saltcote Coatings W.L.L.,paint and coatings,APPROVED,B\nSUP-15,Merrowfield Packaging W.L.L.,packaging,APPROVED,C\nSUP-16,Amberlode Sealing W.L.L.,mechanical seals,APPROVED,B\nSUP-17,Copperhythe Cable Works,cables,APPROVED,B\nSUP-18,Fennick Gasket Industries,gaskets,APPROVED,C\nSUP-19,Ironvale Freight Services W.L.L.,inbound freight,APPROVED,B\nSUP-20,Quillmarsh Impeller Co.,impellers,APPROVED,B\nSUP-21,Kelvingrey Paint Systems,paint and coatings,APPROVED,C\nSUP-22,Thornwick Cartons W.L.L.,packaging,APPROVED,B\nSUP-23,Harrowmere Freight Lines,inbound freight,APPROVED,C\nSUP-24,Coldharbour Enclosures W.L.L.,electrical enclosures,APPROVED,B\nSUP-25,Pinemoor Enclosure Fabrication,electrical enclosures,APPROVED,C\nSUP-26,Mallowmere Machining W.L.L.,machined shafts,APPROVED,B\n"}, "log": {"name": "ASSESSMENT_LOG.csv", "text": "supplier_id,last_assessment_date,result\nSUP-01,2025-09-14,PASS\nSUP-02,2024-11-02,PASS\nSUP-03,2026-02-18,PASS\nSUP-04,2025-06-30,CONDITIONAL\nSUP-05,2026-03-09,PASS\nSUP-06,2025-01-21,PASS\nSUP-07,2025-12-04,PASS\nSUP-08,2024-08-27,CONDITIONAL\nSUP-09,2025-10-16,PASS\nSUP-10,2026-01-12,PASS\nSUP-11,2025-05-07,PASS\nSUP-12,2025-11-25,PASS\nSUP-13,2024-12-10,PASS\nSUP-14,2026-04-14,CONDITIONAL\nSUP-15,2025-08-19,PASS\nSUP-16,2026-03-24,CONDITIONAL\nSUP-17,2025-03-03,PASS\nSUP-18,2026-06-08,PASS\nSUP-20,2025-07-22,PASS\nSUP-21,2024-10-15,PASS\nSUP-22,2026-05-26,PASS\nSUP-23,2025-02-25,PASS\nSUP-26,2026-07-30,PASS\n"}, "memos": [{"name": "MEMO-01.md", "text": "# MEMO-01 — Annual review — pump casings\n\n**Date:** 2024-11-12 · **Author:** Buyer, castings · **Supplier (as written):** Corranby Foundry Works · **Company:** Brightkeel Pumps Manufacturing W.L.L.\n\nCorranby supplies about 60 % of our grey-iron pump casings from its plant near Sitra. On-time delivery this year was 94 %, with two late batches in August caused by a furnace repair.\n\nThe contract includes a product indemnity capped at BHD 250,000. Corranby shares the casing work with Talbeck, which holds the remaining volume and is fully qualified for the same patterns.\n\nNo change to the allocation is proposed.\n\n---\n*SYNTHETIC — for teaching (Week 7 studio, Artificial Intelligence in Logistics). C5-A Supplier Risk Control Tower · Version V1 · 2026-11-07. Every company, person, number and document in this pack is fictional.*\n"}, {"name": "MEMO-02.md", "text": "# MEMO-02 — Second-source casings — status\n\n**Date:** 2024-12-03 · **Author:** Buyer, castings · **Supplier (as written):** Talbeck Castings · **Company:** Brightkeel Pumps Manufacturing W.L.L.\n\nTalbeck Castings delivered every casing order on time this quarter. Machining allowances were slightly generous on the 80 mm volute, which our shop absorbed without cost.\n\nTalbeck's agreement carries a product indemnity capped at BHD 100,000.\n\nWe recommend keeping Talbeck at about 40 % of casing volume.\n\n---\n*SYNTHETIC — for teaching (Week 7 studio, Artificial Intelligence in Logistics). C5-A Supplier Risk Control Tower · Version V1 · 2026-11-07. Every company, person, number and document in this pack is fictional.*\n"}, {"name": "MEMO-03.md", "text": "# MEMO-03 — Motor and shaft supply — 2025 plan\n\n**Date:** 2025-01-20 · **Author:** Category manager, drives · **Supplier (as written):** Vellmoor Motors · **Company:** Brightkeel Pumps Manufacturing W.L.L.\n\nVellmoor supplies induction motors for the 2.2–15 kW range and machines pump shafts for the same models. Lead times have settled at six weeks.\n\nThe framework agreement includes a product indemnity capped at BHD 500,000.\n\nOstrand remains qualified for motors and Mallowmere for machined shafts, so neither family depends on Vellmoor alone.\n\n---\n*SYNTHETIC — for teaching (Week 7 studio, Artificial Intelligence in Logistics). C5-A Supplier Risk Control Tower · Version V1 · 2026-11-07. Every company, person, number and document in this pack is fictional.*\n"}, {"name": "MEMO-04.md", "text": "# MEMO-04 — Ostrand — performance note\n\n**Date:** 2025-02-11 · **Author:** Category manager, drives · **Supplier (as written):** Ostrand Electric Drives · **Company:** Brightkeel Pumps Manufacturing W.L.L.\n\nOstrand's motors passed our winding-temperature tests but two units arrived with damaged terminal boxes in January. Ostrand replaced them within a week.\n\nOstrand's contract carries a product indemnity capped at BHD 75,000.\n\n---\n*SYNTHETIC — for teaching (Week 7 studio, Artificial Intelligence in Logistics). C5-A Supplier Risk Control Tower · Version V1 · 2026-11-07. Every company, person, number and document in this pack is fictional.*\n"}, {"name": "MEMO-05.md", "text": "# MEMO-05 — Impeller supply — contract position\n\n**Date:** 2025-03-10 · **Author:** Buyer, hydraulics · **Supplier (as written):** Marrowgate Impellers · **Company:** Brightkeel Pumps Manufacturing W.L.L.\n\nMarrowgate casts and balances our bronze impellers. Quality has been consistent, with a balancing reject rate under 1 %.\n\nMarrowgate's 2024 agreement includes a product indemnity capped at BHD 120,000.\n\nQuillmarsh is qualified for the same impeller range and takes the overflow.\n\n---\n*SYNTHETIC — for teaching (Week 7 studio, Artificial Intelligence in Logistics). C5-A Supplier Risk Control Tower · Version V1 · 2026-11-07. Every company, person, number and document in this pack is fictional.*\n"}, {"name": "MEMO-06.md", "text": "# MEMO-06 — Bearings — distributor review\n\n**Date:** 2025-04-08 · **Author:** Buyer, components · **Supplier (as written):** Halvard Bearings Trading · **Company:** Brightkeel Pumps Manufacturing W.L.L.\n\nHalvard distributes branded bearings from two manufacturers and holds four weeks of our stock in its Salmabad warehouse.\n\nThe distribution agreement includes an indemnity capped at BHD 60,000.\n\nBrindlecourt is our second approved bearing source.\n\n---\n*SYNTHETIC — for teaching (Week 7 studio, Artificial Intelligence in Logistics). C5-A Supplier Risk Control Tower · Version V1 · 2026-11-07. Every company, person, number and document in this pack is fictional.*\n"}, {"name": "MEMO-07.md", "text": "# MEMO-07 — Cable supply — review\n\n**Date:** 2025-05-19 · **Author:** Buyer, electrical · **Supplier (as written):** Linnetbrook Cables · **Company:** Brightkeel Pumps Manufacturing W.L.L.\n\nLinnetbrook supplies power and control cable cut to length. Delivery has been reliable; one drum was mislabelled in March.\n\nLinnetbrook's indemnity is capped at BHD 50,000.\n\nCopperhythe is approved for the same cable specifications.\n\n---\n*SYNTHETIC — for teaching (Week 7 studio, Artificial Intelligence in Logistics). C5-A Supplier Risk Control Tower · Version V1 · 2026-11-07. Every company, person, number and document in this pack is fictional.*\n"}, {"name": "MEMO-08.md", "text": "# MEMO-08 — Controller PCBs — supply risk note\n\n**Date:** 2025-06-24 · **Author:** Category manager, electronics · **Supplier (as written):** Kestrelwire Electronics · **Company:** Brightkeel Pumps Manufacturing W.L.L.\n\nKestrelwire assembles the controller boards for our smart-pump range. Yield at our end-of-line test is 99.2 %.\n\nKestrelwire remains our sole qualified source for controller PCB assemblies. A second source has been discussed but no supplier has started qualification.\n\nTheir contract includes a product indemnity capped at BHD 250,000.\n\n---\n*SYNTHETIC — for teaching (Week 7 studio, Artificial Intelligence in Logistics). C5-A Supplier Risk Control Tower · Version V1 · 2026-11-07. Every company, person, number and document in this pack is fictional.*\n"}, {"name": "MEMO-09.md", "text": "# MEMO-09 — Mechanical seals — Tidewell\n\n**Date:** 2025-07-15 · **Author:** Buyer, sealing · **Supplier (as written):** Tidewell Seal Systems · **Company:** Brightkeel Pumps Manufacturing W.L.L.\n\nTidewell supplies cartridge mechanical seals for all pump sizes. Their field-failure rate is the lowest of the seal suppliers we have tried.\n\nThe supply agreement caps Tidewell's indemnity at BHD 30,000.\n\nAmberlode Sealing is our other approved seal supplier.\n\n---\n*SYNTHETIC — for teaching (Week 7 studio, Artificial Intelligence in Logistics). C5-A Supplier Risk Control Tower · Version V1 · 2026-11-07. Every company, person, number and document in this pack is fictional.*\n"}, {"name": "MEMO-10.md", "text": "# MEMO-10 — Fasteners — Gannetstone\n\n**Date:** 2025-08-26 · **Author:** Buyer, components · **Supplier (as written):** Gannetstone Fasteners · **Company:** Brightkeel Pumps Manufacturing W.L.L.\n\nGannetstone supplies stainless fasteners in kits packed per pump model, which has cut our picking time.\n\nGannetstone's contract includes a product indemnity capped at BHD 80,000.\n\n---\n*SYNTHETIC — for teaching (Week 7 studio, Artificial Intelligence in Logistics). C5-A Supplier Risk Control Tower · Version V1 · 2026-11-07. Every company, person, number and document in this pack is fictional.*\n"}, {"name": "MEMO-11.md", "text": "# MEMO-11 — Gaskets — Peltrove\n\n**Date:** 2025-09-30 · **Author:** Buyer, sealing · **Supplier (as written):** Peltrove Gasket Supply · **Company:** Brightkeel Pumps Manufacturing W.L.L.\n\nPeltrove cuts flat gaskets from our drawings. Quality is acceptable; prices rose 6 % in July.\n\nOn liability, standard terms apply.\n\nFennick is approved for the same gasket range.\n\n---\n*SYNTHETIC — for teaching (Week 7 studio, Artificial Intelligence in Logistics). C5-A Supplier Risk Control Tower · Version V1 · 2026-11-07. Every company, person, number and document in this pack is fictional.*\n"}, {"name": "MEMO-12.md", "text": "# MEMO-12 — Bearings — second source\n\n**Date:** 2025-10-21 · **Author:** Buyer, components · **Supplier (as written):** Brindlecourt Bearing Supply · **Company:** Brightkeel Pumps Manufacturing W.L.L.\n\nBrindlecourt took over 30 % of bearing volume this year and has delivered complete orders every month.\n\nBrindlecourt's contract carries an indemnity capped at BHD 150,000.\n\n---\n*SYNTHETIC — for teaching (Week 7 studio, Artificial Intelligence in Logistics). C5-A Supplier Risk Control Tower · Version V1 · 2026-11-07. Every company, person, number and document in this pack is fictional.*\n"}, {"name": "MEMO-13.md", "text": "# MEMO-13 — Coating adhesion issue — closed\n\n**Date:** 2025-11-18 · **Author:** Quality engineer · **Supplier (as written):** Saltcote Coatings · **Company:** Brightkeel Pumps Manufacturing W.L.L.\n\nSaltcote's epoxy coating failed our adhesion test on one batch in October. Saltcote traced it to a curing-oven fault and re-coated the batch at its own cost. The corrective action is closed.\n\nKelvingrey remains approved for the same coating systems.\n\n---\n*SYNTHETIC — for teaching (Week 7 studio, Artificial Intelligence in Logistics). C5-A Supplier Risk Control Tower · Version V1 · 2026-11-07. Every company, person, number and document in this pack is fictional.*\n"}, {"name": "MEMO-14.md", "text": "# MEMO-14 — Fasteners — Gulfreach\n\n**Date:** 2025-12-09 · **Author:** Buyer, components · **Supplier (as written):** Gulfreach Fastener Co · **Company:** Brightkeel Pumps Manufacturing W.L.L.\n\nGulfreach supplies carbon-steel fasteners and anchor bolts. They have agreed to hold two months of safety stock for us.\n\nGulfreach Fastener Co carries a product indemnity capped at BHD 90,000.\n\n---\n*SYNTHETIC — for teaching (Week 7 studio, Artificial Intelligence in Logistics). C5-A Supplier Risk Control Tower · Version V1 · 2026-11-07. Every company, person, number and document in this pack is fictional.*\n"}, {"name": "MEMO-15.md", "text": "# MEMO-15 — Export cartons — Merrowfield\n\n**Date:** 2026-01-13 · **Author:** Buyer, indirect · **Supplier (as written):** Merrowfield Packaging · **Company:** Brightkeel Pumps Manufacturing W.L.L.\n\nMerrowfield prints and supplies our export cartons. They switched to recycled board in December with no change in crush strength.\n\nThe packaging contract contains no indemnity clause.\n\nThornwick Cartons is approved for the same carton sizes.\n\n---\n*SYNTHETIC — for teaching (Week 7 studio, Artificial Intelligence in Logistics). C5-A Supplier Risk Control Tower · Version V1 · 2026-11-07. Every company, person, number and document in this pack is fictional.*\n"}, {"name": "MEMO-16.md", "text": "# MEMO-16 — Cable — Copperhythe\n\n**Date:** 2026-02-10 · **Author:** Buyer, electrical · **Supplier (as written):** Copperhythe Cable Works · **Company:** Brightkeel Pumps Manufacturing W.L.L.\n\nCopperhythe delivered all cable orders on time. Their test certificates now arrive with each drum.\n\nCopperhythe's agreement includes an indemnity capped at BHD 120,000.\n\n---\n*SYNTHETIC — for teaching (Week 7 studio, Artificial Intelligence in Logistics). C5-A Supplier Risk Control Tower · Version V1 · 2026-11-07. Every company, person, number and document in this pack is fictional.*\n"}, {"name": "MEMO-17.md", "text": "# MEMO-17 — Seal requalification result\n\n**Date:** 2026-05-14 · **Author:** Quality engineer · **Supplier (as written):** Amberlode Sealing · **Company:** Brightkeel Pumps Manufacturing W.L.L.\n\nAmberlode failed requalification for mechanical seals in March 2026 and must not be used for new seal orders. Leakage exceeded our limit on three of five test pumps. Amberlode has been asked for a corrective plan; no date has been agreed.\n\nAmberlode's contract carries an indemnity capped at BHD 70,000.\n\n---\n*SYNTHETIC — for teaching (Week 7 studio, Artificial Intelligence in Logistics). C5-A Supplier Risk Control Tower · Version V1 · 2026-11-07. Every company, person, number and document in this pack is fictional.*\n"}, {"name": "MEMO-18.md", "text": "# MEMO-18 — Gaskets — Fennick\n\n**Date:** 2026-03-17 · **Author:** Buyer, sealing · **Supplier (as written):** Fennick Gasket Industries · **Company:** Brightkeel Pumps Manufacturing W.L.L.\n\nFennick supplies moulded gaskets and O-rings. Delivery performance was 97 % this quarter.\n\nFennick's contract includes an indemnity capped at BHD 55,000.\n\n---\n*SYNTHETIC — for teaching (Week 7 studio, Artificial Intelligence in Logistics). C5-A Supplier Risk Control Tower · Version V1 · 2026-11-07. Every company, person, number and document in this pack is fictional.*\n"}, {"name": "MEMO-19.md", "text": "# MEMO-19 — Inbound freight — Ironvale\n\n**Date:** 2026-04-21 · **Author:** Logistics coordinator · **Supplier (as written):** Ironvale Freight Services · **Company:** Brightkeel Pumps Manufacturing W.L.L.\n\nIronvale handles inbound road freight from Dammam and Jebel Ali. Transit times have been stable.\n\nOur supplier assessment of Ironvale is scheduled for Q4 2026.\n\nIronvale's carriage agreement includes an indemnity capped at BHD 200,000.\n\n---\n*SYNTHETIC — for teaching (Week 7 studio, Artificial Intelligence in Logistics). C5-A Supplier Risk Control Tower · Version V1 · 2026-11-07. Every company, person, number and document in this pack is fictional.*\n"}, {"name": "MEMO-20.md", "text": "# MEMO-20 — Impellers — Quillmarsh\n\n**Date:** 2026-05-05 · **Author:** Buyer, hydraulics · **Supplier (as written):** Quillmarsh Impeller Co. · **Company:** Brightkeel Pumps Manufacturing W.L.L.\n\nQuillmarsh supplies composite impellers for the small-pump range and is qualified for our bronze range as overflow.\n\nQuillmarsh's contract includes a product indemnity capped at BHD 100,000.\n\n---\n*SYNTHETIC — for teaching (Week 7 studio, Artificial Intelligence in Logistics). C5-A Supplier Risk Control Tower · Version V1 · 2026-11-07. Every company, person, number and document in this pack is fictional.*\n"}, {"name": "MEMO-21.md", "text": "# MEMO-21 — Marrowgate — contract renewal\n\n**Date:** 2026-04-02 · **Author:** Category manager, hydraulics · **Supplier (as written):** Marrowgate Impellers · **Company:** Brightkeel Pumps Manufacturing W.L.L.\n\nMarrowgate's agreement was renewed in February 2026 for three years at the same prices.\n\nThe renewal was signed on Marrowgate's own terms and contains no indemnity clause.\n\nSupply performance is unchanged.\n\n---\n*SYNTHETIC — for teaching (Week 7 studio, Artificial Intelligence in Logistics). C5-A Supplier Risk Control Tower · Version V1 · 2026-11-07. Every company, person, number and document in this pack is fictional.*\n"}, {"name": "MEMO-22.md", "text": "# MEMO-22 — Gulfreach — capacity update\n\n**Date:** 2026-06-16 · **Author:** Buyer, components · **Supplier (as written):** Gulfreach Fasteners Company W.L.L. · **Company:** Brightkeel Pumps Manufacturing W.L.L.\n\nGulfreach has added a second heading machine and can now take all of our carbon-steel fastener volume if needed. Prices are held until June 2027.\n\n---\n*SYNTHETIC — for teaching (Week 7 studio, Artificial Intelligence in Logistics). C5-A Supplier Risk Control Tower · Version V1 · 2026-11-07. Every company, person, number and document in this pack is fictional.*\n"}, {"name": "MEMO-23.md", "text": "# MEMO-23 — Coatings — Kelvingrey\n\n**Date:** 2026-07-07 · **Author:** Buyer, indirect · **Supplier (as written):** Kelvingrey Paint Systems · **Company:** Brightkeel Pumps Manufacturing W.L.L.\n\nKelvingrey supplies the primer and topcoat for our skid frames. Colour matching has been accurate.\n\nKelvingrey's contract includes an indemnity capped at BHD 60,000.\n\n---\n*SYNTHETIC — for teaching (Week 7 studio, Artificial Intelligence in Logistics). C5-A Supplier Risk Control Tower · Version V1 · 2026-11-07. Every company, person, number and document in this pack is fictional.*\n"}, {"name": "MEMO-24.md", "text": "# MEMO-24 — Cartons — Thornwick\n\n**Date:** 2026-08-18 · **Author:** Buyer, indirect · **Supplier (as written):** Thornwick Cartons · **Company:** Brightkeel Pumps Manufacturing W.L.L.\n\nThornwick supplies plain cartons and pallet wrap. Lead time is one week.\n\nThornwick's contract includes an indemnity capped at BHD 75,000.\n\n---\n*SYNTHETIC — for teaching (Week 7 studio, Artificial Intelligence in Logistics). C5-A Supplier Risk Control Tower · Version V1 · 2026-11-07. Every company, person, number and document in this pack is fictional.*\n"}], "extraction": [{"name": "BATCH_1_Hussain_2026-11-23.csv", "text": "memo_id,memo_date,header_supplier_as_written,statement_about_as_written,topic,part_family,position,cap_bhd,quotation\nMEMO-01,2024-11-12,Corranby Foundry Works,NOT STATED,INDEMNITY,NOT STATED,CAP,250000,\"The contract includes a product indemnity capped at BHD 250,000.\"\nMEMO-01,2024-11-12,Corranby Foundry Works,Talbeck,QUALIFICATION,the same patterns,QUALIFIED,,\"Corranby shares the casing work with Talbeck, which holds the remaining volume and is fully qualified for the same patterns.\"\nMEMO-02,2024-12-03,Talbeck Castings,Talbeck,INDEMNITY,NOT STATED,CAP,100000,\"Talbeck's agreement carries a product indemnity capped at BHD 100,000.\"\nMEMO-03,2025-01-20,Vellmoor Motors,NOT STATED,INDEMNITY,NOT STATED,CAP,500000,\"The framework agreement includes a product indemnity capped at BHD 500,000.\"\nMEMO-03,2025-01-20,Vellmoor Motors,Ostrand,QUALIFICATION,motors,QUALIFIED,,\"Ostrand remains qualified for motors and Mallowmere for machined shafts, so neither family depends on Vellmoor alone.\"\nMEMO-03,2025-01-20,Vellmoor Motors,Mallowmere,QUALIFICATION,machined shafts,QUALIFIED,,\"Ostrand remains qualified for motors and Mallowmere for machined shafts, so neither family depends on Vellmoor alone.\"\nMEMO-04,2025-02-11,Ostrand Electric Drives,Ostrand,INDEMNITY,NOT STATED,CAP,75000,\"Ostrand's contract carries a product indemnity capped at BHD 75,000.\"\nMEMO-05,2025-03-10,Marrowgate Impellers,Marrowgate,INDEMNITY,NOT STATED,CAP,120000,\"Marrowgate's 2024 agreement includes a product indemnity capped at BHD 120,000.\"\nMEMO-05,2025-03-10,Marrowgate Impellers,Quillmarsh,QUALIFICATION,the same impeller range,QUALIFIED,,\"Quillmarsh is qualified for the same impeller range and takes the overflow.\"\nMEMO-06,2025-04-08,Halvard Bearings Trading,NOT STATED,INDEMNITY,NOT STATED,CAP,60000,\"The distribution agreement includes an indemnity capped at BHD 60,000.\"\nMEMO-06,2025-04-08,Halvard Bearings Trading,Brindlecourt,QUALIFICATION,bearing,OTHER,,\"Brindlecourt is our second approved bearing source.\"\nMEMO-07,2025-05-19,Linnetbrook Cables,Linnetbrook,INDEMNITY,NOT STATED,CAP,50000,\"Linnetbrook's indemnity is capped at BHD 50,000.\"\nMEMO-07,2025-05-19,Linnetbrook Cables,Copperhythe,QUALIFICATION,the same cable specifications,OTHER,,\"Copperhythe is approved for the same cable specifications.\"\nMEMO-08,2025-06-24,Kestrelwire Electronics,Kestrelwire,QUALIFICATION,controller PCB assemblies,QUALIFIED,,\"Kestrelwire remains our sole qualified source for controller PCB assemblies.\"\nMEMO-08,2025-06-24,Kestrelwire Electronics,NOT STATED,QUALIFICATION,NOT STATED,OTHER,,\"A second source has been discussed but no supplier has started qualification.\"\nMEMO-08,2025-06-24,Kestrelwire Electronics,NOT STATED,INDEMNITY,NOT STATED,CAP,250000,\"Their contract includes a product indemnity capped at BHD 250,000.\"\n"}, {"name": "BATCH_2_Marwan_2026-11-23.csv", "text": "memo_id,memo_date,header_supplier_as_written,statement_about_as_written,topic,part_family,position,cap_bhd,quotation\nMEMO-09,2025-07-15,Tidewell Seal Systems,Tidewell,INDEMNITY,NOT STATED,CAP,30000,\"The supply agreement caps Tidewell's indemnity at BHD 30,000.\"\nMEMO-09,2025-07-15,Tidewell Seal Systems,Amberlode Sealing,QUALIFICATION,seal,OTHER,,\"Amberlode Sealing is our other approved seal supplier.\"\nMEMO-10,2025-08-26,Gannetstone Fasteners,Gannetstone,INDEMNITY,NOT STATED,CAP,80000,\"Gannetstone's contract includes a product indemnity capped at BHD 80,000.\"\nMEMO-11,2025-09-30,Peltrove Gasket Supply,NOT STATED,INDEMNITY,NOT STATED,STANDARD TERMS,,\"On liability, standard terms apply.\"\nMEMO-11,2025-09-30,Peltrove Gasket Supply,Fennick,QUALIFICATION,gasket range,OTHER,,\"Fennick is approved for the same gasket range.\"\nMEMO-12,2025-10-21,Brindlecourt Bearing Supply,Brindlecourt,INDEMNITY,NOT STATED,CAP,150000,\"Brindlecourt's contract carries an indemnity capped at BHD 150,000.\"\nMEMO-13,2025-11-18,Saltcote Coatings,Kelvingrey,QUALIFICATION,coating systems,OTHER,,\"Kelvingrey remains approved for the same coating systems.\"\nMEMO-14,2025-12-09,Gulfreach Fastener Co,Gulfreach Fastener Co,INDEMNITY,NOT STATED,CAP,90000,\"Gulfreach Fastener Co carries a product indemnity capped at BHD 90,000.\"\nMEMO-15,2026-01-13,Merrowfield Packaging,NOT STATED,INDEMNITY,NOT STATED,NO CLAUSE,,\"The packaging contract contains no indemnity clause.\"\nMEMO-15,2026-01-13,Merrowfield Packaging,Thornwick Cartons,QUALIFICATION,carton sizes,OTHER,,\"Thornwick Cartons is approved for the same carton sizes.\"\nMEMO-16,2026-02-10,Copperhythe Cable Works,Copperhythe,INDEMNITY,NOT STATED,CAP,120000,\"Copperhythe's agreement includes an indemnity capped at BHD 120,000.\""}, {"name": "BATCH_3_Maryam_2026-11-23.csv", "text": "memo_id,memo_date,header_supplier_as_written,statement_about_as_written,topic,part_family,position,cap_bhd,quotation\nMEMO-17,2026-05-14,Amberlode Sealing,Amberlode,QUALIFICATION,mechanical seals,FAILED,,\"Amberlode failed requalification for mechanical seals in March 2026 and must not be used for new seal orders.\"\nMEMO-17,2026-05-14,Amberlode Sealing,Amberlode,INDEMNITY,NOT STATED,CAP,70000,\"Amberlode's contract carries an indemnity capped at BHD 70,000.\"\nMEMO-18,2026-03-17,Fennick Gasket Industries,Fennick,INDEMNITY,NOT STATED,CAP,55000,\"Fennick's contract includes an indemnity capped at BHD 55,000.\"\nMEMO-19,2026-04-21,Ironvale Freight Services,Ironvale,INDEMNITY,NOT STATED,CAP,200000,\"Ironvale's carriage agreement includes an indemnity capped at BHD 200,000.\"\nMEMO-20,2026-05-05,Quillmarsh Impeller Co.,Quillmarsh,QUALIFICATION,bronze range,QUALIFIED,,\"Quillmarsh supplies composite impellers for the small-pump range and is qualified for our bronze range as overflow.\"\nMEMO-20,2026-05-05,Quillmarsh Impeller Co.,Quillmarsh,INDEMNITY,NOT STATED,CAP,100000,\"Quillmarsh's contract includes a product indemnity capped at BHD 100,000.\"\nMEMO-21,2026-04-02,Marrowgate Impellers,Marrowgate,INDEMNITY,NOT STATED,NO CLAUSE,,\"The renewal was signed on Marrowgate's own terms and contains no indemnity clause.\"\nMEMO-22,2026-06-16,Gulfreach Fasteners Company W.L.L.,,NONE,NOT STATED,,,\nMEMO-23,2026-07-07,Kelvingrey Paint Systems,Kelvingrey,INDEMNITY,NOT STATED,CAP,60000,\"Kelvingrey's contract includes an indemnity capped at BHD 60,000.\"\nMEMO-24,2026-08-18,Thornwick Cartons,Thornwick,INDEMNITY,NOT STATED,CAP,75000,\"Thornwick's contract includes an indemnity capped at BHD 75,000.\"\n"}]}</script>
+<script>
+// LOGIC-START
+// Plain functions with no page code, so they can be tested on their own.
+
+const AS_OF = "2026-10-31";
+const LEGAL_SUFFIXES = ["wll", "co", "company", "ltd", "llc", "fze"];
+const EXTRACTION_HEADER = ["memo_id","memo_date","header_supplier_as_written","statement_about_as_written","topic","part_family","position","cap_bhd","quotation"];
+
+// Read CSV text into rows. Handles quoted fields, commas and doubled quotes inside quotes.
+function parseCSV(text) {
+  text = text.replace(/^﻿/, "");
+  const rows = []; let row = []; let field = ""; let inQuotes = false;
+  for (let i = 0; i < text.length; i++) {
+    const c = text[i];
+    if (inQuotes) {
+      if (c === '"') {
+        if (text[i + 1] === '"') { field += '"'; i++; } else { inQuotes = false; }
+      } else { field += c; }
+    } else if (c === '"') { inQuotes = true; }
+    else if (c === ",") { row.push(field); field = ""; }
+    else if (c === "\n" || c === "\r") {
+      if (c === "\r" && text[i + 1] === "\n") i++;
+      row.push(field); rows.push(row); row = []; field = "";
+    } else { field += c; }
+  }
+  if (field !== "" || row.length) { row.push(field); rows.push(row); }
+  return rows.filter(r => !(r.length === 1 && r[0].trim() === ""));
+}
+
+// Turn CSV rows into objects. Each object remembers its line in the file (header = line 1).
+function csvToRecords(text) {
+  const rows = parseCSV(text);
+  if (!rows.length) return { header: [], records: [] };
+  const header = rows[0].map(h => h.trim());
+  const records = rows.slice(1).map((r, i) => {
+    const obj = { _line: i + 2 };
+    header.forEach((h, j) => { obj[h] = (r[j] ?? "").trim(); });
+    return obj;
+  });
+  return { header, records };
+}
+
+// Split a memo file into memos. Works for one memo per file and for the batch files.
+function parseMemoFile(text, fileName) {
+  text = text.replace(/^﻿/, "").replace(/\r\n?/g, "\n");
+  const chunks = text.split(/^(?=# MEMO-\d+)/m).filter(c => /^# MEMO-\d+/.test(c));
+  return chunks.map(chunk => {
+    const id = (chunk.match(/^# (MEMO-\d+)/) || [])[1] || null;
+    const date = (chunk.match(/\*\*Date:\*\*\s*(\d{4}-\d{2}-\d{2})/) || [])[1] || null;
+    const sup = chunk.match(/\*\*Supplier \(as written\):\*\*\s*([^·\n]*)/);
+    const supplierAsWritten = sup ? sup[1].trim() : null;
+    // keep the memo text without the classroom footer (after the --- line)
+    const body = chunk.split(/^---\s*$/m)[0].trim();
+    return { id, date, supplierAsWritten, text: body, source: fileName };
+  });
+}
+
+// RR-C5 §2: the five steps, in order. Returns every step so a person can check it.
+function normaliseName(name) {
+  const steps = [];
+  let s = String(name ?? "");
+  steps.push(["As written", s]);
+  s = s.replace(/\./g, "");
+  steps.push(["1. Remove full stops", s]);
+  s = s.replace(/[^\p{L}\p{N}\s]/gu, " ");
+  steps.push(["2. Other punctuation to a space", s]);
+  s = s.toLowerCase();
+  steps.push(["3. Ignore letter case", s]);
+  let words = s.split(/\s+/).filter(Boolean);
+  words = words.filter(w => !LEGAL_SUFFIXES.includes(w));
+  steps.push(["4. Remove legal suffixes (WLL, Co, Company, Ltd, LLC, FZE)", words.join(" ")]);
+  if (words.length) {
+    const last = words[words.length - 1];
+    if (last.length > 1 && last.endsWith("s")) words[words.length - 1] = last.slice(0, -1);
+  }
+  const key = words.join(" ");
+  steps.push(["5. Ignore a plural \"s\" on the last word", key]);
+  return { key, steps };
+}
+
+// Match one memo header name to the master. Exactly one identical result = match.
+function matchMemo(memo, masterRecords) {
+  const memoNorm = normaliseName(memo.supplierAsWritten);
+  const hits = masterRecords.filter(m => normaliseName(m.supplier_name).key === memoNorm.key);
+  if (!memo.supplierAsWritten) {
+    return { status: "CANNOT DETERMINE (match)", reason: "the memo has no Supplier (as written) line", supplierId: null, memoNorm, hits: [] };
+  }
+  if (hits.length === 1) {
+    return { status: "MATCH", reason: "identical to exactly one master supplier after the §2 steps", supplierId: hits[0].supplier_id, memoNorm, hits };
+  }
+  if (hits.length === 0) {
+    return { status: "CANNOT DETERMINE (match)", reason: "no master supplier name is identical after the §2 steps", supplierId: null, memoNorm, hits };
+  }
+  return { status: "CANNOT DETERMINE (match)", reason: "more than one master supplier is identical after the §2 steps: " + hits.map(h => h.supplier_id).join(", "), supplierId: null, memoNorm, hits };
+}
+
+// Collapse runs of spaces and line breaks so a quotation split over two lines still counts as word for word.
+function squash(s) { return String(s ?? "").replace(/\s+/g, " ").trim(); }
+
+// Check each extraction row against the memo it cites.
+function checkExtraction(rows, memosById) {
+  return rows.map(r => {
+    const memo = memosById[r.memo_id];
+    let check;
+    if (!memo) check = { status: "REJECTED", reason: r.memo_id + " was not loaded in this run" };
+    else if ((r.topic || "").toUpperCase() === "NONE") check = { status: "NONE ROW", reason: "memo read, no qualification or indemnity sentence reported" };
+    else if (!r.quotation) check = { status: "REJECTED", reason: "no quotation given" };
+    else if (squash(memo.text).includes(squash(r.quotation))) check = { status: "VERIFIED", reason: "quotation found word for word in " + r.memo_id };
+    else check = { status: "REJECTED", reason: "quotation not found word for word in " + r.memo_id };
+    return { ...r, check };
+  });
+}
+
+// RR-C5 §3: coverage for every master supplier, kept apart from risk.
+function buildCoverage(masterRecords, logRecords, memos, matches) {
+  const logRowCount = logRecords.length;
+  const memoCount = memos.length;
+  return masterRecords.map(m => {
+    const memoIds = memos.filter(x => matches[x.id] && matches[x.id].supplierId === m.supplier_id).map(x => x.id).sort();
+    const logRows = logRecords.filter(l => l.supplier_id === m.supplier_id);
+    return {
+      supplier_id: m.supplier_id,
+      supplier_name: m.supplier_name,
+      master_line: m._line,
+      memos: memoIds.length ? memoIds.join("; ") : "NO MEMO",
+      memo_scope: memoIds.length ? "" : "no memo matched " + m.supplier_id + " among " + memoCount + " memos read in this run (RR-C5 §2), as of " + AS_OF,
+      log_row: logRows.length ? "yes" : "no",
+      log_detail: logRows.length
+        ? logRows.map(l => "ASSESSMENT_LOG.csv line " + l._line + ": " + l.last_assessment_date + ", " + l.result).join("; ")
+        : "no row for " + m.supplier_id + " in ASSESSMENT_LOG.csv (" + logRowCount + " data rows, as of " + AS_OF + ")"
+    };
+  });
+}
+
+// Memo numbers that are missing from the run (gaps between MEMO-01 and the highest number read).
+function memoNumberGaps(ids) {
+  const nums = ids.map(i => parseInt(i.replace("MEMO-", ""), 10)).filter(n => !isNaN(n));
+  if (!nums.length) return [];
+  const max = Math.max(...nums); const have = new Set(nums); const gaps = [];
+  for (let n = 1; n <= max; n++) if (!have.has(n)) gaps.push("MEMO-" + String(n).padStart(2, "0"));
+  return gaps;
+}
+
+// Work out what a dropped file is, from its content (not just its name).
+function classifyFile(name, text) {
+  const lower = String(name).toLowerCase();
+  const clean = String(text).replace(/^\uFEFF/, "");
+  if (lower.endsWith(".csv")) {
+    const firstLine = clean.split(/\r?\n/)[0] || "";
+    const head = ((parseCSV(firstLine)[0]) || []).map(h => h.trim());
+    if (head.join(",") === EXTRACTION_HEADER.join(",")) return "extraction";
+    if (["supplier_id", "supplier_name", "part_families", "approval_status"].every(h => head.includes(h))) return "master";
+    if (["supplier_id", "last_assessment_date", "result"].every(h => head.includes(h))) return "log";
+    return "unknown";
+  }
+  if (lower.endsWith(".md") || lower.endsWith(".txt")) {
+    const memos = parseMemoFile(clean, name).filter(m => m.id && (m.date || m.supplierAsWritten));
+    return memos.length ? "memos" : "unknown";
+  }
+  return "unknown";
+}
+
+// ---------- RR-C5 §4 flags, §5 contradictions, §6 status ----------
+
+const INDEMNITY_THRESHOLD_BHD = 50000;
+const QUAL_STATING = ["FAILED", "MUST NOT USE", "QUALIFIED"];
+const IND_STATING = ["NO CLAUSE", "CAP"];
+
+const up = v => String(v ?? "").trim().toUpperCase();
+function isNotStated(v) { const t = up(v); return t === "" || t === "NOT STATED"; }
+function splitFamilies(s) { return String(s ?? "").split(";").map(x => x.trim()).filter(Boolean); }
+
+// Part family names compared without case, punctuation or plural endings ("Gaskets" = "gasket").
+function familyKey(s) {
+  return String(s ?? "").toLowerCase().replace(/[^\p{L}\p{N}\s]/gu, " ").split(/\s+/).filter(Boolean)
+    .map(w => (w.length > 4 && w.endsWith("ies")) ? w.slice(0, -3) + "y" : (w.length > 1 && w.endsWith("s") && !w.endsWith("ss")) ? w.slice(0, -1) : w)
+    .join(" ");
+}
+
+// Which of the supplier's master families an extraction row's part_family means. Never guesses between two.
+function resolveFamily(partFamily, masterFamilies) {
+  if (isNotStated(partFamily)) {
+    if (masterFamilies.length === 1) return { family: masterFamilies[0], how: "the memo names no part family; the supplier has only one in the master (" + masterFamilies[0] + ")" };
+    return { family: null, how: "the memo names no part family and the supplier has " + masterFamilies.length + " families in the master" };
+  }
+  const k = familyKey(partFamily).split(" ");
+  const hits = masterFamilies.filter(f => { const fk = familyKey(f).split(" "); return fk.every(w => k.includes(w)) || k.every(w => fk.includes(w)); });
+  if (hits.length === 1) return { family: hits[0], how: familyKey(hits[0]) === k.join(" ") ? "same family as the master" : '"' + partFamily + '" read as the master family "' + hits[0] + '"' };
+  if (!hits.length) return { family: null, how: '"' + partFamily + '" does not match any master family of this supplier (' + masterFamilies.join("; ") + ")" };
+  return { family: null, how: '"' + partFamily + '" could mean more than one master family (' + hits.join("; ") + ")" };
+}
+
+// Tutor ruling 2026-11-23: a memo counts only for its header supplier. A row about another supplier is not used.
+function aboutHeaderSupplier(row, memo, masterRec) {
+  if (isNotStated(row.statement_about_as_written)) return true;
+  const words = normaliseName(row.statement_about_as_written).key.split(" ").filter(Boolean);
+  if (!words.length) return true;
+  return [memo.supplierAsWritten, masterRec ? masterRec.supplier_name : ""].some(n => {
+    const target = normaliseName(n).key.split(" ").filter(Boolean);
+    return words.length <= target.length && words.every((w, i) => w === target[i]);
+  });
+}
+
+// A cap must be a number, and that number must appear in the quotation (with or without thousands commas).
+function readCap(row) {
+  const raw = String(row.cap_bhd ?? "").replace(/[,\s]/g, "");
+  if (!/^\d+(\.\d+)?$/.test(raw)) return { cap: null, problem: "cap_bhd is empty or not a number, so the cap cannot be read" };
+  const cap = Number(raw);
+  const inQuote = (String(row.quotation).match(/\d[\d,]*(\.\d+)?/g) || []).some(n => Number(n.replace(/,/g, "")) === cap);
+  if (!inQuote) return { cap: null, problem: "cap_bhd " + raw + " does not appear in the quotation" };
+  return { cap, problem: null };
+}
+
+const byNewest = (a, b) => (b.date || "").localeCompare(a.date || "") || b.memo_id.localeCompare(a.memo_id);
+const quoteRef = s => s.memo_id + " (" + s.date + "): \"" + s.quotation + "\"";
+
+function buildScorecard(masterRecords, logRecords, memos, matches, checkedRows) {
+  const memoById = Object.fromEntries(memos.map(m => [m.id, m]));
+  const masterById = Object.fromEntries(masterRecords.map(m => [m.supplier_id, m]));
+  const used = []; const notUsed = [];
+
+  // 1. Decide which extraction rows can be used, and for which supplier.
+  for (const r of checkedRows) {
+    const memo = memoById[r.memo_id];
+    const topic = up(r.topic);
+    if (topic === "NONE") continue;
+    const base = { memo_id: r.memo_id, file: r._file, line: r._line, topic, position: up(r.position), quotation: r.quotation, about: r.statement_about_as_written };
+    if (r.check.status !== "VERIFIED") { notUsed.push({ ...base, why: "quotation " + r.check.status + ": " + r.check.reason }); continue; }
+    const match = matches[r.memo_id];
+    if (!match || match.status !== "MATCH") { notUsed.push({ ...base, why: r.memo_id + " is CANNOT DETERMINE (match), so it is attached to no supplier (RR-C5 §2)" }); continue; }
+    const sup = masterById[match.supplierId];
+    if (!aboutHeaderSupplier(r, memo, sup)) { notUsed.push({ ...base, supplier_id: sup.supplier_id, why: "the sentence is about \"" + r.statement_about_as_written + "\", not the memo's header supplier; a memo counts only for its header supplier (RR-C5 §2, tutor ruling 2026-11-23)" }); continue; }
+    used.push({ ...base, supplier_id: sup.supplier_id, date: memo.date, part_family: r.part_family, cap_bhd: r.cap_bhd });
+  }
+
+  const memoIdsFor = id => memos.filter(m => matches[m.id] && matches[m.id].supplierId === id).map(m => m.id).sort();
+  const extracted = new Set(checkedRows.map(r => r.memo_id));
+  const contradictions = []; const warnings = [];
+
+  // 2. Qualification per supplier and family (§4.2): qualified by default; only the newest stating memo can take it away.
+  const qual = {};   // supplier_id -> family -> { qualified, governing, statements }
+  for (const m of masterRecords) {
+    const fams = splitFamilies(m.part_families);
+    qual[m.supplier_id] = {};
+    fams.forEach(f => { qual[m.supplier_id][f] = { qualified: true, governing: null, statements: [] }; });
+    for (const s of used.filter(u => u.supplier_id === m.supplier_id && u.topic === "QUALIFICATION")) {
+      if (!QUAL_STATING.includes(s.position)) { notUsed.push({ ...s, why: "position " + (s.position || "blank") + " does not state qualification for a family, so it changes nothing (RR-C5 §4.2)" }); continue; }
+      const fam = resolveFamily(s.part_family, fams);
+      if (!fam.family) { notUsed.push({ ...s, why: "part family not resolved: " + fam.how + "; a person must check this sentence" }); warnings.push(m.supplier_id + ": " + s.memo_id + " states " + s.position + " but " + fam.how + ". Not applied; a person must check it."); continue; }
+      qual[m.supplier_id][fam.family].statements.push({ ...s, familyHow: fam.how });
+    }
+    for (const [f, q] of Object.entries(qual[m.supplier_id])) {
+      if (!q.statements.length) continue;
+      q.statements.sort(byNewest);
+      const top = q.statements.filter(s => s.date === q.statements[0].date);
+      const vals = new Set(top.map(s => s.position === "QUALIFIED"));
+      if (vals.size > 1) { warnings.push(m.supplier_id + " " + f + ": memos with the same newest date disagree on qualification (" + top.map(s => s.memo_id).join(", ") + "). CANNOT DETERMINE which governs; left as qualified by default. A person must check."); continue; }
+      q.governing = q.statements[0];
+      q.qualified = q.governing.position === "QUALIFIED";
+      if (new Set(q.statements.map(s => s.position)).size > 1) contradictions.push({ supplier_id: m.supplier_id, topic: "QUALIFICATION", family: f, statements: q.statements, governing: q.governing });
+    }
+  }
+
+  // 3. Family counts (§4.2): only APPROVED suppliers, qualified for that family.
+  const famMap = {};
+  for (const m of masterRecords) {
+    for (const f of splitFamilies(m.part_families)) {
+      const k = familyKey(f);
+      famMap[k] = famMap[k] || { family: f, suppliers: [] };
+      famMap[k].suppliers.push({ supplier_id: m.supplier_id, supplier_name: m.supplier_name, line: m._line, approved: up(m.approval_status) === "APPROVED", family: f, ...qual[m.supplier_id][f] });
+    }
+  }
+  const families = Object.values(famMap).sort((a, b) => a.family.localeCompare(b.family)).map(F => {
+    const qualified = F.suppliers.filter(s => s.approved && s.qualified);
+    const result = qualified.length === 1 ? "SINGLE SOURCE" : qualified.length === 0 ? "NO QUALIFIED SUPPLIER" : qualified.length + " qualified";
+    return { ...F, qualified, result };
+  });
+
+  // 4. One scorecard row per master supplier.
+  const rows = masterRecords.map(m => {
+    const id = m.supplier_id;
+    const approved = up(m.approval_status) === "APPROVED";
+    const memoIds = memoIdsFor(id);
+    const notes = [];
+    const masterRef = "SUPPLIER_MASTER.csv line " + m._line + " (" + id + ", " + (m.approval_status || "no status") + ", " + m.part_families + ")";
+
+    // §4.1 never assessed
+    const logRows = logRecords.filter(l => l.supplier_id === id);
+    const na = !approved
+      ? { flag: false, text: "NOT APPLICABLE: not APPROVED in the master", evidence: masterRef }
+      : logRows.length
+        ? { flag: false, text: "assessed", evidence: logRows.map(l => "ASSESSMENT_LOG.csv line " + l._line + ": " + l.last_assessment_date + ", " + l.result).join("; ") }
+        : { flag: true, text: "NEVER ASSESSED", evidence: masterRef + "; no row for " + id + " in ASSESSMENT_LOG.csv (" + logRecords.length + " data rows, as of " + AS_OF + ")" };
+
+    // §4.2 single source
+    const ssFams = families.filter(F => F.result === "SINGLE SOURCE" && F.qualified[0].supplier_id === id);
+    const ss = { flag: ssFams.length > 0, families: ssFams.map(F => F.family), evidence: ssFams.map(F => {
+      const others = F.suppliers.filter(s => s.supplier_id !== id);
+      const why = others.map(o => !o.approved ? o.supplier_id + " not APPROVED (master line " + o.line + ")" : o.supplier_id + " not qualified: " + quoteRef(o.governing));
+      return F.family + ": the only approved, qualified supplier among " + F.suppliers.length + " master supplier(s) listing it (master lines " + F.suppliers.map(s => s.line).join(", ") + ")" + (why.length ? "; " + why.join("; ") : "");
+    }) };
+    for (const [f, q] of Object.entries(qual[id])) {
+      if (q.governing && !q.qualified) notes.push("Not qualified for " + f + " (" + q.governing.position + "): " + quoteRef(q.governing));
+    }
+
+    // §4.3 indemnity: newest memo that states a position
+    const indRows = used.filter(u => u.supplier_id === id && u.topic === "INDEMNITY").sort(byNewest);
+    const stated = indRows.filter(s => IND_STATING.includes(s.position)).map(s => {
+      if (s.position === "NO CLAUSE") return { ...s, result: "GAP", rule: "no indemnity clause" };
+      const c = readCap(s);
+      if (c.problem) return { ...s, result: "CANNOT DETERMINE", rule: c.problem };
+      return { ...s, cap: c.cap, result: c.cap < INDEMNITY_THRESHOLD_BHD ? "GAP" : "NO GAP", rule: "cap BHD " + c.cap.toLocaleString("en-US") + (c.cap < INDEMNITY_THRESHOLD_BHD ? " is below" : " is at or above") + " BHD 50,000" };
+    });
+    let ind;
+    const memoScope = memoIds.length ? memoIds.length + " memo(s) matched to " + id + " (" + memoIds.join(", ") + ")" : "NO MEMO: no memo matched " + id + " among " + memos.length + " memos read";
+    if (!stated.length) {
+      const said = indRows.map(s => s.memo_id + " says " + (s.position || "nothing usable") + ": \"" + s.quotation + "\"");
+      ind = { result: "CANNOT DETERMINE", governing: null, evidence: "no memo about " + id + " states an indemnity position; searched " + memoScope + ", as of " + AS_OF + (said.length ? ". Not a position (RR-C5 §4.3): " + said.join("; ") : "") };
+    } else {
+      const top = stated.filter(s => s.date === stated[0].date);
+      const results = new Set(top.map(s => s.result));
+      if (results.size > 1) {
+        ind = { result: "CANNOT DETERMINE", governing: null, evidence: "memos with the same newest date disagree: " + top.map(s => quoteRef(s) + " = " + s.result).join("; ") };
+      } else {
+        const g = top[0];
+        ind = { result: g.result, governing: g, evidence: quoteRef(g) + " (" + g.rule + ")" };
+        const newerSilent = indRows.filter(s => !IND_STATING.includes(s.position) && byNewest(s, g) < 0);
+        if (newerSilent.length) ind.evidence += ". Newer, but not a position so it does not change this (RR-C5 §4.3): " + newerSilent.map(quoteRef).join("; ");
+      }
+      if (new Set(stated.map(s => s.position + "|" + (s.cap ?? ""))).size > 1) contradictions.push({ supplier_id: id, topic: "INDEMNITY", family: "", statements: stated, governing: ind.governing });
+    }
+
+    // memos about this supplier that nobody has extracted yet
+    const missing = memoIds.filter(x => !extracted.has(x));
+    if (missing.length) notes.push("No extraction rows yet for " + missing.join(", ") + ", so memo-based results for " + id + " may be incomplete");
+
+    // §6 status
+    const gap = ind.result === "GAP";
+    let status, statusWhy;
+    if (ss.flag && (gap || na.flag)) { status = "RED"; statusWhy = "SINGLE SOURCE and " + [gap && "INDEMNITY GAP", na.flag && "NEVER ASSESSED"].filter(Boolean).join(" and "); }
+    else if (ss.flag || gap || na.flag) { status = "AMBER"; statusWhy = [ss.flag && "SINGLE SOURCE", gap && "INDEMNITY GAP", na.flag && "NEVER ASSESSED"].filter(Boolean).join(", ") + " (one flag, not the RED combination)"; }
+    else if (ind.result === "CANNOT DETERMINE") { status = "CANNOT DETERMINE"; statusWhy = "no flag, but the indemnity position is CANNOT DETERMINE"; }
+    else { status = "GREEN"; statusWhy = "no flag and indemnity NO GAP"; }
+
+    return { supplier_id: id, supplier_name: m.supplier_name, part_families: m.part_families, master_line: m._line, approved, memoIds, ss, ind, na, status, statusWhy, notes };
+  });
+
+  const famFindings = families.filter(F => F.result === "NO QUALIFIED SUPPLIER");
+  return { rows, families, famFindings, contradictions, used, notUsed, warnings, unextracted: memos.map(m => m.id).filter(x => !extracted.has(x)) };
+}
+
+// The pack's scorecard template, filled in.
+const SCORECARD_HEADER = ["supplier_id","supplier_name","part_families","single_source (Y/N)","single_source_evidence","indemnity (GAP / NO GAP / CANNOT DETERMINE)","indemnity_evidence (memo ID + quotation)","never_assessed (Y/N)","never_assessed_evidence + scope","status (RED / AMBER / CANNOT DETERMINE / GREEN)","notes"];
+function scorecardTable(sc) {
+  return [SCORECARD_HEADER].concat(sc.rows.map(r => [
+    r.supplier_id, r.supplier_name, r.part_families,
+    r.ss.flag ? "Y" : "N", r.ss.flag ? r.ss.evidence.join(" | ") : "",
+    r.ind.result, r.ind.evidence,
+    r.na.flag ? "Y" : (r.approved ? "N" : "NOT APPLICABLE"), r.na.evidence,
+    r.status, r.notes.join(" | ")
+  ]));
+}
+
+// LOGIC-END
+
+</script>
+<script>
+{
+const IC={
+ upload:'<path d="M12 16V4M7 9l5-5 5 5M5 20h14"/>',file:'<path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/>',
+ table:'<rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 10h18M9 4v16"/>',list:'<path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/>',
+ mail:'<rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/>',quote:'<path d="M7 7h4v4c0 3-2 5-4 6M15 7h4v4c0 3-2 5-4 6"/>',
+ grid:'<rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/>',
+ bars:'<path d="M4 20V10M10 20V4M16 20v-8M22 20H2"/>',shield:'<path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"/>',
+ link:'<path d="M10 14a5 5 0 0 0 7 0l3-3a5 5 0 0 0-7-7l-1 1M14 10a5 5 0 0 0-7 0l-3 3a5 5 0 0 0 7 7l1-1"/>',user:'<circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/>',
+ doc:'<path d="M6 3h9l4 4v14H6z"/><path d="M9 12h7M9 16h7M9 8h3"/>',refresh:'<path d="M20 11a8 8 0 1 0-2.3 5.7M20 4v7h-7"/>',trash:'<path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"/>',
+ copy:'<rect x="8" y="8" width="13" height="13" rx="2"/><path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"/>',down:'<path d="M12 4v12M7 11l5 5 5-5M5 20h14"/>',
+ arrow:'<path d="M5 12h14M13 6l6 6-6 6"/>',search:'<circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/>',alert:'<path d="M12 3l10 18H2z"/><path d="M12 10v4M12 18h.01"/>',
+ clock:'<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',check:'<path d="M5 12.5l4.5 4.5L19 7.5"/>'};
+const ic=(n,c="ico")=>`<svg class="${c}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${IC[n]}</svg>`;
+const $=s=>document.querySelector(s);
+const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const reduce=matchMedia("(prefers-reduced-motion: reduce)").matches;
+const LBL={RED:"RED",AMBER:"AMBER",GREEN:"GREEN","CANNOT DETERMINE":"CANNOT DETERMINE"};
+const CLS=s=>s==="CANNOT DETERMINE"?"CD":s;
+const NAME={master:"Supplier master",log:"Assessment log",memos:"Memos",extraction:"Memo extraction"};
+
+/* ---------- theme ---------- */
+const root=document.documentElement;
+const sun='<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>';
+const moon='<path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/>';
+function isDark(){const t=root.dataset.theme;return t?t==="dark":matchMedia("(prefers-color-scheme: dark)").matches}
+function setIcon(){$("#tIco").innerHTML=isDark()?sun:moon}
+try{const s=localStorage.getItem("ct-theme");if(s)root.dataset.theme=s}catch(e){}
+setIcon();
+
+/* ---------- data state ---------- */
+const BUILT=JSON.parse(document.getElementById("builtin").textContent);
+const S={master:null,log:null,memos:[],extraction:[],src:{},sel:"",q:"",qc:"",fs:"",notes:[],events:[],own:false};
+function ev(t){S.events.push({at:new Date(),t})}
+function setMaster(name,text,src){const r=csvToRecords(text);S.master={name,header:r.header,records:r.records};S.src.master=src}
+function setLog(name,text,src){const r=csvToRecords(text);S.log={name,header:r.header,records:r.records};S.src.log=src}
+function loadBuiltIn(){
+  setMaster(BUILT.master.name,BUILT.master.text,"built");setLog(BUILT.log.name,BUILT.log.text,"built");
+  S.memos=BUILT.memos.map(f=>({...f}));S.src.memos="built";
+  S.extraction=BUILT.extraction.map(f=>({...f}));S.src.extraction="built";
+}
+function validateAs(type,text){
+  const need={master:["supplier_id","supplier_name","part_families","approval_status"],log:["supplier_id","last_assessment_date","result"]};
+  if(type==="master"||type==="log"){const h=csvToRecords(text).header;const m=need[type].filter(x=>!h.includes(x));return m.length?"it has no "+m.join(", ")+" column":null}
+  if(type==="extraction")return csvToRecords(text).header.join(",")===EXTRACTION_HEADER.join(",")?null:"its header doesn't match our extraction format";
+  if(type==="memos")return parseMemoFile(text,"").some(m=>m.id)?null:'no memo starting with "# MEMO-" was found in it';
+  return null}
+async function ingest(files,forced){
+  const notes=[];const n={master:0,log:0,memos:0,extraction:0};
+  for(const f of files){
+    if(f.name.startsWith("."))continue;
+    const text=await f.text();let type;
+    if(forced){const p=validateAs(forced,text);if(p){notes.push(["bad",f.name+" was not loaded as "+NAME[forced]+": "+p+"."]);continue}type=forced}
+    else{type=classifyFile(f.name,text);if(type==="unknown"){notes.push(["warn",f.name+" wasn't recognised, so it wasn't used."]);continue}}
+    if(type==="master")setMaster(f.name,text,"own");
+    else if(type==="log")setLog(f.name,text,"own");
+    else{if(S.src[type]!=="own"){S[type]=[];S.src[type]="own"}
+      if(!S[type].some(x=>x.name===f.name&&x.text===text))S[type].push({name:f.name,text})}
+    n[type]++}
+  const done=Object.entries(n).filter(([,v])=>v).map(([k,v])=>v+" to "+NAME[k]);
+  if(done.length){notes.unshift(["ok","Loaded "+done.join(", ")+"."]);ev("Loaded "+done.join(", ")+(forced?" (dropped on the "+NAME[forced]+" box)":"")+": "+files.map(f=>f.name).slice(0,6).join(", ")+(files.length>6?" and "+(files.length-6)+" more":""))}
+  notes.filter(x=>x[0]==="bad").forEach(x=>ev("Refused: "+x[1]));
+  S.notes=notes;render()}
+function clearType(t){if(t==="master")S.master=null;else if(t==="log")S.log=null;else S[t]=[];S.src[t]=null}
+
+/* ---------- compute with the tested RR-C5 logic ---------- */
+function compute(){
+  const byId={};const dups=[];
+  for(const f of S.memos)for(const m of parseMemoFile(f.text,f.name)){if(!m.id)continue;if(byId[m.id]){if(squash(byId[m.id].text)!==squash(m.text))dups.push(m.id+" differs between "+byId[m.id].source+" and "+f.name)}else byId[m.id]=m}
+  const memos=Object.values(byId).sort((a,b)=>a.id.localeCompare(b.id));
+  const mr=S.master?S.master.records:[],lr=S.log?S.log.records:[];
+  const matches={};memos.forEach(m=>{matches[m.id]=matchMemo(m,mr)});
+  const ex=[];for(const f of S.extraction){const r=csvToRecords(f.text).records;r.forEach(x=>x._file=f.name);ex.push(...r)}
+  const checked=checkExtraction(ex,byId);
+  const ready=!!(S.master&&S.log);
+  const coverage=ready?buildCoverage(mr,lr,memos,matches):[];
+  const sc=ready?buildScorecard(mr,lr,memos,matches,checked):null;
+  return {memos,byId,dups,mr,lr,matches,ex,checked,coverage,sc}}
+
+/* ---------- render ---------- */
+let C=null;
+function render(){C=compute();renderTop();renderTiles();renderMsgs();renderKpis();renderSc();renderPf();renderCv();renderMm();renderSd();renderCr();moveInk(curTab())}
+function renderTop(){$("#heroDrop").hidden=!(S.own||!Object.values(S.src).some(Boolean));const v=Object.values(S.src).filter(Boolean),own=v.includes("own"),built=v.includes("built");$("#dataPill").classList.toggle("own",own);$("#dataPillT").textContent=!v.length?"No files loaded":own&&built?"Built-in + your files":own?"Your own files":"Built-in data"}
+const TT={master:["table","The supplier master: every approved supplier and its part families."],log:["clock","The assessment log: which suppliers have been assessed, and when."],memos:["mail","The buyer memos. Each one is matched to a supplier by its header."],extraction:["quote","The quotes Claude pulled from the memos. Each one is checked word for word."]};
+function tile(type,title,num,unit,file){const src=S.src[type];const has=!!src;
+  return `<div class="card tile" data-type="${type}" data-tip="${esc(TT[type][1])} ${has?num+" "+esc(unit)+" loaded.":"Nothing loaded yet."}"><div class="t">${ic(TT[type][0])}<span class="tick ${has?"":"off"}">${has?'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>':""}</span>${esc(title)}</div>
+  <div>${has?`<span class="n">${num}</span> <span class="f">${esc(unit)}</span>`:'<span class="f">Drop the file here</span>'}</div><div class="f">${esc(file||"")}</div>
+  <div class="src"><span class="tag ${src==="own"?"own":src?"":"none"}">${src==="own"?"Your file":src?"Built-in":"Empty"}</span><span style="display:flex;gap:6px"><button class="btn ghost small" data-choose="${type}">${ic("upload")}${has?"Replace":"Choose"}</button>${has?`<button class="btn danger small" data-clear="${type}" aria-label="Clear">${ic("trash")}Clear</button>`:""}</span></div>
+  <input type="file" hidden data-in="${type}" ${type==="memos"||type==="extraction"?"multiple":""}></div>`}
+function renderTiles(){
+  const v=C.checked.filter(r=>r.check.status==="VERIFIED").length,rej=C.checked.filter(r=>r.check.status==="REJECTED").length;
+  $("#tiles").innerHTML=
+   tile("master","Supplier master",S.master?S.master.records.length:0,"suppliers",S.master&&S.master.name)+
+   tile("log","Assessment log",S.log?S.log.records.length:0,"assessment rows",S.log&&S.log.name)+
+   tile("memos","Memos",C.memos.length,"distinct memos",fileList(S.memos))+
+   tile("extraction","Memo extraction",C.ex.length,rej?"rows, "+rej+" quote(s) rejected":"rows, "+v+" quotes verified",fileList(S.extraction));
+  document.querySelectorAll("[data-choose]").forEach(b=>b.onclick=()=>b.closest(".tile").querySelector("input").click());
+  document.querySelectorAll("[data-clear]").forEach(b=>b.onclick=()=>{clearType(b.dataset.clear);S.notes=[["ok",NAME[b.dataset.clear]+" cleared."]];ev(NAME[b.dataset.clear]+" cleared");render()});
+  document.querySelectorAll(".tile input[data-in]").forEach(i=>i.onchange=async e=>{const f=[...e.target.files];e.target.value="";await ingest(f,i.dataset.in)});
+  document.querySelectorAll(".tile").forEach(t=>{
+    t.ondragenter=e=>{if(hasFiles(e)){e.preventDefault();t.classList.add("drag")}};
+    t.ondragover=e=>{if(hasFiles(e)){e.preventDefault();e.stopPropagation()}};
+    t.ondragleave=e=>{if(!t.contains(e.relatedTarget))t.classList.remove("drag")};
+    t.ondrop=async e=>{if(!hasFiles(e))return;e.preventDefault();e.stopPropagation();t.classList.remove("drag");await ingest(await filesFromDrop(e.dataTransfer),t.dataset.type)}})}
+function fileList(a){return a.length>3?a.length+" files: "+a[0].name+" to "+a[a.length-1].name:a.map(f=>f.name).join(", ")}
+function renderMsgs(){const out=S.notes.map(([k,t])=>`<div class="msg ${k}">${esc(t)}</div>`);
+  const gaps=memoNumberGaps(C.memos.map(m=>m.id));if(gaps.length)out.push(`<div class="msg warn">Memo numbers missing from this run: ${esc(gaps.join(", "))}.</div>`);
+  C.dups.forEach(d=>out.push(`<div class="msg bad">${esc(d)}</div>`));
+  if(C.sc)C.sc.warnings.forEach(w=>out.push(`<div class="msg warn">${esc(w)}</div>`));
+  $("#msgs").innerHTML=out.join("")}
+function renderKpis(){
+  const cnt=s=>C.sc?C.sc.rows.filter(r=>r.status===s).length:0;
+  const k=[["RED",cnt("RED"),"RED suppliers"],["AMBER",cnt("AMBER"),"AMBER suppliers"],["GREEN",cnt("GREEN"),"GREEN suppliers"],["CD",cnt("CANNOT DETERMINE"),"cannot determine"]];
+  $("#kpis").innerHTML=k.map(x=>`<div class="card kpi ${x[0]}" data-f="${x[0]}" tabindex="0" data-tip="${x[1]} ${esc(x[2])}. Click to show only these in the scorecard."><b data-n="${x[1]}">0</b><span>${x[2]}</span></div>`).join("")+`<p class="q" style="grid-column:1/-1;margin:0">${C.sc?C.sc.rows.length+" suppliers checked against "+C.memos.length+" memos. Click a number to filter the scorecard.":"Load the master and the log to see results."}</p>`;
+  document.querySelectorAll(".kpi").forEach(el=>{el.onclick=()=>{S.fs=el.dataset.f;S.q="";showTab("sc");renderSc();document.querySelector(".console").scrollIntoView({behavior:reduce?"auto":"smooth"})}});
+  countUp()}
+function countUp(){document.querySelectorAll("[data-n]").forEach(el=>{const n=+el.dataset.n;if(reduce){el.textContent=n;return}let s=null;const st=ts=>{s=s||ts;const p=Math.min((ts-s)/800,1);el.textContent=Math.round(n*(1-Math.pow(1-p,3)));if(p<1)requestAnimationFrame(st)};requestAnimationFrame(st)})}
+const wait=t=>`<div class="empty">${esc(t)}</div>`;
+function flagsOf(r){const f=[];if(r.ss.flag)f.push("SINGLE SOURCE: "+r.ss.families.join(", "));if(r.ind.result==="GAP")f.push("INDEMNITY GAP");if(r.na.flag)f.push("NEVER ASSESSED");return f}
+function renderSc(){const P=$("#p-sc");$("#c-sc").textContent=C.sc?C.sc.rows.length:0;
+  if(!C.sc){P.innerHTML=wait("Load the master and the log to see the scorecard.");return}
+  const R=C.sc.rows,cnt=st=>R.filter(r=>r.status===st).length;
+  const cdRows=R.filter(r=>r.status==="CANNOT DETERMINE"),cdMemos=new Set(cdRows.flatMap(r=>r.memoIds)).size,cdNone=cdRows.filter(r=>!r.memoIds.length).length;
+  const key=[["RED","RED",cnt("RED"),"suppliers","Single source, and an indemnity gap or never assessed (§6)."],
+   ["AMBER","AMBER",cnt("AMBER"),"suppliers","Any one flag: single source, indemnity gap or never assessed."],
+   ["GREEN","GREEN",cnt("GREEN"),"suppliers","No flag, and the indemnity cap is BHD 50,000 or more."],
+   ["CD","CANNOT DETERMINE",cdRows.length,"suppliers","No flag, but no memo states the indemnity: "+cdMemos+" memo"+(cdMemos===1?"":"s")+" checked, "+cdNone+" supplier"+(cdNone===1?"":"s")+" with no memo at all."]];
+  const q=S.q.toLowerCase();
+  const rows=R.filter(r=>(!S.fs||CLS(r.status)===S.fs)&&(!q||[r.supplier_id,r.supplier_name,r.status,...flagsOf(r),r.ind.result].join(" ").toLowerCase().includes(q)));
+  P.innerHTML=`<div class="key">${key.map(k=>`<button class="${k[0]}" data-fs="${k[0]}" aria-pressed="${S.fs===k[0]}" data-tip="${esc(k[1])}: ${k[2]} ${k[3]}. ${esc(k[4])} Click to filter."><div class="top"><span class="st ${k[0]}">${esc(k[1])}</span><span class="num">${k[2]}</span></div><p>${esc(k[4])}</p></button>`).join("")}</div>
+  <div class="flagkey"><h4>${ic("flag")}The three flags to look for. Any one makes a supplier at least AMBER.</h4><div class="fk">${[["SINGLE SOURCE","link","The only approved, qualified supplier for a part family. If it stops, the line stops (§4.2).",R.filter(r=>r.ss.flag).length],["INDEMNITY GAP","shield","No indemnity clause, or a cap below BHD 50,000, in the newest memo that states it (§4.3).",R.filter(r=>r.ind.result==="GAP").length],["NEVER ASSESSED","clock","Approved in the master, but no row in the assessment log (§4.1).",R.filter(r=>r.na.flag).length]].map(f=>`<button data-flag="${f[0]}" aria-pressed="${S.q===f[0].toLowerCase()}" data-tip="${f[0]}: ${f[3]} supplier${f[3]===1?"":"s"}. ${esc(f[2])} Click to list them."><span class="fi">${ic(f[1])}</span><span><b>${f[0]}</b><small>${esc(f[2])}</small></span><span class="fn">${f[3]}</span></button>`).join("")}</div></div>
+  <div class="tools"><input type="search" id="q" placeholder="Search supplier, flag or status" value="${esc(S.q)}" data-tip="Type a supplier name, an ID or a flag to narrow the list.">${S.fs||S.q?`<button class="btn ghost small" id="fsClear">Show all ${R.length}</button>`:`<span class="q">Showing all ${R.length} suppliers. Click a colour to filter.</span>`}</div>
+  <div class="scroll"><table><thead><tr><th>Supplier</th><th>Flags and evidence</th><th class="hide-s">Indemnity</th><th>Status</th></tr></thead><tbody>${rows.map(r=>{const f=flagsOf(r);
+   return `<tr class="click ${CLS(r.status)}" data-id="${esc(r.supplier_id)}" data-tip="${esc(r.supplier_name)} is ${esc(r.status)}: ${esc(r.statusWhy)}. Click for the evidence."><td><b>${esc(r.supplier_name)}</b><div class="q">${esc(r.supplier_id)}, ${esc(r.part_families)}</div></td><td>${f.length?f.map(x=>`<span class="flag">${esc(x)}</span>`).join(""):'<span class="q">No flags</span>'}<div class="q">${esc(r.statusWhy)}</div></td><td class="hide-s">${esc(r.ind.result)}</td><td><span class="st ${CLS(r.status)}">${esc(LBL[r.status])}</span></td></tr>`}).join("")||'<tr><td colspan="4" class="empty">No supplier matches that search.</td></tr>'}</tbody></table></div>
+  ${C.sc.contradictions.length?`<div class="box" data-tip="When two memos about the same supplier disagree, the newer one governs (RR-C5 section 5)."><h4>${ic("alert")}Contradictions (RR-C5 §5): the newer memo governs</h4>${C.sc.contradictions.map(c=>`<div class="q" style="margin-top:8px"><b>${esc(c.supplier_id)}</b> ${esc(c.topic)}${c.family?" ("+esc(c.family)+")":""}</div>${c.statements.map(st=>`<blockquote>${esc(st.memo_id)} (${esc(st.date)}), ${esc(st.position)}: "${esc(st.quotation)}"${c.governing&&c.governing.memo_id===st.memo_id?' <span class="st GREEN">governs</span>':""}</blockquote>`).join("")}`).join("")}</div>`:""}
+  <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap"><button class="btn ghost small" id="dlSc" data-tip="Save the scorecard as a CSV file in the pack's template format.">${ic("down")}Download scorecard CSV</button><button class="btn ghost small" id="cpSc" data-tip="Copy the scorecard CSV so you can paste it into Excel.">${ic("copy")}Copy scorecard CSV</button></div>`;
+  const sb=$("#q");sb.oninput=()=>{S.q=sb.value;const pos=sb.selectionStart;renderSc();const n=$("#q");n.focus();n.setSelectionRange(pos,pos)};
+  P.querySelectorAll("[data-fs]").forEach(bt=>bt.onclick=()=>{S.fs=S.fs===bt.dataset.fs?"":bt.dataset.fs;renderSc()});
+  P.querySelectorAll("[data-flag]").forEach(bt=>bt.onclick=()=>{const v=bt.dataset.flag.toLowerCase();S.q=S.q===v?"":v;S.fs="";renderSc()});
+  if($("#fsClear"))$("#fsClear").onclick=()=>{S.fs="";S.q="";renderSc()};
+  P.querySelectorAll("tr.click").forEach(tr=>tr.onclick=()=>openSup(tr.dataset.id));
+  const csv=()=>scorecardTable(C.sc).map(r=>r.map(csvCell).join(",")).join("\n");
+  $("#dlSc").onclick=()=>download("G05_C5_scorecard_"+today()+".csv",csv(),"text/csv");$("#cpSc").onclick=()=>copy(csv(),$("#cpSc"))}
+function renderPf(){const P=$("#p-pf");$("#c-pf").textContent=C.sc?C.sc.families.length:0;
+  if(!C.sc){P.innerHTML=wait("Load the master and the log to see the part families.");return}
+  P.innerHTML=`<p class="hint">Our visible addition. For each part family: how many approved suppliers it has, how many are still qualified after the memos, and who lost qualification, with the quote that took it away (RR-C5 §4.2; a memo counts only for its header supplier).</p>`+
+  C.sc.families.map(F=>{const tot=F.suppliers.length,ok=F.qualified.length,appr=F.suppliers.filter(s=>s.approved).length,lost=F.suppliers.filter(s=>s.approved&&!s.qualified).length,na=tot-appr;
+   const st=ok===0?["RED","no qualified supplier"]:ok===1?["AMBER","single source"]:["GREEN",ok+" still qualified"];
+   return `<div class="fam" data-tip="${esc(F.family)}: ${appr} approved, ${ok} still qualified${lost?", "+lost+" lost qualification":""}.${ok===1?" Single source.":ok===0?" No qualified supplier.":""}"><div><b>${esc(F.family)}</b><div class="q">${appr} approved${na?", "+na+" not approved":""}</div></div><div><div class="meter"><i style="width:0" data-w="${ok/tot*100}"></i>${lost?`<i class="lost" style="width:0" data-w="${lost/tot*100}"></i>`:""}${na?`<i class="na" style="width:0" data-w="${na/tot*100}"></i>`:""}</div>
+   <div class="who">${F.suppliers.map(s=>`<span class="${!s.approved?"na":s.qualified?"ok":"lost"}" title="${esc(s.supplier_id)}">${esc(s.supplier_name)}${!s.approved?" (not approved)":!s.qualified?" (lost)":""}</span>`).join("")}</div>
+   ${F.suppliers.filter(s=>s.approved&&!s.qualified&&s.governing).map(s=>`<blockquote>${esc(s.supplier_name)}: ${esc(s.governing.memo_id)} (${esc(s.governing.date)}) "${esc(s.governing.quotation)}"</blockquote>`).join("")}</div>
+   <span class="st ${st[0]}">${esc(st[1])}</span></div>`}).join("");
+  if(P.classList.contains("on"))growBars()}
+function growBars(){requestAnimationFrame(()=>requestAnimationFrame(()=>document.querySelectorAll("#p-pf .meter i").forEach(i=>i.style.width=i.dataset.w+"%")))}
+function renderCv(){const P=$("#p-cv");
+  if(!C.coverage.length){P.innerHTML=wait("Load the master, the log and the memos to see coverage.");return}
+  const q=S.qc.toLowerCase();const rows=C.coverage.filter(r=>!q||(r.supplier_id+" "+r.supplier_name).toLowerCase().includes(q));
+  P.innerHTML=`<div class="tools"><input type="search" id="qc" placeholder="Search supplier" value="${esc(S.qc)}"><span class="q">${C.coverage.length} suppliers, ${C.coverage.filter(r=>r.memos==="NO MEMO").length} with NO MEMO, ${C.coverage.filter(r=>r.log_row==="no").length} with no log row</span></div>
+  <p class="hint">RR-C5 §3. Coverage only, kept apart from risk: NO MEMO means the memos can't tell us about that supplier; it is not a flag.</p>
+  <div class="scroll"><table><thead><tr><th>Supplier</th><th>Memos found</th><th>Log row</th><th class="hide-s">Evidence or scope searched</th></tr></thead><tbody>${rows.map(r=>`<tr class="click" data-id="${esc(r.supplier_id)}" data-tip="${esc(r.supplier_name)}: ${r.memos==="NO MEMO"?"no memo":esc(r.memos)}, log row ${esc(r.log_row)}. Click for detail."><td><b>${esc(r.supplier_name)}</b><div class="q">${esc(r.supplier_id)}</div></td><td>${r.memos==="NO MEMO"?'<span class="st CD">NO MEMO</span>':esc(r.memos)}</td><td>${r.log_row==="yes"?'<span class="st GREEN">yes</span>':'<span class="st AMBER">no</span>'}</td><td class="hide-s"><span class="q">${esc(r.log_detail)}${r.memo_scope?"<br>"+esc(r.memo_scope):""}</span></td></tr>`).join("")}</tbody></table></div>`;
+  const s=$("#qc");s.oninput=()=>{S.qc=s.value;const pos=s.selectionStart;renderCv();const n=$("#qc");n.focus();n.setSelectionRange(pos,pos)};
+  P.querySelectorAll("tr.click").forEach(tr=>tr.onclick=()=>openSup(tr.dataset.id))}
+function stepTable(a,b,labA,labB){const sa=normaliseName(a).steps,sb=b!=null?normaliseName(b).steps:null;
+  return `<table class="steps"><thead><tr><th>Step (RR-C5 §2)</th><th>${esc(labA)}</th>${sb?`<th>${esc(labB)}</th>`:""}</tr></thead><tbody>${sa.map((s,i)=>`<tr><td>${esc(s[0])}</td><td class="mono">${esc(s[1])}</td>${sb?`<td class="mono">${esc(sb[i][1])}</td>`:""}</tr>`).join("")}${sb?`<tr><td><b>Result</b></td><td colspan="2" class="${sa[sa.length-1][1]===sb[sb.length-1][1]?"same":""}">${sa[sa.length-1][1]===sb[sb.length-1][1]?"Identical: MATCH":"Different"}</td></tr>`:""}</tbody></table>`}
+function renderMm(){const P=$("#p-mm");$("#c-mm").textContent=C.memos.length;
+  if(!S.master||!C.memos.length){P.innerHTML=wait("Load the master and the memos to see the matching.");return}
+  const un=C.memos.filter(m=>C.matches[m.id].status!=="MATCH").length;
+  P.innerHTML=`<p class="hint">Each memo's "Supplier (as written)" header goes through the five RR-C5 §2 steps next to the master name. A memo is attached only when the result is identical to exactly one master supplier. ${C.memos.length} memos, ${C.memos.length-un} matched, ${un} CANNOT DETERMINE (match).</p>`+
+  C.memos.map(m=>{const r=C.matches[m.id];const sup=r.supplierId?C.mr.find(x=>x.supplier_id===r.supplierId):null;
+   return `<div class="box" data-tip="${esc(m.id)} is written to &quot;${esc(m.supplierAsWritten)}&quot;. ${r.status==="MATCH"?"After the five steps it matches "+esc(sup.supplier_name)+".":"It matches no single master supplier, so it is set aside."}"><div style="display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap"><div><b>${esc(m.id)}</b> <span class="q">${esc(m.date)}, written "${esc(m.supplierAsWritten)}"</span></div><span class="st ${r.status==="MATCH"?"GREEN":"AMBER"}">${esc(r.status==="MATCH"?"MATCH: "+sup.supplier_id+" "+sup.supplier_name:r.status)}</span></div>
+   <details style="margin-top:6px"><summary>Show the five steps side by side</summary>${stepTable(m.supplierAsWritten,sup?sup.supplier_name:null,"Memo header",sup?"Master "+sup.supplier_id:"")}<p class="q">${esc(r.reason)}</p></details></div>`}).join("")}
+function openSup(id){S.sel=id;renderSd();showTab("sd")}
+function renderSd(){const P=$("#p-sd");
+  if(!C.sc){P.innerHTML=wait("Load the master and the log first.");return}
+  const opts=C.sc.rows.map(r=>`<option value="${esc(r.supplier_id)}" ${r.supplier_id===S.sel?"selected":""}>${esc(r.supplier_id+" "+r.supplier_name)}</option>`).join("");
+  let h=`<div class="tools"><select id="pick"><option value="">Choose a supplier</option>${opts}</select></div>`;
+  const r=C.sc.rows.find(x=>x.supplier_id===S.sel);
+  if(!r){P.innerHTML=h+wait("Choose a supplier, or click one in the Scorecard or Coverage tab.");$("#pick").onchange=e=>{S.sel=e.target.value;renderSd()};return}
+  const m=C.mr.find(x=>x.supplier_id===r.supplier_id);const cov=C.coverage.find(x=>x.supplier_id===r.supplier_id);
+  h+=`<div class="detail"><div style="display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;align-items:center"><h3>${esc(r.supplier_name)}</h3><span class="st ${CLS(r.status)}">${esc(LBL[r.status])}</span></div><p class="q">${esc(r.supplier_id)}, ${esc(r.part_families)}. ${esc(r.statusWhy)}.</p>
+  <div class="box"><h4>${ic("shield")}Single source (RR-C5 §4.2)</h4>${r.ss.flag?`<span class="flag">SINGLE SOURCE</span><div class="q">${esc(r.ss.evidence.join(" | "))}</div>`:'<div class="q">No: another approved, qualified supplier exists for each of its families.</div>'}</div>
+  <div class="box"><h4>${ic("doc")}Indemnity (RR-C5 §4.3): ${esc(r.ind.result)}</h4>${r.ind.governing?`<blockquote>${esc(r.ind.governing.memo_id)} (${esc(r.ind.governing.date)}): "${esc(r.ind.governing.quotation)}"</blockquote>`:""}<div class="q">${esc(r.ind.evidence)}</div></div>
+  <div class="box"><h4>${ic("clock")}Assessment (RR-C5 §4.1): ${esc(r.na.text)}</h4><div class="q">${esc(r.na.evidence)}</div></div>
+  ${r.notes.length?`<div class="box"><h4>${ic("alert")}Notes</h4>${r.notes.map(n=>`<div class="q">${esc(n)}</div>`).join("")}</div>`:""}
+  <div class="box"><h4>${ic("table")}Master row</h4><div class="mono">SUPPLIER_MASTER.csv line ${m._line}: ${esc([m.supplier_id,m.supplier_name,m.part_families,m.approval_status,m.spend_band].join(" | "))}</div></div>
+  <div class="box"><h4>${ic("mail")}Memos matched (RR-C5 §2)</h4>${r.memoIds.length?r.memoIds.map(mid=>{const mm=C.byId[mid];const rows=C.checked.filter(x=>x.memo_id===mid);
+    return `<div style="margin-top:8px"><b>${esc(mid)}</b> <span class="q">${esc(mm.date)}, written "${esc(mm.supplierAsWritten)}"</span><details><summary>Five steps side by side</summary>${stepTable(mm.supplierAsWritten,m.supplier_name,"Memo header","Master")}</details>
+    ${rows.map(x=>x.check.status==="NONE ROW"?'<div class="q">Read; no qualification or indemnity sentence.</div>':`<blockquote><span class="st ${x.check.status==="VERIFIED"?"GREEN":"RED"}">${esc(x.check.status)}</span> ${esc(x.topic)}${x.position?", "+esc(x.position):""}, about ${esc(x.statement_about_as_written)}<br>"${esc(x.quotation)}"</blockquote>`).join("")}</div>`}).join(""):`<span class="st CD">NO MEMO</span><div class="q">${esc(cov?cov.memo_scope:"")}</div>`}</div></div>`;
+  P.innerHTML=h;$("#pick").onchange=e=>{S.sel=e.target.value;renderSd()}}
+function recordText(){const L=["COVERAGE RECORD, C5-A Supplier Risk Control Tower, Group 5 (V2)","Run at: "+new Date().toISOString()+", rules RR-C5 as of "+AS_OF,"","FILES READ"];
+  if(S.master)L.push("- "+S.master.name+" ("+(S.src.master==="own"?"your file":"built-in")+"): "+S.master.records.length+" data rows");
+  if(S.log)L.push("- "+S.log.name+" ("+(S.src.log==="own"?"your file":"built-in")+"): "+S.log.records.length+" data rows");
+  S.memos.forEach(f=>{const ids=parseMemoFile(f.text,f.name).map(m=>m.id);L.push("- "+f.name+": "+ids.length+" memo(s): "+ids.join(", "))});
+  S.extraction.forEach(f=>L.push("- "+f.name+": "+csvToRecords(f.text).records.length+" extraction rows"));
+  if(S.events.length){L.push("","CHANGES IN THIS SESSION");S.events.forEach(e=>L.push("- "+e.at.toLocaleTimeString("en-GB")+"  "+e.t))}
+  L.push("","MEMOS READ: "+C.memos.length+" distinct",C.memos.map(m=>m.id).join(", ")||"(none)");
+  const g=memoNumberGaps(C.memos.map(m=>m.id));L.push("Missing numbers in the sequence: "+(g.length?g.join(", "):"none"));
+  if(C.ex.length){const c=s=>C.checked.filter(r=>r.check.status===s).length;const cov=new Set(C.ex.map(r=>r.memo_id));const no=C.memos.filter(m=>!cov.has(m.id)).map(m=>m.id);
+   L.push("","EXTRACTION CHECK","Verified quotations: "+c("VERIFIED")+", NONE rows: "+c("NONE ROW")+", rejected: "+c("REJECTED"),"Memos with no extraction row: "+(no.length?no.join(", "):"none"));
+   C.checked.filter(r=>r.check.status==="REJECTED").forEach(r=>L.push("REJECTED "+r._file+" line "+r._line+": "+r.check.reason))}
+  return L.join("\n")}
+function renderCr(){const P=$("#p-cr");
+  if(!S.master&&!S.log&&!S.memos.length){P.innerHTML=wait("Nothing loaded yet.");return}
+  P.innerHTML=`<p class="hint">Proof of what this run read: every file, every memo ID and every quotation check.</p><div style="display:flex;gap:8px;margin-bottom:10px;flex-wrap:wrap"><button class="btn ghost small" id="dlCr" data-tip="Save this record as a text file for the evidence folder.">${ic("down")}Download record</button><button class="btn ghost small" id="cpCr" data-tip="Copy this record to paste it somewhere.">${ic("copy")}Copy record</button><span class="q" style="align-self:center">${ic("clock")} Updated ${new Date().toLocaleTimeString("en-GB")}</span></div><pre class="rec">${esc(recordText())}</pre>`;
+  $("#dlCr").onclick=()=>download("G05_C5_coverage_record_"+today()+".txt",recordText(),"text/plain");$("#cpCr").onclick=()=>copy(recordText(),$("#cpCr"))}
+
+/* ---------- helpers ---------- */
+const csvCell=v=>/[",\n]/.test(String(v))?'"'+String(v).replace(/"/g,'""')+'"':String(v);
+const today=()=>new Date().toISOString().slice(0,10);
+function download(name,text,type){try{const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([text],{type}));a.download=name;document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},500)}catch(e){}S.notes=[["ok","Download started. If nothing downloads here, use Copy instead."]];renderMsgs()}
+async function copy(text,btn){try{await navigator.clipboard.writeText(text);btn.textContent="Copied"}catch(e){btn.textContent="Copy not allowed here"}setTimeout(()=>render(),1400)}
+function hasFiles(e){return e.dataTransfer&&[...(e.dataTransfer.types||[])].includes("Files")}
+async function filesFromDrop(dt){const items=[...(dt.items||[])];const ents=items.map(i=>i.webkitGetAsEntry?i.webkitGetAsEntry():null).filter(Boolean);if(!ents.length)return[...dt.files];const out=[];
+  async function walk(en){if(en.isFile)out.push(await new Promise((r,j)=>en.file(r,j)));else if(en.isDirectory){const rd=en.createReader();let b;do{b=await new Promise((r,j)=>rd.readEntries(r,j));for(const c of b)await walk(c)}while(b.length)}}
+  for(const en of ents)await walk(en);return out}
+
+/* ---------- tabs ---------- */
+const tabs=[...document.querySelectorAll(".tab")],ink=$("#ink");
+const curTab=()=>tabs.find(t=>t.getAttribute("aria-selected")==="true");
+function moveInk(t){if(!t)return;ink.style.left=t.offsetLeft+10+"px";ink.style.width=t.offsetWidth-20+"px"}
+function showTab(p){tabs.forEach(t=>t.setAttribute("aria-selected",t.dataset.p===p));document.querySelectorAll(".panel").forEach(x=>x.classList.toggle("on",x.id==="p-"+p));moveInk(curTab());if(p==="pf")growBars()}
+tabs.forEach(t=>t.onclick=()=>showTab(t.dataset.p));
+addEventListener("resize",()=>moveInk(curTab()));
+
+/* ---------- buttons, page drop, effects ---------- */
+$("#goScore").onclick=()=>{showTab("sc");document.querySelector(".console").scrollIntoView({behavior:reduce?"auto":"smooth"})};
+$("#ownBtn").onclick=()=>{["master","log","memos","extraction"].forEach(clearType);S.own=true;S.notes=[["ok","Built-in data removed. Drop your own files in the box above, on a source box, or anywhere on the page."]];ev("Switched to your own files (built-in data removed)");render()};
+$("#builtBtn").onclick=()=>{loadBuiltIn();S.own=false;S.notes=[["ok","Back to the built-in data: the pack as issued and Group 5's three batches."]];ev("Back to the built-in data");render()};
+$("#clearAll").onclick=()=>{["master","log","memos","extraction"].forEach(clearType);S.sel="";S.notes=[["ok","All files cleared."]];ev("All files cleared");render()};
+$("#heroPick").onclick=()=>$("#pickAny").click();
+$("#pickAny").onchange=async e=>{const f=[...e.target.files];e.target.value="";await ingest(f)};
+const hd=$("#heroDrop");
+hd.addEventListener("dragenter",e=>{if(hasFiles(e)){e.preventDefault();hd.classList.add("over")}});
+hd.addEventListener("dragover",e=>{if(hasFiles(e)){e.preventDefault();e.stopPropagation()}});
+hd.addEventListener("dragleave",e=>{if(!hd.contains(e.relatedTarget))hd.classList.remove("over")});
+hd.addEventListener("drop",async e=>{if(!hasFiles(e))return;e.preventDefault();e.stopPropagation();hd.classList.remove("over");await ingest(await filesFromDrop(e.dataTransfer))});
+document.querySelectorAll("[data-ic]").forEach(el=>{el.outerHTML=ic(el.dataset.ic,el.dataset.c==="big"?"":"ico")});
+
+/* ---------- robot: eyes follow the mouse, bubble explains what is under it ---------- */
+const bot=$("#bot"),bub=$("#bubble"),eL=$("#eL"),eR=$("#eR"),headG=bot.querySelector(".head"),mouth=$("#mouth");
+let bubT=0,lastTip="";
+function look(x,y){const b=bot.getBoundingClientRect();const cx=b.left+b.width/2,cy=b.top+b.height*0.42;const dx=x-cx,dy=y-cy,d=Math.hypot(dx,dy)||1;const k=Math.min(1,d/260);
+  const ex=dx/d*5*k,ey=dy/d*4*k;eL.style.transform=eR.style.transform=`translate(${ex}px,${ey}px)`;headG.style.transform=`rotate(${Math.max(-8,Math.min(8,dx/60))}deg)`}
+function say(t){if(!t){bub.classList.remove("show");lastTip="";mouth.setAttribute("d","M52 69 Q60 73 68 69");return}
+  if(t!==lastTip){bub.textContent=t;lastTip=t}bub.classList.add("show");mouth.setAttribute("d","M52 68 Q60 76 68 68");clearTimeout(bubT);bubT=setTimeout(()=>say(""),3500)}
+document.addEventListener("pointermove",e=>{look(e.clientX,e.clientY)});
+document.addEventListener("pointerover",e=>{const t=e.target.closest&&e.target.closest("[data-tip]");if(t)say(t.dataset.tip)});
+document.addEventListener("focusin",e=>{const t=e.target.closest&&e.target.closest("[data-tip]");if(t)say(t.dataset.tip)});
+function blink(){bot.classList.add("blink");setTimeout(()=>bot.classList.remove("blink"),140);setTimeout(blink,2600+Math.random()*3400)}
+if(!reduce)setTimeout(blink,2000);
+setTimeout(()=>say("Hi! Point at anything and I'll tell you what it is."),900);
+addEventListener("dragover",e=>{if(hasFiles(e))e.preventDefault()});
+addEventListener("drop",async e=>{if(!hasFiles(e))return;e.preventDefault();await ingest(await filesFromDrop(e.dataTransfer))});
+$("#tBtn").onclick=()=>{root.dataset.theme=isDark()?"light":"dark";try{localStorage.setItem("ct-theme",root.dataset.theme)}catch(e){}setIcon();colors()};
+document.addEventListener("pointermove",e=>{const c=e.target.closest&&e.target.closest(".card");if(!c)return;const b=c.getBoundingClientRect();c.style.setProperty("--mx",e.clientX-b.left+"px");c.style.setProperty("--my",e.clientY-b.top+"px")});
+document.addEventListener("click",e=>{const b=e.target.closest(".btn,.iconbtn");if(!b||reduce)return;const r=b.getBoundingClientRect(),s=Math.max(r.width,r.height),i=document.createElement("span");i.className="rip";i.style.cssText=`width:${s}px;height:${s}px;left:${e.clientX-r.left-s/2}px;top:${e.clientY-r.top-s/2}px`;b.appendChild(i);setTimeout(()=>i.remove(),650)});
+
+/* ---------- supplier network background ---------- */
+const cv=$("#net"),ctx=cv.getContext("2d");let W,H,pts=[],on=!reduce,raf=0,col={};const mouse={x:-9999,y:-9999};
+function colors(){const d=isDark();col={dot:d?"rgba(120,220,215,":"rgba(11,127,134,",line:d?"rgba(78,169,255,":"rgba(10,95,143,",la:d?.32:.22,da:d?.8:.55}}
+function size(){const dpr=Math.min(devicePixelRatio||1,2);W=innerWidth;H=innerHeight;cv.width=W*dpr;cv.height=H*dpr;ctx.setTransform(dpr,0,0,dpr,0,0);const n=Math.round(Math.min(110,W*H/14000));const side=Math.round(n*0.28);pts=Array.from({length:n+side},(_,i)=>{const edge=i>=n;const x=edge?(Math.random()<.5?Math.random()*W*0.12:W-Math.random()*W*0.12):Math.random()*W;return{x,y:Math.random()*H,vx:(Math.random()-.5)*(edge?.18:.28),vy:(Math.random()-.5)*.28,r:Math.random()*1.6+1}})}
+function frame(){ctx.clearRect(0,0,W,H);const L=130;
+ for(const p of pts){p.x+=p.vx;p.y+=p.vy;if(p.x<0||p.x>W)p.vx*=-1;if(p.y<0||p.y>H)p.vy*=-1;const dx=p.x-mouse.x,dy=p.y-mouse.y,d=Math.hypot(dx,dy);if(d<120&&d>0){p.x+=dx/d*.6;p.y+=dy/d*.6}}
+ for(let i=0;i<pts.length;i++){const a=pts[i];for(let j=i+1;j<pts.length;j++){const b=pts[j],d=Math.hypot(a.x-b.x,a.y-b.y);if(d<L){ctx.strokeStyle=col.line+(1-d/L)*col.la+")";ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);ctx.stroke()}}
+  const dm=Math.hypot(a.x-mouse.x,a.y-mouse.y);if(dm<180){ctx.strokeStyle=col.line+(1-dm/180)*.45+")";ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(mouse.x,mouse.y);ctx.stroke()}
+  ctx.fillStyle=col.dot+col.da+")";ctx.beginPath();ctx.arc(a.x,a.y,a.r,0,7);ctx.fill()}
+ raf=requestAnimationFrame(frame)}
+function start(){cancelAnimationFrame(raf);if(on&&!document.hidden)frame();else ctx.clearRect(0,0,W,H)}
+colors();size();start();
+addEventListener("resize",()=>{size();start()});
+addEventListener("pointermove",e=>{mouse.x=e.clientX;mouse.y=e.clientY});
+document.addEventListener("pointerleave",()=>{mouse.x=mouse.y=-9999});
+document.addEventListener("visibilitychange",start);
+matchMedia("(prefers-color-scheme: dark)").addEventListener("change",()=>{colors();setIcon()});
+
+/* ---------- start with the built-in data ---------- */
+loadBuiltIn();render();
+}
+</script>
+</body>
+</html>

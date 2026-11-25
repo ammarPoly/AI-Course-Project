@@ -9,6 +9,7 @@
 
 Newest first. Whenever someone's Claude finishes or changes something that affects you, it adds a line here (see `CLAUDE.md`). The full log for everyone is in `00_ADMIN/TEAM_NOTES.md`.
 
+- 2026-11-25, from Ammar: V2 is ready. It opens straight onto the real scorecard, so write AQ-1 to AQ-5 in the test record BEFORE you open V2 or the Netlify link. Then run T-03 to T-05: press "Use my own files" and drop your invented files in the hero box.
 - 2026-11-25, from Fatema: part-family summary test cases T-03 to T-05 written (NOT RUN). Run them once Ammar builds the summary.
 - 2026-11-25, from Fatema: T-02 complete: coverage MATCH and flags MATCH, both screenshots in 05_EVIDENCE.
 - 2026-11-25, from Fatema: T-02 flags expected result written. Next: load the 3 extraction CSVs into the tool, check SUP-01 and SUP-02 in the Scorecard tab, and send a screenshot.
