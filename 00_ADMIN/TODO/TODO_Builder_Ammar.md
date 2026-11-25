@@ -9,6 +9,7 @@
 
 Newest first. Whenever someone's Claude finishes or changes something that affects you, it adds a line here (see `CLAUDE.md`). The full log for everyone is in `00_ADMIN/TEAM_NOTES.md`.
 
+- 2026-11-25, from Ammar: V2 fix: new memo intake now ADDS a new memo and its extraction rows to the loaded memos (before, it replaced all 24 built-in memos). A memo with nothing on qualification or indemnity now shows NOT STATED, as the canvas says. Rules unchanged, dev tests pass.
 - 2026-11-25, from Ammar: V2 of the tool is in `02_WORK/control_tower.html` (built in the general chat, not the build chat). Rule logic unchanged, all dev tests pass. v01 and v02 saved in `03_VERSIONS/` with CHANGES.md. Put the V2 index.html on a new Netlify site (keep the V1 site as it is). The built-in data, robot, dark mode and background were your additions, so add a line to the canvas decision log if the tutor asks.
 - 2026-11-25, from Fatema: part-family summary test cases written as T-03, T-04 and T-05 in the test record (invented data, expected results first, NOT RUN). Please use them when building the summary. Pull request ready to merge.
 - 2026-11-25, from Fatema: T-02 flags part run: MATCH (SUP-02 indemnity taken from MEMO-02, not MEMO-01). T-02 is complete. Pull request #24 ready to merge.
