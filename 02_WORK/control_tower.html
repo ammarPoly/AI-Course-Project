@@ -172,8 +172,9 @@ details summary{cursor:pointer;color:var(--accent);font-size:13px;font-weight:60
 .flagkey small{display:block;font-size:12.5px;color:var(--muted);line-height:1.4}
 @media (max-width:820px){.flagkey .fk{grid-template-columns:1fr}}
 /* robot */
-#bot{position:fixed;top:112px;right:22px;z-index:6;width:120px;height:140px;cursor:default;filter:drop-shadow(0 12px 18px light-dark(rgba(15,28,43,.22),rgba(0,0,0,.55)))}
+#bot{position:fixed;top:112px;right:22px;z-index:6;width:120px;height:140px;cursor:grab;touch-action:none;user-select:none;filter:drop-shadow(0 12px 18px light-dark(rgba(15,28,43,.22),rgba(0,0,0,.55)))}
 #bot svg{width:100%;height:100%;overflow:visible}
+#bot.dragging{cursor:grabbing}#bot.dragging .float{animation-play-state:paused}
 #bot .float{animation:float 4s ease-in-out infinite;transform-origin:60px 70px}
 @keyframes float{50%{transform:translateY(-4px)}}
 #bot .head{transition:transform .25s ease-out;transform-origin:60px 60px}
@@ -196,7 +197,7 @@ footer{position:relative;z-index:1;text-align:center;color:var(--muted);font-siz
 </head>
 <body>
 <canvas id="net" aria-hidden="true"></canvas>
-<div id="bot" aria-hidden="true"><svg viewBox="0 0 120 140">
+<div id="bot" aria-hidden="true" data-tip="Drag me anywhere on the page. Double-click me to send me back to my corner."><svg viewBox="0 0 120 140">
  <defs>
   <linearGradient id="metal" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="light-dark(#ffffff,#3a4b5f)"/><stop offset=".55" stop-color="light-dark(#dfe7ee,#243447)"/><stop offset="1" stop-color="light-dark(#b9c6d2,#162434)"/></linearGradient>
   <linearGradient id="metal2" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="light-dark(#eef3f7,#2d3e52)"/><stop offset="1" stop-color="light-dark(#aab8c6,#132131)"/></linearGradient>
@@ -886,9 +887,44 @@ let bubT=0,lastTip="";
 function look(x,y){const b=bot.getBoundingClientRect();const cx=b.left+b.width/2,cy=b.top+b.height*0.42;const dx=x-cx,dy=y-cy,d=Math.hypot(dx,dy)||1;const k=Math.min(1,d/260);
   const ex=dx/d*5*k,ey=dy/d*4*k;eL.style.transform=eR.style.transform=`translate(${ex}px,${ey}px)`;headG.style.transform=`rotate(${Math.max(-8,Math.min(8,dx/60))}deg)`}
 function say(t){if(!t){bub.classList.remove("show");lastTip="";mouth.setAttribute("d","M52 69 Q60 73 68 69");return}
-  if(t!==lastTip){bub.textContent=t;lastTip=t}bub.classList.add("show");mouth.setAttribute("d","M52 68 Q60 76 68 68");clearTimeout(bubT);bubT=setTimeout(()=>say(""),3500)}
+  if(t!==lastTip){bub.textContent=t;lastTip=t}placeBub();bub.classList.add("show");mouth.setAttribute("d","M52 68 Q60 76 68 68");clearTimeout(bubT);bubT=setTimeout(()=>say(""),3500)}
+/* bubble placement: on narrow windows it stays in the free margin beside the robot and gets taller instead of covering the page */
+function placeBub(){const r=bot.getBoundingClientRect(),vw=innerWidth,vh=innerHeight,G=10;
+  const m=document.querySelector("main.wrap"),mr=m.getBoundingClientRect(),cs=getComputedStyle(m);
+  const cL=mr.left+parseFloat(cs.paddingLeft),cR=mr.right-parseFloat(cs.paddingRight);
+  const cx=r.left+r.width/2,inRight=r.right>cR+20&&cx>(cL+cR)/2,inLeft=r.left<cL-20&&cx<(cL+cR)/2;let x,w,y,side;
+  const fit=(a,b)=>Math.max(0,b-a-G*2);
+  if(inRight||inLeft){
+    const zL=inRight?cR:0,zR=inRight?vw:cL;
+    const leftAv=fit(zL,r.left),rightAv=fit(r.right,zR),zoneW=fit(zL,zR);
+    if(leftAv>=140){w=Math.min(280,leftAv);x=r.left-G-w;side="l"}
+    else if(rightAv>=140){w=Math.min(280,rightAv);x=r.right+G;side="r"}
+    else if(zoneW>=100){w=Math.min(280,zoneW);x=Math.min(Math.max(zL+G,cx-w/2),zR-G-w);side="b"}
+  }
+  if(side===undefined&&(inRight||inLeft)){w=Math.max(r.width+8,fit(inRight?cR:0,inRight?vw:cL));x=Math.max(G,Math.min(cx-w/2,vw-G-w));side="b"}
+  if(side===undefined){w=Math.min(280,vw-2*G);if(r.left-G-w>=G){x=r.left-G-w;side="l"}else if(r.right+G+w<=vw-G){x=r.right+G;side="r"}else{x=Math.max(G,Math.min(cx-w/2,vw-G-w));side="b"}}
+  bub.style.width=w+"px";bub.style.maxWidth=w+"px";bub.style.left=x+"px";bub.style.right="auto";bub.style.bottom="auto";
+  const h=bub.offsetHeight;
+  if(side==="b"){y=r.bottom+6;if(y+h>vh-G)y=r.top-6-h}else y=r.top+r.height*0.22;
+  y=Math.max(G,Math.min(y,vh-G-h));bub.style.top=y+"px";
+  bub.style.borderRadius=side==="l"?"14px 4px 14px 14px":side==="r"?"4px 14px 14px 14px":"14px"}
+/* drag the robot anywhere; the spot is remembered in this browser */
+(function(){let drag=null,moved=false;
+  function put(x,y){const b=bot.getBoundingClientRect();x=Math.max(0,Math.min(x,innerWidth-b.width));y=Math.max(0,Math.min(y,innerHeight-b.height));
+    Object.assign(bot.style,{left:x+"px",top:y+"px",right:"auto",bottom:"auto"});return[x,y]}
+  try{const s=JSON.parse(localStorage.getItem("ct-bot")||"null");if(s)requestAnimationFrame(()=>put(s.x*innerWidth,s.y))}catch(e){}
+  bot.addEventListener("pointerdown",e=>{if(e.button!==0)return;const b=bot.getBoundingClientRect();drag={dx:e.clientX-b.left,dy:e.clientY-b.top};moved=false;bot.setPointerCapture(e.pointerId);bot.classList.add("dragging");e.preventDefault()});
+  bot.addEventListener("pointermove",e=>{if(!drag)return;moved=true;put(e.clientX-drag.dx,e.clientY-drag.dy);if(bub.classList.contains("show"))placeBub()});
+  const end=e=>{if(!drag)return;drag=null;bot.classList.remove("dragging");const b=bot.getBoundingClientRect();
+    try{localStorage.setItem("ct-bot",JSON.stringify({x:b.left/innerWidth,y:b.top}))}catch(err){}
+    quietUntil=Date.now()+1500;say(moved?"I'll stay here. Double-click me to go back to my corner.":"Drag me anywhere on the page.")};
+  bot.addEventListener("pointerup",end);bot.addEventListener("pointercancel",end);
+  bot.addEventListener("dblclick",()=>{["left","top","right","bottom"].forEach(k=>bot.style[k]="");try{localStorage.removeItem("ct-bot")}catch(e){}say("Back in my corner.")});
+  addEventListener("resize",()=>{if(bot.style.left){const b=bot.getBoundingClientRect();put(b.left,b.top)}if(bub.classList.contains("show"))placeBub()});
+})();
 document.addEventListener("pointermove",e=>{look(e.clientX,e.clientY)});
-document.addEventListener("pointerover",e=>{const t=e.target.closest&&e.target.closest("[data-tip]");if(t)say(t.dataset.tip)});
+let quietUntil=0;
+document.addEventListener("pointerover",e=>{if(Date.now()<quietUntil)return;const t=e.target.closest&&e.target.closest("[data-tip]");if(t)say(t.dataset.tip)});
 document.addEventListener("focusin",e=>{const t=e.target.closest&&e.target.closest("[data-tip]");if(t)say(t.dataset.tip)});
 function blink(){bot.classList.add("blink");setTimeout(()=>bot.classList.remove("blink"),140);setTimeout(blink,2600+Math.random()*3400)}
 if(!reduce)setTimeout(blink,2000);
