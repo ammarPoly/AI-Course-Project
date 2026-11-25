@@ -1,6 +1,6 @@
 # Evidence list: Group 5, C5-A Supplier Risk Control Tower
 
-One line per evidence file in `05_EVIDENCE/`. Never edit the evidence files themselves (K-05 §3); add a new line here instead.
+One line per piece of evidence (files in `05_EVIDENCE/`, saved versions in `03_VERSIONS/`, and checks with no file of their own). Never edit the evidence files themselves (K-05 §3); add a new line here instead.
 
 | File | Date | Who made it | What it proves |
 |---|---|---|---|
@@ -13,3 +13,8 @@ One line per evidence file in `05_EVIDENCE/`. Never edit the evidence files them
 | `05_EVIDENCE/T-01_coverage_SUP-01_2026-11-25_Fatema.png` | 2026-11-25 | Fatema | Screenshot of the tool's Coverage tab (`02_WORK/control_tower.html` from main, downloaded 2026-11-25) for test T-01: SUP-01 Corranby Foundry Works W.L.L. shows memos MEMO-01 and log row yes (ASSESSMENT_LOG.csv line 2: 2025-09-14, PASS). |
 | `05_EVIDENCE/T-02_coverage_SUP-01_SUP-02_2026-11-25_Fatema.png` | 2026-11-25 | Fatema | Screenshot of the tool's Coverage tab for test T-02: SUP-01 shows memos MEMO-01, and SUP-02 Talbeck Castings Co. shows MEMO-02 only, so MEMO-01 (which mentions Talbeck in its body) is not counted for SUP-02. |
 | `05_EVIDENCE/T-02_scorecard_SUP-01_SUP-02_2026-11-25_Fatema.png` | 2026-11-25 | Fatema | Screenshot of the tool's Scorecard tab for test T-02 (flags part), with the 3 extraction CSVs loaded: SUP-01 and SUP-02 both single source no, indemnity NO GAP (SUP-01 from MEMO-01, BHD 250,000; SUP-02 from MEMO-02, BHD 100,000), status GREEN. |
+| `05_EVIDENCE/G05_tutor_reply_2026-11-23_canvas_READY_TO_BUILD.md` | 2026-11-23 | Tutor (Mr Ali Darwish), saved by Ammar | The tutor initialled the canvas READY TO BUILD and provisionally agreed the part-family summary (to confirm at CP-8). Evidence for CP-7 line 4. |
+| `05_EVIDENCE/G05_AI_crosscheck_extraction_2026-11-23.md` | 2026-11-23 | Ammar (through Claude; AI check) | Second AI check of the extraction: 37 of 37 quotations found in their memos, no date, header or position errors, no qualification or indemnity sentence clearly missed; 3 borderline sentences listed for a person to judge. Labelled as AI-generated; Fatema's own re-read is the independent check. |
+| `03_VERSIONS/v01_2026-11-25/` (`control_tower.html` and `04_TESTS/`) | 2026-11-25 | Ammar | Saved version v01: the tool used for T-01 and T-02, with the test record as it stood after them. Version saved for CP-7. Change note in `03_VERSIONS/CHANGES.md`. |
+| `03_VERSIONS/v02_2026-11-25/control_tower.html` | 2026-11-25 | Ammar | Saved version v02 (V2 tool): rule logic unchanged from v01 (dev tests pass), new tabs and memo intake. Change note in `03_VERSIONS/CHANGES.md`. |
+| `03_VERSIONS/CHANGES.md` | 2026-11-25 | Ammar | One change note per saved version (v01, v02), as K-05 asks: what changed and which tests used it. |
