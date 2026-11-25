@@ -4,6 +4,8 @@ One line per change, newest first. Every member's Claude adds a line here (and i
 
 Format: `- YYYY-MM-DD, for <member>, from <member>: what was done. What to do now.`
 
+- 2026-11-25, for Ammar, from Ammar: V2 fix: new memo intake now ADDS a new memo and its extraction rows to the loaded memos (before, it replaced all 24 built-in memos). A memo with nothing on qualification or indemnity now shows NOT STATED, as the canvas says. Rules unchanged, dev tests pass.
+- 2026-11-25, for Fatema, from Ammar: V2 fix: dropping a new memo plus its extraction CSV now adds it to the memos already loaded instead of replacing them. Relevant if you test new memo intake later. Your T-03 to T-05 still use "Use my own files" as before.
 - 2026-11-25, for Marwan, from Ammar: V2 update: the robot can be dragged anywhere (double-click sends him back to the top right), and on narrow screens his message box stays beside or under him instead of covering the colour cards. Same file, same rules.
 - 2026-11-25, for Ammar, from Ammar: V2 of the tool is in `02_WORK/control_tower.html` (built in the general chat, not the build chat). Rule logic unchanged, all dev tests pass. v01 and v02 saved in `03_VERSIONS/` with CHANGES.md. Put the V2 index.html on a new Netlify site (keep the V1 site as it is). The built-in data, robot, dark mode and background were your additions, so add a line to the canvas decision log if the tutor asks.
 - 2026-11-25, for Fatema, from Ammar: V2 is ready. It opens straight onto the real scorecard, so write AQ-1 to AQ-5 in the test record BEFORE you open V2 or the Netlify link. Then run T-03 to T-05: press "Use my own files" and drop your invented files in the hero box.

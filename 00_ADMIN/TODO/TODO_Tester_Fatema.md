@@ -9,6 +9,7 @@
 
 Newest first. Whenever someone's Claude finishes or changes something that affects you, it adds a line here (see `CLAUDE.md`). The full log for everyone is in `00_ADMIN/TEAM_NOTES.md`.
 
+- 2026-11-25, from Ammar: V2 fix: dropping a new memo plus its extraction CSV now adds it to the memos already loaded instead of replacing them. Relevant if you test new memo intake later. Your T-03 to T-05 still use "Use my own files" as before.
 - 2026-11-25, from Ammar: V2 is ready. It opens straight onto the real scorecard, so write AQ-1 to AQ-5 in the test record BEFORE you open V2 or the Netlify link. Then run T-03 to T-05: press "Use my own files" and drop your invented files in the hero box.
 - 2026-11-25, from Fatema: part-family summary test cases T-03 to T-05 written (NOT RUN). Run them once Ammar builds the summary.
 - 2026-11-25, from Fatema: T-02 complete: coverage MATCH and flags MATCH, both screenshots in 05_EVIDENCE.

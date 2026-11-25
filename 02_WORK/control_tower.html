@@ -250,7 +250,7 @@ footer{position:relative;z-index:1;text-align:center;color:var(--muted);font-siz
     <div class="kpis" id="kpis"></div>
   </section>
 
-  <div class="sec"><div><h3>Sources</h3><p id="srcHint">Loaded from the pack as issued. Drop a file on a box to replace it, or drop several anywhere on the page.</p></div>
+  <div class="sec"><div><h3>Sources</h3><p id="srcHint">Loaded from the pack as issued. A new memo and its extraction rows are added to what is loaded and everything reruns. A master or log file replaces the one loaded. Drop files on a box or anywhere on the page.</p></div>
     <div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn ghost small" id="builtBtn" data-tip="Reload the pack exactly as issued, plus the group's three batch files."><i data-ic="refresh"></i>Back to built-in data</button><button class="btn danger small" id="clearAll" data-tip="Remove every loaded file and start empty."><i data-ic="trash"></i>Clear all files</button></div></div>
   <div class="tiles" id="tiles"></div>
   <div class="msgs" id="msgs"></div>
@@ -699,8 +699,9 @@ async function ingest(files,forced){
     else{type=classifyFile(f.name,text);if(type==="unknown"){notes.push(["warn",f.name+" wasn't recognised, so it wasn't used."]);continue}}
     if(type==="master")setMaster(f.name,text,"own");
     else if(type==="log")setLog(f.name,text,"own");
-    else{if(S.src[type]!=="own"){S[type]=[];S.src[type]="own"}
-      if(!S[type].some(x=>x.name===f.name&&x.text===text))S[type].push({name:f.name,text})}
+    else{/* memos and extraction files are ADDED to what is loaded (new memo intake); a file with the same name is replaced by the newer copy */
+      if(!S.src[type])S.src[type]="own";else if(S.src[type]==="built")S.src[type]="mixed";
+      const i=S[type].findIndex(x=>x.name===f.name);if(i>=0)S[type][i]={name:f.name,text};else S[type].push({name:f.name,text})}
     n[type]++}
   const done=Object.entries(n).filter(([,v])=>v).map(([k,v])=>v+" to "+NAME[k]);
   if(done.length){notes.unshift(["ok","Loaded "+done.join(", ")+"."]);ev("Loaded "+done.join(", ")+(forced?" (dropped on the "+NAME[forced]+" box)":"")+": "+files.map(f=>f.name).slice(0,6).join(", ")+(files.length>6?" and "+(files.length-6)+" more":""))}
@@ -725,12 +726,12 @@ function compute(){
 /* ---------- render ---------- */
 let C=null;
 function render(){C=compute();renderTop();renderTiles();renderMsgs();renderKpis();renderSc();renderPf();renderCv();renderMm();renderSd();renderCr();moveInk(curTab())}
-function renderTop(){$("#heroDrop").hidden=!(S.own||!Object.values(S.src).some(Boolean));const v=Object.values(S.src).filter(Boolean),own=v.includes("own"),built=v.includes("built");$("#dataPill").classList.toggle("own",own);$("#dataPillT").textContent=!v.length?"No files loaded":own&&built?"Built-in + your files":own?"Your own files":"Built-in data"}
+function renderTop(){$("#heroDrop").hidden=!(S.own||!Object.values(S.src).some(Boolean));const v=Object.values(S.src).filter(Boolean),own=v.includes("own")||v.includes("mixed"),built=v.includes("built")||v.includes("mixed");$("#dataPill").classList.toggle("own",own);$("#dataPillT").textContent=!v.length?"No files loaded":own&&built?"Built-in + your files":own?"Your own files":"Built-in data"}
 const TT={master:["table","The supplier master: every approved supplier and its part families."],log:["clock","The assessment log: which suppliers have been assessed, and when."],memos:["mail","The buyer memos. Each one is matched to a supplier by its header."],extraction:["quote","The quotes Claude pulled from the memos. Each one is checked word for word."]};
 function tile(type,title,num,unit,file){const src=S.src[type];const has=!!src;
   return `<div class="card tile" data-type="${type}" data-tip="${esc(TT[type][1])} ${has?num+" "+esc(unit)+" loaded.":"Nothing loaded yet."}"><div class="t">${ic(TT[type][0])}<span class="tick ${has?"":"off"}">${has?'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>':""}</span>${esc(title)}</div>
   <div>${has?`<span class="n">${num}</span> <span class="f">${esc(unit)}</span>`:'<span class="f">Drop the file here</span>'}</div><div class="f">${esc(file||"")}</div>
-  <div class="src"><span class="tag ${src==="own"?"own":src?"":"none"}">${src==="own"?"Your file":src?"Built-in":"Empty"}</span><span style="display:flex;gap:6px"><button class="btn ghost small" data-choose="${type}">${ic("upload")}${has?"Replace":"Choose"}</button>${has?`<button class="btn danger small" data-clear="${type}" aria-label="Clear">${ic("trash")}Clear</button>`:""}</span></div>
+  <div class="src"><span class="tag ${src==="own"||src==="mixed"?"own":src?"":"none"}">${src==="own"?(type==="memos"||type==="extraction"?"Your files":"Your file"):src==="mixed"?"Built-in + yours":src?"Built-in":"Empty"}</span><span style="display:flex;gap:6px"><button class="btn ghost small" data-choose="${type}">${ic("upload")}${!has?"Choose":type==="memos"||type==="extraction"?"Add":"Replace"}</button>${has?`<button class="btn danger small" data-clear="${type}" aria-label="Clear">${ic("trash")}Clear</button>`:""}</span></div>
   <input type="file" hidden data-in="${type}" ${type==="memos"||type==="extraction"?"multiple":""}></div>`}
 function renderTiles(){
   const v=C.checked.filter(r=>r.check.status==="VERIFIED").length,rej=C.checked.filter(r=>r.check.status==="REJECTED").length;
@@ -830,7 +831,7 @@ function renderSd(){const P=$("#p-sd");
   <div class="box"><h4>${ic("table")}Master row</h4><div class="mono">SUPPLIER_MASTER.csv line ${m._line}: ${esc([m.supplier_id,m.supplier_name,m.part_families,m.approval_status,m.spend_band].join(" | "))}</div></div>
   <div class="box"><h4>${ic("mail")}Memos matched (RR-C5 §2)</h4>${r.memoIds.length?r.memoIds.map(mid=>{const mm=C.byId[mid];const rows=C.checked.filter(x=>x.memo_id===mid);
     return `<div style="margin-top:8px"><b>${esc(mid)}</b> <span class="q">${esc(mm.date)}, written "${esc(mm.supplierAsWritten)}"</span><details><summary>Five steps side by side</summary>${stepTable(mm.supplierAsWritten,m.supplier_name,"Memo header","Master")}</details>
-    ${rows.map(x=>x.check.status==="NONE ROW"?'<div class="q">Read; no qualification or indemnity sentence.</div>':`<blockquote><span class="st ${x.check.status==="VERIFIED"?"GREEN":"RED"}">${esc(x.check.status)}</span> ${esc(x.topic)}${x.position?", "+esc(x.position):""}, about ${esc(x.statement_about_as_written)}<br>"${esc(x.quotation)}"</blockquote>`).join("")}</div>`}).join(""):`<span class="st CD">NO MEMO</span><div class="q">${esc(cov?cov.memo_scope:"")}</div>`}</div></div>`;
+    ${rows.map(x=>x.check.status==="NONE ROW"?'<div class="q">NOT STATED: memo read, it has no qualification or indemnity sentence, so it changes nothing.</div>':`<blockquote><span class="st ${x.check.status==="VERIFIED"?"GREEN":"RED"}">${esc(x.check.status)}</span> ${esc(x.topic)}${x.position?", "+esc(x.position):""}, about ${esc(x.statement_about_as_written)}<br>"${esc(x.quotation)}"</blockquote>`).join("")}</div>`}).join(""):`<span class="st CD">NO MEMO</span><div class="q">${esc(cov?cov.memo_scope:"")}</div>`}</div></div>`;
   P.innerHTML=h;$("#pick").onchange=e=>{S.sel=e.target.value;renderSd()}}
 function recordText(){const L=["COVERAGE RECORD, C5-A Supplier Risk Control Tower, Group 5 (V2)","Run at: "+new Date().toISOString()+", rules RR-C5 as of "+AS_OF,"","FILES READ"];
   if(S.master)L.push("- "+S.master.name+" ("+(S.src.master==="own"?"your file":"built-in")+"): "+S.master.records.length+" data rows");
