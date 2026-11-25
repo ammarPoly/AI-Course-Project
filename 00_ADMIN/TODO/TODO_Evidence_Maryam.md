@@ -9,6 +9,7 @@
 
 Newest first. Whenever someone's Claude finishes or changes something that affects you, it adds a line here (see `CLAUDE.md`). The full log for everyone is in `00_ADMIN/TEAM_NOTES.md`.
 
+- 2026-11-25, from Maryam: CP-7 complete and renamed to `00_ADMIN/G05_C5-A_CP-7_2026-11-25.md`; Ammar's version folders and CHANGES.md, the tutor reply and the AI cross-check logged in EVIDENCE_LIST.md. Next: log Fatema's T-03 to T-05 screenshots and AQ-1 to AQ-5 results when they arrive; CP-8 at the end of Week 8.
 - 2026-11-25, from Ammar: V2 is live at https://riskcontroltowerv2.netlify.app/ (V1 stays at https://riskcontroltowerv1.netlify.app/). Fatema: write AQ-1 to AQ-5 before you open the V2 link.
 - 2026-11-25, from Ammar: Ammar has finished building V2. Please log `03_VERSIONS/v01_2026-11-25/`, `03_VERSIONS/v02_2026-11-25/` and `03_VERSIONS/CHANGES.md` in EVIDENCE_LIST.md (K-05). Coming next for you: Fatema's T-03 to T-05 screenshots and her AQ-1 to AQ-5 results, and the V2 Netlify link from Ammar.
 - 2026-11-25, from Ammar: new evidence for K-05: `03_VERSIONS/v01_2026-11-25/` (tool plus the test record as it stood after T-01 and T-02), `03_VERSIONS/v02_2026-11-25/` (V2 tool) and `03_VERSIONS/CHANGES.md` (one line per version). This also covers your end-of-week v01 copy (task 9). Please log them in EVIDENCE_LIST.md.
@@ -18,12 +19,12 @@ Newest first. Whenever someone's Claude finishes or changes something that affec
 - 2026-11-25, from Fatema: T-01 done (SUP-01, MATCH), screenshot in `05_EVIDENCE/T-01_coverage_SUP-01_2026-11-25_Fatema.png`. Please mark **CP-7 line 5 YES** and finish the CP-7 sheet (date and rename). CP-7 is then complete.
 - 2026-11-25, from Ammar: v01 can be saved in `03_VERSIONS/` now that CP-7 is complete (Ammar's Claude will do it when Ammar says).
 
-## Status (updated 2026-11-23)
+## Status (updated 2026-11-25)
 
-- First evidence saved: `05_EVIDENCE/G05_C5_coverage_record_2026-11-23_Ammar.txt`, the tool's record of Ammar's first run on the real files (26 suppliers, 23 log rows, all 24 memos, none missing). Add it to the evidence list.
-- The test record is set up in `04_TESTS/` for Fatema.
-- **Your main job now is memo batch 3** (below, under Week 8), plus logging Hussain's and Marwan's batch runs in the sweep log.
-- The group decided a memo counts only for the supplier in its header; it's in the canvas decision log. Tell Ammar if you disagree.
+- Done: usage budget card, sweep log (all 3 batches, all 24 memo IDs echoed back), evidence list, pack check (44 of 44 files match), memo batch 3, all three batch chats saved in `05_EVIDENCE/`.
+- Done: CP-7 complete (all 5 lines YES): `00_ADMIN/G05_C5-A_CP-7_2026-11-25.md`. v01 saved by Ammar in `03_VERSIONS/v01_2026-11-25/` (task 9).
+- Next: log new evidence as it arrives (Fatema's T-03 to T-05 and AQ-1 to AQ-5), log long runs on the usage card, fill in CP-8 at the end of Week 8.
+- The group decided a memo counts only for the supplier in its header; it's in the canvas decision log.
 
 ## Step by step: from where to where
 
