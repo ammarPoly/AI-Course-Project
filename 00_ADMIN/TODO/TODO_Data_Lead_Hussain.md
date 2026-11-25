@@ -9,6 +9,7 @@
 
 Newest first. Whenever someone's Claude finishes or changes something that affects you, it adds a line here (see `CLAUDE.md`). The full log for everyone is in `00_ADMIN/TEAM_NOTES.md`.
 
+- 2026-11-25, from Ammar: V2 is live at https://riskcontroltowerv2.netlify.app/ (V1 stays at https://riskcontroltowerv1.netlify.app/). Fatema: write AQ-1 to AQ-5 before you open the V2 link.
 - 2026-11-25, from Ammar: Ammar has finished building V2. Please: 1) check the MEMO-20 warning shown under Sources in V2 ("bronze range" vs Quillmarsh's master family "impellers") and say if you agree it should not be applied; 2) finish your review of the rule choices in `02_WORK/dev_tests/README.md`; 3) draft the industrial gap (K-11); 4) write your extension case with its expected result first. Don't show Fatema any real results until she has written AQ-1 to AQ-5.
 - 2026-11-25, from Ammar: V2 is in the repo. Its Part families tab shows a warning for MEMO-20: it says Quillmarsh (SUP-20) is QUALIFIED for the "bronze range", but the master lists Quillmarsh for "impellers", so the tool does not apply it (no result changes). Please check you agree, it is a good refusal example for the demo. Your rule review is still open.
 - 2026-11-25, from Ammar: your next tasks are in your file: review the rule choices in `02_WORK/dev_tests/README.md`, draft the industrial gap (K-11), and write one extension case with its expected result.

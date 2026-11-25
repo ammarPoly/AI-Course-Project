@@ -9,6 +9,7 @@
 
 Newest first. Whenever someone's Claude finishes or changes something that affects you, it adds a line here (see `CLAUDE.md`). The full log for everyone is in `00_ADMIN/TEAM_NOTES.md`.
 
+- 2026-11-25, from Ammar: V2 is live at https://riskcontroltowerv2.netlify.app/ (V1 stays at https://riskcontroltowerv1.netlify.app/). Fatema: write AQ-1 to AQ-5 before you open the V2 link.
 - 2026-11-25, from Ammar: Ammar's build part for V2 is done: full scorecard, part-family summary, new memo intake, CSV export, smoother page and softer light mode, all in `02_WORK/control_tower.html` (pull request #29 has the last two). The build chat prompt is no longer needed. Still for you: put the final index.html on a new Netlify site and send the link to the group, add a line to the canvas decision log about the built-in data and the display additions, fill canvas field 7 (the trap with evidence), and ask the tutor at CP-8 to confirm the part-family summary once Fatema has run T-03 to T-05.
 - 2026-11-25, from Ammar: V2 fix: new memo intake now ADDS a new memo and its extraction rows to the loaded memos (before, it replaced all 24 built-in memos). A memo with nothing on qualification or indemnity now shows NOT STATED, as the canvas says. Rules unchanged, dev tests pass.
 - 2026-11-25, from Ammar: V2 of the tool is in `02_WORK/control_tower.html` (built in the general chat, not the build chat). Rule logic unchanged, all dev tests pass. v01 and v02 saved in `03_VERSIONS/` with CHANGES.md. Put the V2 index.html on a new Netlify site (keep the V1 site as it is). The built-in data, robot, dark mode and background were your additions, so add a line to the canvas decision log if the tutor asks.
@@ -23,7 +24,8 @@ Newest first. Whenever someone's Claude finishes or changes something that affec
 ## Status (updated 2026-11-25)
 
 - Done 2026-11-25: V2 built and in the repo (scorecard for all 26 suppliers, three flags, contradictions, status, part-family summary, new memo intake, CSV export). v01 and v02 saved in `03_VERSIONS/`. T-01 and T-02 run by Fatema: MATCH.
-- Next: Netlify link for V2, canvas decision log line, canvas field 7, CP-8 confirmation of the part-family summary.
+- Done 2026-11-25: V2 on Netlify, https://riskcontroltowerv2.netlify.app/
+- Next: canvas decision log line, canvas field 7, CP-8 confirmation of the part-family summary.
 
 - Done: canvas drafted, roles set, to-do files, memo decision recorded in the canvas decision log (header supplier only; other mentions are notes), pull request #1 merged.
 - Done: first slice of the tool built (load files, §2 matching, coverage, coverage record). You ran it on the real files on 2026-11-23: 26 suppliers, 23 log rows, 24 memos, none missing. The coverage record is in `05_EVIDENCE/`.
