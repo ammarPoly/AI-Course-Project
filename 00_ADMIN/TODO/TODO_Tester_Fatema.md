@@ -9,6 +9,7 @@
 
 Newest first. Whenever someone's Claude finishes or changes something that affects you, it adds a line here (see `CLAUDE.md`). The full log for everyone is in `00_ADMIN/TEAM_NOTES.md`.
 
+- 2026-11-26, from Ammar: T-06 (Maryam's case) is merged and ready for you to run with the files in `04_TESTS/T-06_inputs/`. When you load MEMO-90 the page will also say memo numbers MEMO-25 to MEMO-89 are missing; that is only because MEMO-90 is an invented number, not part of the test.
 - 2026-11-26, from Maryam: my extension case T-06 (REFUSAL, misspelled supplier name "Talbek-Castings", RR-C5 §2) is in the test record with its expected result, NOT RUN. Please run it when you can and send me the screenshot to log. Inputs are ready in `04_TESTS/T-06_inputs/` (MEMO-90.md and T-06_extraction_MEMO-90.csv): load them with "Use my own files" together with the pack files.
 - 2026-11-25, from Maryam: the tutor told the group in class that Opus 5.5 is fine for the memo batches (class date not recorded). Recorded on the usage card `00_ADMIN/G05_usage_budget_v01.md`.
 - 2026-11-25, from Ammar: V2 is live at https://riskcontroltowerv2.netlify.app/ (V1 stays at https://riskcontroltowerv1.netlify.app/). Fatema: write AQ-1 to AQ-5 before you open the V2 link.

@@ -690,13 +690,18 @@ function validateAs(type,text){
   if(type==="extraction")return csvToRecords(text).header.join(",")===EXTRACTION_HEADER.join(",")?null:"its header doesn't match our extraction format";
   if(type==="memos")return parseMemoFile(text,"").some(m=>m.id)?null:'no memo starting with "# MEMO-" was found in it';
   return null}
+/* memo headings the tool can't read: the ID must be "MEMO-" plus digits (MEMO-25), so "# MEMO-T06" is skipped. Say so instead of skipping in silence. */
+/* show a long run of missing numbers as a range: MEMO-26 to MEMO-89 (64 numbers) */
+function gapRanges(ids){const n=ids.map(x=>+String(x).replace(/\D/g,"")),out=[];for(let i=0;i<n.length;){let j=i;while(j+1<n.length&&n[j+1]===n[j]+1)j++;out.push(j-i>=2?ids[i]+" to "+ids[j]+" ("+(j-i+1)+" numbers)":ids.slice(i,j+1).join(", "));i=j+1}return out.join(", ")}
+function badMemoIds(text){return [...String(text).matchAll(/^#\s*(MEMO[^\s]*)/gim)].map(m=>m[1]).filter(id=>!/^MEMO-\d+$/.test(id))}
 async function ingest(files,forced){
   const notes=[];const n={master:0,log:0,memos:0,extraction:0};
   for(const f of files){
     if(f.name.startsWith("."))continue;
     const text=await f.text();let type;
+    if(/\.(md|txt)$/i.test(f.name)){const bad=badMemoIds(text);if(bad.length)notes.push(["bad",f.name+": memo "+bad.join(", ")+" was skipped, because a memo ID must be MEMO- followed by digits only (for example MEMO-25). Rename it and load the file again."])}
     if(forced){const p=validateAs(forced,text);if(p){notes.push(["bad",f.name+" was not loaded as "+NAME[forced]+": "+p+"."]);continue}type=forced}
-    else{type=classifyFile(f.name,text);if(type==="unknown"){notes.push(["warn",f.name+" wasn't recognised, so it wasn't used."]);continue}}
+    else{type=classifyFile(f.name,text);if(type==="unknown"){if(!notes.some(x=>x[1].startsWith(f.name+": memo ")))notes.push(["warn",f.name+" wasn't recognised, so it wasn't used."]);continue}}
     if(type==="master")setMaster(f.name,text,"own");
     else if(type==="log")setLog(f.name,text,"own");
     else{/* memos and extraction files are ADDED to what is loaded (new memo intake); a file with the same name is replaced by the newer copy */
@@ -750,7 +755,7 @@ function renderTiles(){
     t.ondrop=async e=>{if(!hasFiles(e))return;e.preventDefault();e.stopPropagation();t.classList.remove("drag");await ingest(await filesFromDrop(e.dataTransfer),t.dataset.type)}})}
 function fileList(a){return a.length>3?a.length+" files: "+a[0].name+" to "+a[a.length-1].name:a.map(f=>f.name).join(", ")}
 function renderMsgs(){const out=S.notes.map(([k,t])=>`<div class="msg ${k}">${esc(t)}</div>`);
-  const gaps=memoNumberGaps(C.memos.map(m=>m.id));if(gaps.length)out.push(`<div class="msg warn">Memo numbers missing from this run: ${esc(gaps.join(", "))}.</div>`);
+  const gaps=memoNumberGaps(C.memos.map(m=>m.id));if(gaps.length)out.push(`<div class="msg warn">Memo numbers missing from this run: ${esc(gapRanges(gaps))}.</div>`);
   C.dups.forEach(d=>out.push(`<div class="msg bad">${esc(d)}</div>`));
   if(C.sc)C.sc.warnings.forEach(w=>out.push(`<div class="msg warn">${esc(w)}</div>`));
   $("#msgs").innerHTML=out.join("")}

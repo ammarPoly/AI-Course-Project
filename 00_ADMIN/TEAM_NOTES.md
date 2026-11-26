@@ -4,6 +4,9 @@ One line per change, newest first. Every member's Claude adds a line here (and i
 
 Format: `- YYYY-MM-DD, for <member>, from <member>: what was done. What to do now.`
 
+- 2026-11-26, for Ammar, from Ammar: fixed the silent skip Maryam found: if a memo ID is not MEMO- plus digits (e.g. MEMO-T06), the page now says which memo was skipped and how to fix it. Missing memo numbers now show as a range. Rule logic unchanged, dev tests pass. Upload the new index.html to the V2 Netlify site.
+- 2026-11-26, for Maryam, from Ammar: your finding is fixed: the page now names a memo it skips because its ID is not MEMO- plus digits (e.g. MEMO-T06) and says how to fix it. Logged in `03_VERSIONS/CHANGES.md` under changes since v02. T-06 was merged as you wrote it.
+- 2026-11-26, for Fatema, from Ammar: T-06 (Maryam's case) is merged and ready for you to run with the files in `04_TESTS/T-06_inputs/`. When you load MEMO-90 the page will also say memo numbers MEMO-25 to MEMO-89 are missing; that is only because MEMO-90 is an invented number, not part of the test.
 - 2026-11-26, for Ammar, from Maryam: the tool skips a memo whose ID is not "MEMO-" plus digits (e.g. "MEMO-T06") without any warning. T-06 now uses MEMO-90; its input files are in `04_TESTS/T-06_inputs/`. Could be someone's "could break the tool" extension case.
 - 2026-11-26, for Fatema and Ammar, from Maryam: extension case T-06 added to the test record (REFUSAL: invented memo MEMO-90 with supplier "Talbek-Castings", RR-C5 §2), expected result written by Maryam before any run, NOT RUN; worksheet saved in 05_EVIDENCE. Fatema: please run it and send Maryam the screenshot. Ammar: please merge the pull request.
 - 2026-11-25, for everyone, from Maryam: the tutor told the group in class that Opus 5.5 is fine for the memo batches (class date not recorded). Recorded on the usage card. Nothing to do.
