@@ -9,6 +9,7 @@
 
 Newest first. Whenever someone's Claude finishes or changes something that affects you, it adds a line here (see `CLAUDE.md`). The full log for everyone is in `00_ADMIN/TEAM_NOTES.md`.
 
+- 2026-11-26, from Ammar: canvas decision log has a new row (dated 2026-11-25): V2 opens with the pack files and our batch CSVs built in, own files can still be loaded as field 6 says, and the display extras (dark/light mode, background, robot) don't change any result. Nothing to do; Marwan, it's worth knowing for the demo if the tutor asks.
 - 2026-11-26, from Ammar: fixed the silent skip Maryam found: if a memo ID is not MEMO- plus digits (e.g. MEMO-T06), the page now says which memo was skipped and how to fix it. Missing memo numbers now show as a range. Rule logic unchanged, dev tests pass. Upload the new index.html to the V2 Netlify site.
 - 2026-11-26, from Maryam: while making T-06's input files we found the tool skips a memo whose ID is not "MEMO-" plus digits (e.g. "MEMO-T06") without any warning (parseMemoFile in control_tower.html). T-06 now uses MEMO-90. Could be someone's "could break the tool" extension case.
 - 2026-11-26, from Maryam: extension case T-06 (REFUSAL, RR-C5 §2) added to the test record (.md and .xlsx), expected result written by Maryam, NOT RUN. Please merge the pull request.
@@ -30,7 +31,8 @@ Newest first. Whenever someone's Claude finishes or changes something that affec
 
 - Done 2026-11-25: V2 built and in the repo (scorecard for all 26 suppliers, three flags, contradictions, status, part-family summary, new memo intake, CSV export). v01 and v02 saved in `03_VERSIONS/`. T-01 and T-02 run by Fatema: MATCH.
 - Done 2026-11-25: V2 on Netlify, https://riskcontroltowerv2.netlify.app/
-- Next: canvas decision log line, canvas field 7, CP-8 confirmation of the part-family summary.
+- Done 2026-11-26: canvas decision log line for V2 (built-in data and display extras).
+- Next: canvas field 7, CP-8 confirmation of the part-family summary.
 
 - Done: canvas drafted, roles set, to-do files, memo decision recorded in the canvas decision log (header supplier only; other mentions are notes), pull request #1 merged.
 - Done: first slice of the tool built (load files, §2 matching, coverage, coverage record). You ran it on the real files on 2026-11-23: 26 suppliers, 23 log rows, 24 memos, none missing. The coverage record is in `05_EVIDENCE/`.
