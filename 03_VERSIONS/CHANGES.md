@@ -9,4 +9,5 @@ Each version is a dated folder with a copy of `02_WORK/control_tower.html`. The 
 
 ## Changes since the last saved version (in `02_WORK/control_tower.html`, to go into the next saved version)
 
+- 2026-11-26: robot button next to the dark/light button turns the helper robot off or on (choice remembered; hovering the button makes the robot explain it). On windows 701 to 1366 px wide the robot is smaller (84 px) and sits in the bottom right corner, so he no longer covers the AMBER tile on a 1280 px screen. Display only; rule logic unchanged, dev tests pass.
 - 2026-11-26: a memo heading whose ID is not MEMO- plus digits (e.g. MEMO-T06) is no longer skipped in silence; the page names it and says how to fix it (found by Maryam while making T-06). A long run of missing memo numbers is shown as a range (MEMO-25 to MEMO-89). Rule logic unchanged, dev tests pass.

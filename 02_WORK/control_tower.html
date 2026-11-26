@@ -190,6 +190,8 @@ footer{position:relative;z-index:1;text-align:center;color:var(--muted);font-siz
 :focus-visible{outline:3px solid var(--accent);outline-offset:2px}
 @media (max-width:900px){.hero{grid-template-columns:minmax(0,1fr)}.tiles{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media (max-width:900px){.key{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (min-width:701px) and (max-width:1366px){#bot{width:84px;height:98px;top:auto;bottom:14px;right:8px}}
+html.nobot #bot,html.nobot #bubble{display:none}
 @media (max-width:700px){#bot{width:64px;height:76px;top:auto;bottom:14px;right:10px}#bubble{top:auto;bottom:40px;right:82px;max-width:200px}}
 @media (max-width:600px){.tiles{grid-template-columns:minmax(0,1fr)}.brand small{display:none}.fam{grid-template-columns:minmax(0,1fr)}table{font-size:13px}.hide-s{display:none}input[type=search]{min-width:0;width:100%}}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
@@ -237,6 +239,7 @@ footer{position:relative;z-index:1;text-align:center;color:var(--muted);font-siz
   <div class="sp"></div>
   <span class="pill" id="dataPill" data-tip="Shows whether the tool is using the built-in pack or files you loaded."><span class="d"></span><span id="dataPillT">Built-in data</span></span>
   <span class="pill ver">V2</span>
+  <button class="iconbtn" id="rBtn" aria-pressed="true" data-tip="Turn the helper robot off or on. When he is off, nothing explains the page on hover. Your choice is remembered." aria-label="Turn the helper robot off or on" title="Helper robot on or off"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="8" width="14" height="11" rx="3"/><path d="M12 8V4.5"/><circle cx="12" cy="3.5" r="1"/><circle cx="9.5" cy="13" r="1"/><circle cx="14.5" cy="13" r="1"/><path d="M3 12v3M21 12v3"/></svg></button>
   <button class="iconbtn" id="tBtn" data-tip="Switch between dark and light mode. Your choice is remembered." aria-label="Switch dark or light mode" title="Dark or light mode"><svg id="tIco" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"></svg></button>
 </div></header>
 
@@ -892,7 +895,7 @@ const bot=$("#bot"),bub=$("#bubble"),eL=$("#eL"),eR=$("#eR"),headG=bot.querySele
 let bubT=0,lastTip="";
 function look(x,y){const b=bot.getBoundingClientRect();const cx=b.left+b.width/2,cy=b.top+b.height*0.42;const dx=x-cx,dy=y-cy,d=Math.hypot(dx,dy)||1;const k=Math.min(1,d/260);
   const ex=dx/d*5*k,ey=dy/d*4*k;eL.style.transform=eR.style.transform=`translate(${ex}px,${ey}px)`;headG.style.transform=`rotate(${Math.max(-8,Math.min(8,dx/60))}deg)`}
-function say(t){if(!t){bub.classList.remove("show");lastTip="";mouth.setAttribute("d","M52 69 Q60 73 68 69");return}
+function say(t){if(root.classList.contains("nobot"))return;if(!t){bub.classList.remove("show");lastTip="";mouth.setAttribute("d","M52 69 Q60 73 68 69");return}
   if(t!==lastTip){bub.textContent=t;lastTip=t}placeBub();bub.classList.add("show");mouth.setAttribute("d","M52 68 Q60 76 68 68");clearTimeout(bubT);bubT=setTimeout(()=>say(""),3500)}
 /* bubble placement: on narrow windows it stays in the free margin beside the robot and gets taller instead of covering the page */
 function placeBub(){const r=bot.getBoundingClientRect(),vw=innerWidth,vh=innerHeight,G=10;
@@ -937,6 +940,10 @@ if(!reduce)setTimeout(blink,2000);
 setTimeout(()=>say("Hi! Point at anything and I'll tell you what it is."),900);
 addEventListener("dragover",e=>{if(hasFiles(e))e.preventDefault()});
 addEventListener("drop",async e=>{if(!hasFiles(e))return;e.preventDefault();await ingest(await filesFromDrop(e.dataTransfer))});
+/* robot on/off; the choice is remembered in this browser */
+const rBtn=$("#rBtn");function botOn(on){root.classList.toggle("nobot",!on);rBtn.setAttribute("aria-pressed",on?"true":"false");try{localStorage.setItem("ct-robot",on?"on":"off")}catch(e){}}
+try{if(localStorage.getItem("ct-robot")==="off")botOn(false)}catch(e){}
+rBtn.onclick=()=>{const on=root.classList.contains("nobot");if(!on)say("");botOn(on);if(on){quietUntil=Date.now()+1500;say("I'm back. Point at anything and I'll tell you what it is.")}};
 $("#tBtn").onclick=()=>{root.dataset.theme=isDark()?"light":"dark";try{localStorage.setItem("ct-theme",root.dataset.theme)}catch(e){}setIcon();colors()};
 document.addEventListener("pointermove",e=>{const c=e.target.closest&&e.target.closest(".card");if(!c)return;const b=c.getBoundingClientRect();c.style.setProperty("--mx",e.clientX-b.left+"px");c.style.setProperty("--my",e.clientY-b.top+"px")});
 document.addEventListener("click",e=>{const b=e.target.closest(".btn,.iconbtn");if(!b||reduce)return;const r=b.getBoundingClientRect(),s=Math.max(r.width,r.height),i=document.createElement("span");i.className="rip";i.style.cssText=`width:${s}px;height:${s}px;left:${e.clientX-r.left-s/2}px;top:${e.clientY-r.top-s/2}px`;b.appendChild(i);setTimeout(()=>i.remove(),650)});
