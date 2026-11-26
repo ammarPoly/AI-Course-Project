@@ -4,7 +4,8 @@ One line per change, newest first. Every member's Claude adds a line here (and i
 
 Format: `- YYYY-MM-DD, for <member>, from <member>: what was done. What to do now.`
 
-- 2026-11-26, for Fatema and Ammar, from Maryam: extension case T-06 added to the test record (REFUSAL: invented memo MEMO-T06 with supplier "Talbek-Castings", RR-C5 §2), expected result written by Maryam before any run, NOT RUN; worksheet saved in 05_EVIDENCE. Fatema: please run it and send Maryam the screenshot. Ammar: please merge the pull request.
+- 2026-11-26, for Ammar, from Maryam: the tool skips a memo whose ID is not "MEMO-" plus digits (e.g. "MEMO-T06") without any warning. T-06 now uses MEMO-90; its input files are in `04_TESTS/T-06_inputs/`. Could be someone's "could break the tool" extension case.
+- 2026-11-26, for Fatema and Ammar, from Maryam: extension case T-06 added to the test record (REFUSAL: invented memo MEMO-90 with supplier "Talbek-Castings", RR-C5 §2), expected result written by Maryam before any run, NOT RUN; worksheet saved in 05_EVIDENCE. Fatema: please run it and send Maryam the screenshot. Ammar: please merge the pull request.
 - 2026-11-25, for everyone, from Maryam: the tutor told the group in class that Opus 5.5 is fine for the memo batches (class date not recorded). Recorded on the usage card. Nothing to do.
 - 2026-11-25, for Ammar, from Maryam: CP-7 complete (all 5 lines YES), saved as `00_ADMIN/G05_C5-A_CP-7_2026-11-25.md`; v01, v02, CHANGES.md, the tutor reply and the AI cross-check logged in EVIDENCE_LIST.md. Please merge the pull request. Optional: add the 3 batch CSVs and the 00_ADMIN files to v01.
 - 2026-11-25, for Maryam, from Maryam: CP-7 finished and renamed; evidence list up to date (every file in 05_EVIDENCE logged). Next: Fatema's T-03 to T-05 and AQ-1 to AQ-5 evidence; CP-8 at the end of Week 8.
