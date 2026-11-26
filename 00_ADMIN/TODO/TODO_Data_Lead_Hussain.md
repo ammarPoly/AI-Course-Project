@@ -9,6 +9,7 @@
 
 Newest first. Whenever someone's Claude finishes or changes something that affects you, it adds a line here (see `CLAUDE.md`). The full log for everyone is in `00_ADMIN/TEAM_NOTES.md`.
 
+- 2026-11-26, from Ammar: Ammar is asking you to do these next: 1) your Claude already made drafts on the branch `claude/exciting-cannon-kpp53a` (`00_ADMIN/G05_C5-A_Hussain_review_draft_2026-11-26.md` for the MEMO-20 check and rule review, and `00_ADMIN/G05_C5-A_K-11_industrial_gap_draft_2026-11-26.md`). Read them, change anything you disagree with, mark them confirmed by you, then open a pull request and tell Ammar; 2) write your extension case with its expected result first.
 - 2026-11-25, from Maryam: the tutor told the group in class that Opus 5.5 is fine for the memo batches (class date not recorded). Recorded on the usage card `00_ADMIN/G05_usage_budget_v01.md`.
 - 2026-11-25, from Ammar: V2 is live at https://riskcontroltowerv2.netlify.app/ (V1 stays at https://riskcontroltowerv1.netlify.app/). Fatema: write AQ-1 to AQ-5 before you open the V2 link.
 - 2026-11-25, from Ammar: Ammar has finished building V2. Please: 1) check the MEMO-20 warning shown under Sources in V2 ("bronze range" vs Quillmarsh's master family "impellers") and say if you agree it should not be applied; 2) finish your review of the rule choices in `02_WORK/dev_tests/README.md`; 3) draft the industrial gap (K-11); 4) write your extension case with its expected result first. Don't show Fatema any real results until she has written AQ-1 to AQ-5.
