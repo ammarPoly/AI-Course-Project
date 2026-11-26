@@ -9,6 +9,7 @@
 
 Newest first. Whenever someone's Claude finishes or changes something that affects you, it adds a line here (see `CLAUDE.md`). The full log for everyone is in `00_ADMIN/TEAM_NOTES.md`.
 
+- 2026-11-26, from Ammar: the helper robot can now be turned off with the robot button next to the dark/light button (click again to bring him back). On a 1280 or 1366 px screen, like most projectors, he is smaller and sits in the bottom right corner. Worth knowing for the demo; turn him off if he gets in the way.
 - 2026-11-26, from Ammar: canvas decision log has a new row (dated 2026-11-25): V2 opens with the pack files and our batch CSVs built in, own files can still be loaded as field 6 says, and the display extras (dark/light mode, background, robot) don't change any result. Nothing to do; Marwan, it's worth knowing for the demo if the tutor asks.
 - 2026-11-25, from Maryam: the tutor told the group in class that Opus 5.5 is fine for the memo batches (class date not recorded). Recorded on the usage card `00_ADMIN/G05_usage_budget_v01.md`.
 - 2026-11-25, from Ammar: V2 is live at https://riskcontroltowerv2.netlify.app/ (V1 stays at https://riskcontroltowerv1.netlify.app/). Fatema: write AQ-1 to AQ-5 before you open the V2 link.
