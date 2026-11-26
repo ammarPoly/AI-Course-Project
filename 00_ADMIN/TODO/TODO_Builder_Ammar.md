@@ -9,6 +9,7 @@
 
 Newest first. Whenever someone's Claude finishes or changes something that affects you, it adds a line here (see `CLAUDE.md`). The full log for everyone is in `00_ADMIN/TEAM_NOTES.md`.
 
+- 2026-11-26, from Ammar: helper robot changes (display only, rule logic unchanged, dev tests pass): new robot button next to the dark/light button turns him off or on and the page remembers the choice; on windows 1366 px wide or less he is smaller and sits in the bottom right corner so he no longer covers the AMBER tile. Upload the new index.html to the V2 Netlify site after merging.
 - 2026-11-26, from Ammar: canvas decision log has a new row (dated 2026-11-25): V2 opens with the pack files and our batch CSVs built in, own files can still be loaded as field 6 says, and the display extras (dark/light mode, background, robot) don't change any result. Nothing to do; Marwan, it's worth knowing for the demo if the tutor asks.
 - 2026-11-26, from Ammar: fixed the silent skip Maryam found: if a memo ID is not MEMO- plus digits (e.g. MEMO-T06), the page now says which memo was skipped and how to fix it. Missing memo numbers now show as a range. Rule logic unchanged, dev tests pass. Upload the new index.html to the V2 Netlify site.
 - 2026-11-26, from Maryam: while making T-06's input files we found the tool skips a memo whose ID is not "MEMO-" plus digits (e.g. "MEMO-T06") without any warning (parseMemoFile in control_tower.html). T-06 now uses MEMO-90. Could be someone's "could break the tool" extension case.
