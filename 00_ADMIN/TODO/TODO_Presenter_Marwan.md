@@ -5,6 +5,17 @@
 **Covering for:** Hussain (data lead), if he's absent.
 **Your core step in your own account:** memo batch 2 (MEMO-09 to MEMO-16).
 
+## Notes for you
+
+Newest first. Whenever someone's Claude finishes or changes something that affects you, it adds a line here (see `CLAUDE.md`). The full log for everyone is in `00_ADMIN/TEAM_NOTES.md`.
+
+- 2026-11-25, from Maryam: the tutor told the group in class that Opus 5.5 is fine for the memo batches (class date not recorded). Recorded on the usage card `00_ADMIN/G05_usage_budget_v01.md`.
+- 2026-11-25, from Ammar: V2 is live at https://riskcontroltowerv2.netlify.app/ (V1 stays at https://riskcontroltowerv1.netlify.app/). Fatema: write AQ-1 to AQ-5 before you open the V2 link.
+- 2026-11-25, from Ammar: Ammar has finished building V2, and it is the version you will demo (Ammar will send the Netlify link). Please: 1) go through V2 and start the demo plan (colour cards, the three flags, part families, the MEMO-20 refusal, new memo intake); 2) write your extension case with its expected result first. Don't show Fatema any real results until she has written AQ-1 to AQ-5.
+- 2026-11-25, from Ammar: V2 update: the robot can be dragged anywhere (double-click sends him back to the top right), and on narrow screens his message box stays beside or under him instead of covering the colour cards. Same file, same rules.
+- 2026-11-25, from Ammar: V2 is the tool you will demo. No action yet, but have a look at the tabs, the colour and flag cards (click them to filter) and the robot that explains what the mouse points at.
+- 2026-11-25, from Ammar: no action needed right now. Coming up: one extension case (expected result first), then the run of show and demo insurance after the freeze.
+
 ## Status (updated 2026-11-23)
 
 - The first part of the tool works (loading files, memo matching, coverage). **Your main job now is memo batch 2** (below, under Week 8). Please run it soon: the flags can't be built until the batch CSVs exist.

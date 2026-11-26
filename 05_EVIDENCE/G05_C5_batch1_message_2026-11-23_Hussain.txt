@@ -1,0 +1,27 @@
+Hi Maryam,
+
+MEMOS READ: MEMO-01, MEMO-02, MEMO-03, MEMO-04, MEMO-05, MEMO-06, MEMO-07, MEMO-08 (8)
+Chat export attached: BATCH_1_Hussain_2026-11-23_chat.md
+Model label: [Opus 5.5]
+
+Deviations: "No deviations: one run, one chat, all 8 memos read."
+
+Unsure sentences:
+
+No supplier named (MEMO-01, MEMO-03, MEMO-06, MEMO-08 indemnity rows). Four indemnity sentences don't name a supplier: "The contract…", "The framework agreement…", "The distribution agreement…" and "Their contract…". The context points to the header supplier, but you asked for the name as it appears in the sentence, so I wrote NOT STATED. You'll need to decide whether these count as statements about the header supplier.
+
+MEMO-01, "Corranby shares the casing work with Talbeck…". I wrote "the same patterns" as the part family because that's what the qualification clause says. "Casing work" appears earlier in the same sentence. The sentence says nothing about Corranby's own qualification, so I gave Corranby no row from it.
+
+MEMO-03, "Ostrand remains qualified… neither family depends on Vellmoor alone." This suggests Vellmoor also supplies both families, but it doesn't state Vellmoor's qualification, so I gave Vellmoor no row. The earlier sentence "Vellmoor supplies induction motors…" is about supply, not qualification, so I left it out.
+
+MEMO-04, "Ostrand's motors passed our winding-temperature tests…". This describes a product test result, not qualification for a part family, so I left it out.
+
+MEMO-06 Brindlecourt and MEMO-07 Copperhythe. These sentences say "approved", not "qualified". Under the rule card, approved means qualified by default, but that applies to approval in the supplier master, not to wording in a memo. So I used OTHER and didn't treat the word as QUALIFIED. In MEMO-06, "second approved" may also suggest Halvard is approved, but Halvard isn't named, so I gave it no row. For Brindlecourt's part family I wrote "bearing" because the sentence only says "bearing source".
+
+MEMO-08, "A second source has been discussed but no supplier has started qualification." It's about qualification, but it names no supplier and no family, so I wrote QUALIFICATION / OTHER with NOT STATED. You could also argue it's NONE.
+
+MEMO-07, Linnetbrook's cap of BHD 50,000. I recorded the figure as written. I didn't judge it against any threshold.
+
+
+Confirmed: BATCH_1_Hussain_2026-11-23.csv is from my run on 2026-11-23 (16 rows, matches the chat).
+Thanks, Hussain

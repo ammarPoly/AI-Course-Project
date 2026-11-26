@@ -5,6 +5,17 @@
 **Covering for:** Ammar (build lead), if he's absent.
 **Your core step in your own account:** memo batch 1 (MEMO-01 to MEMO-08).
 
+## Notes for you
+
+Newest first. Whenever someone's Claude finishes or changes something that affects you, it adds a line here (see `CLAUDE.md`). The full log for everyone is in `00_ADMIN/TEAM_NOTES.md`.
+
+- 2026-11-25, from Maryam: the tutor told the group in class that Opus 5.5 is fine for the memo batches (class date not recorded). Recorded on the usage card `00_ADMIN/G05_usage_budget_v01.md`.
+- 2026-11-25, from Ammar: V2 is live at https://riskcontroltowerv2.netlify.app/ (V1 stays at https://riskcontroltowerv1.netlify.app/). Fatema: write AQ-1 to AQ-5 before you open the V2 link.
+- 2026-11-25, from Ammar: Ammar has finished building V2. Please: 1) check the MEMO-20 warning shown under Sources in V2 ("bronze range" vs Quillmarsh's master family "impellers") and say if you agree it should not be applied; 2) finish your review of the rule choices in `02_WORK/dev_tests/README.md`; 3) draft the industrial gap (K-11); 4) write your extension case with its expected result first. Don't show Fatema any real results until she has written AQ-1 to AQ-5.
+- 2026-11-25, from Ammar: V2 is in the repo. Its Part families tab shows a warning for MEMO-20: it says Quillmarsh (SUP-20) is QUALIFIED for the "bronze range", but the master lists Quillmarsh for "impellers", so the tool does not apply it (no result changes). Please check you agree, it is a good refusal example for the demo. Your rule review is still open.
+- 2026-11-25, from Ammar: your next tasks are in your file: review the rule choices in `02_WORK/dev_tests/README.md`, draft the industrial gap (K-11), and write one extension case with its expected result.
+- 2026-11-25, from Ammar: your old branch with the extra batch 1 copy in `03_VERSIONS/` was deleted on purpose. Your batch 1 is safe in `02_WORK/extraction/`.
+
 ## Status (updated 2026-11-23)
 
 - Your tutor question is answered. The tutor ruled that a memo counts only for the supplier in its header (RR-C5 §2: the supplier "as the buyer wrote it"). So MEMO-01 is a Corranby memo only, and its sentence about Talbeck isn't used for Talbeck. It's in the canvas decision log.
