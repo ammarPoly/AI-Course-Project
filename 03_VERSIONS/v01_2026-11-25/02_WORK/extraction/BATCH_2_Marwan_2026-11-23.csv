@@ -1,0 +1,12 @@
+memo_id,memo_date,header_supplier_as_written,statement_about_as_written,topic,part_family,position,cap_bhd,quotation
+MEMO-09,2025-07-15,Tidewell Seal Systems,Tidewell,INDEMNITY,NOT STATED,CAP,30000,"The supply agreement caps Tidewell's indemnity at BHD 30,000."
+MEMO-09,2025-07-15,Tidewell Seal Systems,Amberlode Sealing,QUALIFICATION,seal,OTHER,,"Amberlode Sealing is our other approved seal supplier."
+MEMO-10,2025-08-26,Gannetstone Fasteners,Gannetstone,INDEMNITY,NOT STATED,CAP,80000,"Gannetstone's contract includes a product indemnity capped at BHD 80,000."
+MEMO-11,2025-09-30,Peltrove Gasket Supply,NOT STATED,INDEMNITY,NOT STATED,STANDARD TERMS,,"On liability, standard terms apply."
+MEMO-11,2025-09-30,Peltrove Gasket Supply,Fennick,QUALIFICATION,gasket range,OTHER,,"Fennick is approved for the same gasket range."
+MEMO-12,2025-10-21,Brindlecourt Bearing Supply,Brindlecourt,INDEMNITY,NOT STATED,CAP,150000,"Brindlecourt's contract carries an indemnity capped at BHD 150,000."
+MEMO-13,2025-11-18,Saltcote Coatings,Kelvingrey,QUALIFICATION,coating systems,OTHER,,"Kelvingrey remains approved for the same coating systems."
+MEMO-14,2025-12-09,Gulfreach Fastener Co,Gulfreach Fastener Co,INDEMNITY,NOT STATED,CAP,90000,"Gulfreach Fastener Co carries a product indemnity capped at BHD 90,000."
+MEMO-15,2026-01-13,Merrowfield Packaging,NOT STATED,INDEMNITY,NOT STATED,NO CLAUSE,,"The packaging contract contains no indemnity clause."
+MEMO-15,2026-01-13,Merrowfield Packaging,Thornwick Cartons,QUALIFICATION,carton sizes,OTHER,,"Thornwick Cartons is approved for the same carton sizes."
+MEMO-16,2026-02-10,Copperhythe Cable Works,Copperhythe,INDEMNITY,NOT STATED,CAP,120000,"Copperhythe's agreement includes an indemnity capped at BHD 120,000."

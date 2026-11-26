@@ -9,6 +9,7 @@
 
 Newest first. Whenever someone's Claude finishes or changes something that affects you, it adds a line here (see `CLAUDE.md`). The full log for everyone is in `00_ADMIN/TEAM_NOTES.md`.
 
+- 2026-11-26, from Ammar: v01 folder completed as Maryam suggested: `03_VERSIONS/v01_2026-11-25/` now also has the canvas, roles, usage card and CP-7 draft (in `00_ADMIN/`) and the 3 memo batch files (in `02_WORK/extraction/`), copied exactly as they were when v01 was saved on 25 Nov. Nothing to do.
 - 2026-11-26, from Ammar: canvas decision log has a new row (dated 2026-11-25): V2 opens with the pack files and our batch CSVs built in, own files can still be loaded as field 6 says, and the display extras (dark/light mode, background, robot) don't change any result. Nothing to do; Marwan, it's worth knowing for the demo if the tutor asks.
 - 2026-11-26, from Ammar: fixed the silent skip Maryam found: if a memo ID is not MEMO- plus digits (e.g. MEMO-T06), the page now says which memo was skipped and how to fix it. Missing memo numbers now show as a range. Rule logic unchanged, dev tests pass. Upload the new index.html to the V2 Netlify site.
 - 2026-11-26, from Maryam: while making T-06's input files we found the tool skips a memo whose ID is not "MEMO-" plus digits (e.g. "MEMO-T06") without any warning (parseMemoFile in control_tower.html). T-06 now uses MEMO-90. Could be someone's "could break the tool" extension case.

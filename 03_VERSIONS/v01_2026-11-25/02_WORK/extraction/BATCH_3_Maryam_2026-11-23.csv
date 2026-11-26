@@ -1,0 +1,11 @@
+memo_id,memo_date,header_supplier_as_written,statement_about_as_written,topic,part_family,position,cap_bhd,quotation
+MEMO-17,2026-05-14,Amberlode Sealing,Amberlode,QUALIFICATION,mechanical seals,FAILED,,"Amberlode failed requalification for mechanical seals in March 2026 and must not be used for new seal orders."
+MEMO-17,2026-05-14,Amberlode Sealing,Amberlode,INDEMNITY,NOT STATED,CAP,70000,"Amberlode's contract carries an indemnity capped at BHD 70,000."
+MEMO-18,2026-03-17,Fennick Gasket Industries,Fennick,INDEMNITY,NOT STATED,CAP,55000,"Fennick's contract includes an indemnity capped at BHD 55,000."
+MEMO-19,2026-04-21,Ironvale Freight Services,Ironvale,INDEMNITY,NOT STATED,CAP,200000,"Ironvale's carriage agreement includes an indemnity capped at BHD 200,000."
+MEMO-20,2026-05-05,Quillmarsh Impeller Co.,Quillmarsh,QUALIFICATION,bronze range,QUALIFIED,,"Quillmarsh supplies composite impellers for the small-pump range and is qualified for our bronze range as overflow."
+MEMO-20,2026-05-05,Quillmarsh Impeller Co.,Quillmarsh,INDEMNITY,NOT STATED,CAP,100000,"Quillmarsh's contract includes a product indemnity capped at BHD 100,000."
+MEMO-21,2026-04-02,Marrowgate Impellers,Marrowgate,INDEMNITY,NOT STATED,NO CLAUSE,,"The renewal was signed on Marrowgate's own terms and contains no indemnity clause."
+MEMO-22,2026-06-16,Gulfreach Fasteners Company W.L.L.,,NONE,NOT STATED,,,
+MEMO-23,2026-07-07,Kelvingrey Paint Systems,Kelvingrey,INDEMNITY,NOT STATED,CAP,60000,"Kelvingrey's contract includes an indemnity capped at BHD 60,000."
+MEMO-24,2026-08-18,Thornwick Cartons,Thornwick,INDEMNITY,NOT STATED,CAP,75000,"Thornwick's contract includes an indemnity capped at BHD 75,000."
