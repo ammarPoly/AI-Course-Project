@@ -4,6 +4,7 @@ One line per change, newest first. Every member's Claude adds a line here (and i
 
 Format: `- YYYY-MM-DD, for <member>, from <member>: what was done. What to do now.`
 
+- 2026-11-26, for Ammar, Maryam and Marwan, from Ammar: canvas decision log has a new row (dated 2026-11-25): V2 opens with the pack files and our batch CSVs built in, own files can still be loaded as field 6 says, and the display extras (dark/light mode, background, robot) don't change any result. Nothing to do; Marwan, it's worth knowing for the demo if the tutor asks.
 - 2026-11-26, for Ammar, from Ammar: fixed the silent skip Maryam found: if a memo ID is not MEMO- plus digits (e.g. MEMO-T06), the page now says which memo was skipped and how to fix it. Missing memo numbers now show as a range. Rule logic unchanged, dev tests pass. Upload the new index.html to the V2 Netlify site.
 - 2026-11-26, for Maryam, from Ammar: your finding is fixed: the page now names a memo it skips because its ID is not MEMO- plus digits (e.g. MEMO-T06) and says how to fix it. Logged in `03_VERSIONS/CHANGES.md` under changes since v02. T-06 was merged as you wrote it.
 - 2026-11-26, for Fatema, from Ammar: T-06 (Maryam's case) is merged and ready for you to run with the files in `04_TESTS/T-06_inputs/`. When you load MEMO-90 the page will also say memo numbers MEMO-25 to MEMO-89 are missing; that is only because MEMO-90 is an invented number, not part of the test.

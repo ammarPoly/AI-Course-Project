@@ -9,6 +9,7 @@
 
 Newest first. Whenever someone's Claude finishes or changes something that affects you, it adds a line here (see `CLAUDE.md`). The full log for everyone is in `00_ADMIN/TEAM_NOTES.md`.
 
+- 2026-11-26, from Ammar: canvas decision log has a new row (dated 2026-11-25): V2 opens with the pack files and our batch CSVs built in, own files can still be loaded as field 6 says, and the display extras (dark/light mode, background, robot) don't change any result. Nothing to do; Marwan, it's worth knowing for the demo if the tutor asks.
 - 2026-11-26, from Ammar: your finding is fixed: the page now names a memo it skips because its ID is not MEMO- plus digits (e.g. MEMO-T06) and says how to fix it. Logged in `03_VERSIONS/CHANGES.md` under changes since v02. T-06 was merged as you wrote it.
 - 2026-11-26, from Maryam: my extension case T-06 written (REFUSAL, misspelled name, RR-C5 §2), NOT RUN; worksheet saved in 05_EVIDENCE. Next: Fatema runs it; log her screenshot when it arrives.
 - 2026-11-25, from Maryam: the tutor told the group in class that Opus 5.5 is fine for the memo batches (class date not recorded). Recorded on the usage card `00_ADMIN/G05_usage_budget_v01.md`.
