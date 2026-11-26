@@ -9,6 +9,7 @@
 
 Newest first. Whenever someone's Claude finishes or changes something that affects you, it adds a line here (see `CLAUDE.md`). The full log for everyone is in `00_ADMIN/TEAM_NOTES.md`.
 
+- 2026-11-26, from Ammar: fixed the silent skip Maryam found: if a memo ID is not MEMO- plus digits (e.g. MEMO-T06), the page now says which memo was skipped and how to fix it. Missing memo numbers now show as a range. Rule logic unchanged, dev tests pass. Upload the new index.html to the V2 Netlify site.
 - 2026-11-26, from Maryam: while making T-06's input files we found the tool skips a memo whose ID is not "MEMO-" plus digits (e.g. "MEMO-T06") without any warning (parseMemoFile in control_tower.html). T-06 now uses MEMO-90. Could be someone's "could break the tool" extension case.
 - 2026-11-26, from Maryam: extension case T-06 (REFUSAL, RR-C5 §2) added to the test record (.md and .xlsx), expected result written by Maryam, NOT RUN. Please merge the pull request.
 - 2026-11-25, from Maryam: the tutor told the group in class that Opus 5.5 is fine for the memo batches (class date not recorded). Recorded on the usage card `00_ADMIN/G05_usage_budget_v01.md`.
