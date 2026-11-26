@@ -9,6 +9,8 @@
 
 Newest first. Whenever someone's Claude finishes or changes something that affects you, it adds a line here (see `CLAUDE.md`). The full log for everyone is in `00_ADMIN/TEAM_NOTES.md`.
 
+- 2026-11-26, from Maryam: while making T-06's input files we found the tool skips a memo whose ID is not "MEMO-" plus digits (e.g. "MEMO-T06") without any warning (parseMemoFile in control_tower.html). T-06 now uses MEMO-90. Could be someone's "could break the tool" extension case.
+- 2026-11-26, from Maryam: extension case T-06 (REFUSAL, RR-C5 §2) added to the test record (.md and .xlsx), expected result written by Maryam, NOT RUN. Please merge the pull request.
 - 2026-11-25, from Maryam: the tutor told the group in class that Opus 5.5 is fine for the memo batches (class date not recorded). Recorded on the usage card `00_ADMIN/G05_usage_budget_v01.md`.
 - 2026-11-25, from Maryam: CP-7 complete (all 5 lines YES), saved as `00_ADMIN/G05_C5-A_CP-7_2026-11-25.md` (renamed from the DRAFT); v01, v02, CHANGES.md, the tutor reply and the AI cross-check logged in EVIDENCE_LIST.md. Please merge the pull request. Optional: your v01 folder has the tool and 04_TESTS but not the 3 batch CSVs or the 00_ADMIN files (canvas, roles, usage card, CP-7) that K-04 pairs with CP-7; add them if you want v01 complete.
 - 2026-11-25, from Ammar: V2 is live at https://riskcontroltowerv2.netlify.app/ (V1 stays at https://riskcontroltowerv1.netlify.app/). Fatema: write AQ-1 to AQ-5 before you open the V2 link.
