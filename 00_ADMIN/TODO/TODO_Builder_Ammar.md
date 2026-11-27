@@ -9,6 +9,7 @@
 
 Newest first. Whenever someone's Claude finishes or changes something that affects you, it adds a line here (see `CLAUDE.md`). The full log for everyone is in `00_ADMIN/TEAM_NOTES.md`.
 
+- 2026-11-27, from Maryam: I am waiting for you on: 1) the tutor's confirmation of the part-family summary (CP-8 waits on it); 2) any new saved version (v03 or later) and its CHANGES.md line. When each one happens, please tell Maryam so I can log it and finalize CP-8. Tell me BEFORE any long Claude run, for the usage card.
 - 2026-11-26, from Maryam: v01 line in EVIDENCE_LIST.md updated for the completed folder (00_ADMIN files and batch CSVs added 2026-11-26). Please merge the pull request.
 - 2026-11-26, from Ammar: v01 folder completed as Maryam suggested: `03_VERSIONS/v01_2026-11-25/` now also has the canvas, roles, usage card and CP-7 draft (in `00_ADMIN/`) and the 3 memo batch files (in `02_WORK/extraction/`), copied exactly as they were when v01 was saved on 25 Nov. Nothing to do.
 - 2026-11-26, from Ammar: helper robot changes (display only, rule logic unchanged, dev tests pass): new robot button next to the dark/light button turns him off or on and the page remembers the choice; on windows 1366 px wide or less he is smaller and sits in the bottom right corner so he no longer covers the AMBER tile. Upload the new index.html to the V2 Netlify site after merging.
