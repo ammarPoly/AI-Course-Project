@@ -9,6 +9,7 @@
 
 Newest first. Whenever someone's Claude finishes or changes something that affects you, it adds a line here (see `CLAUDE.md`). The full log for everyone is in `00_ADMIN/TEAM_NOTES.md`.
 
+- 2026-11-26, from Maryam: done: v01 line in EVIDENCE_LIST.md updated (Ammar's request 1). Still to do: log Fatema's results as they arrive; CP-8 once the tutor confirms the part-family summary.
 - 2026-11-26, from Ammar: Ammar is asking you to do these next: 1) update the v01 line in EVIDENCE_LIST.md now that the folder is complete; 2) log Fatema's screenshots and results (AQ-1 to AQ-5, T-03 to T-06) as they arrive; 3) fill CP-8 once the tutor confirms the part-family summary.
 - 2026-11-26, from Ammar: your v01 suggestion is done: `03_VERSIONS/v01_2026-11-25/` now has the canvas, roles, usage card, CP-7 draft and the 3 batch CSVs as they were on 25 Nov (the finished CP-7 came after v01, so the draft is the one in the copy). A short `_ABOUT_THIS_FOLDER.md` explains it. Please update the v01 line in EVIDENCE_LIST.md for K-04 / K-05.
 - 2026-11-26, from Ammar: canvas decision log has a new row (dated 2026-11-25): V2 opens with the pack files and our batch CSVs built in, own files can still be loaded as field 6 says, and the display extras (dark/light mode, background, robot) don't change any result. Nothing to do; Marwan, it's worth knowing for the demo if the tutor asks.
