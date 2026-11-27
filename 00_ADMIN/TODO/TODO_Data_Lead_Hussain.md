@@ -9,6 +9,7 @@
 
 Newest first. Whenever someone's Claude finishes or changes something that affects you, it adds a line here (see `CLAUDE.md`). The full log for everyone is in `00_ADMIN/TEAM_NOTES.md`.
 
+- 2026-11-27, from Maryam: I am waiting for you on: 1) your rule review and MEMO-20 check; 2) your industrial gap draft (K-11); 3) your extension case with its expected result. When each one is merged, please tell Maryam so I can log it as evidence and finalize CP-8. Tell me BEFORE any long Claude run, for the usage card.
 - 2026-11-26, from Ammar: Ammar is asking you to do these next: 1) your Claude already made drafts on the branch `claude/exciting-cannon-kpp53a` (`00_ADMIN/G05_C5-A_Hussain_review_draft_2026-11-26.md` for the MEMO-20 check and rule review, and `00_ADMIN/G05_C5-A_K-11_industrial_gap_draft_2026-11-26.md`). Read them, change anything you disagree with, mark them confirmed by you, then open a pull request and tell Ammar; 2) write your extension case with its expected result first.
 - 2026-11-25, from Maryam: the tutor told the group in class that Opus 5.5 is fine for the memo batches (class date not recorded). Recorded on the usage card `00_ADMIN/G05_usage_budget_v01.md`.
 - 2026-11-25, from Ammar: V2 is live at https://riskcontroltowerv2.netlify.app/ (V1 stays at https://riskcontroltowerv1.netlify.app/). Fatema: write AQ-1 to AQ-5 before you open the V2 link.
