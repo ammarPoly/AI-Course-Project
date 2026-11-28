@@ -9,6 +9,8 @@
 
 Newest first. Whenever someone's Claude finishes or changes something that affects you, it adds a line here (see `CLAUDE.md`). The full log for everyone is in `00_ADMIN/TEAM_NOTES.md`.
 
+- 2026-11-28, from Ammar: canvas field 7 is filled: the trap we found is MEMO-20 ("bronze range" is not a master family for Quillmarsh, so the tool refuses to apply it and shows a warning). Use it as the refusal example in the demo.
+- 2026-11-28, from Ammar: the tutor replied on V1 (`05_EVIDENCE/G05_tutor_reply_2026-11-28_v1_review.md`). Ammar is asking you to write the extension case that could break the tool (expected result written by you first). Demo plan and six answers still to do.
 - 2026-11-28, from Ammar: the tutor asked what the coverage record shows if the last memo isn't loaded. Answer now: a red warning under Sources, the Memos card says how many of the 24 pack memos are missing, and the record says "Pack memos read: 23 of 24. NOT READ: MEMO-24". Worth showing in the demo.
 - 2026-11-27, from Maryam: I am waiting for you on: 1) your extension case with its expected result; 2) the demo plan; 3) the six answers draft. When each one is done, please tell Maryam so I can log it as evidence and finalize CP-8. Tell me BEFORE any long Claude run, for the usage card.
 - 2026-11-26, from Ammar: Ammar is asking you to do these next: 1) plan the demo on V2 (colour cards, the three flags, part families, the MEMO-20 refusal, new memo intake); 2) write your extension case with its expected result first; 3) draft the six answers (Week 7 task 3 in this file) if they aren't done yet, and tell Ammar where they are.

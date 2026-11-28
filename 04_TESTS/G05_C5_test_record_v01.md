@@ -2,6 +2,8 @@
 
 Write the expected result and its rule or clause **before** the run. The chat that produced an answer is not its check. Types: ACCEPTANCE · TRAP · REFUSAL · EDGE · EXTENSION · REGRESSION · INDEPENDENT CHECK. Verdicts: MATCH · MISMATCH · OBSERVED FAILURE · NOT RUN. (An XLSX copy with drop-down lists sits beside this file.)
 
+**Version tested:** the page shows its version label in the header and footer (V1 at riskcontroltowerv1, V2 at riskcontroltowerv2). Write that label in "Version tested" for every run, as the tutor asked on 2026-11-28. T-01 and T-02 ran on V1 (saved as `03_VERSIONS/v01_2026-11-25/`).
+
 | Test ID | Type | Input (file, row, document) | Expected result + rule or clause (written BEFORE the run) | Expected written by | Observed result (file) | Verdict | Evidence link | Version tested | Notes |
 |---|---|---|---|---|---|---|---|---|---|
 | AQ-1 | ACCEPTANCE | The scorecard row for every supplier on the master list, with flags, evidence quotations or record references, and status (RR-C5 §6). | | | | | | | |
