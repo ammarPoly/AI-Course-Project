@@ -4,6 +4,7 @@ One line per change, newest first. Every member's Claude adds a line here (and i
 
 Format: `- YYYY-MM-DD, for <member>, from <member>: what was done. What to do now.`
 
+- 2026-11-28, for Fatema and Ammar, from Ammar: the page's version label is now V2.1 (top right and footer; the robot explains it). It goes up each time a new file goes on Netlify, so always write the label shown on the page in "Version tested".
 - 2026-11-28, for Ammar, from Ammar: fixed the gap the tutor asked about ("what does your coverage record show if the last memo isn't loaded?"): before, leaving out MEMO-24 gave "Missing numbers: none" and SUP-22 quietly went from GREEN to CANNOT DETERMINE. Now the page shows a red warning, the Memos card says how many of the 24 pack memos are missing, and the coverage record says "Pack memos read: 23 of 24. NOT READ: MEMO-24". Rule logic unchanged, dev tests pass. Upload the new index.html to the V2 Netlify site after merging.
 - 2026-11-28, for Fatema, from Ammar: the page now warns when any of the 24 pack memos (MEMO-01 to MEMO-24) is not loaded, in red under Sources and in the coverage record. When you run T-03 to T-06 with "Use my own files" and invented memos you will see this warning; it is expected and not part of those tests.
 - 2026-11-28, for Maryam, from Ammar: new fix for the tutor's question about a missing last memo: the coverage record now has a line "Pack memos read: N of 24" and names any pack memo not read. Please log it as evidence with the tutor's 28 Nov reply when that is saved.
