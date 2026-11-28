@@ -9,6 +9,7 @@
 
 Newest first. Whenever someone's Claude finishes or changes something that affects you, it adds a line here (see `CLAUDE.md`). The full log for everyone is in `00_ADMIN/TEAM_NOTES.md`.
 
+- 2026-11-28, from Ammar: fixed the gap the tutor asked about ("what does your coverage record show if the last memo isn't loaded?"): before, leaving out MEMO-24 gave "Missing numbers: none" and SUP-22 quietly went from GREEN to CANNOT DETERMINE. Now the page shows a red warning, the Memos card says how many of the 24 pack memos are missing, and the coverage record says "Pack memos read: 23 of 24. NOT READ: MEMO-24". Rule logic unchanged, dev tests pass. Upload the new index.html to the V2 Netlify site after merging.
 - 2026-11-27, from Maryam: I am waiting for you on: 1) the tutor's confirmation of the part-family summary (CP-8 waits on it); 2) any new saved version (v03 or later) and its CHANGES.md line. When each one happens, please tell Maryam so I can log it and finalize CP-8. Tell me BEFORE any long Claude run, for the usage card.
 - 2026-11-26, from Maryam: v01 line in EVIDENCE_LIST.md updated for the completed folder (00_ADMIN files and batch CSVs added 2026-11-26). Please merge the pull request.
 - 2026-11-26, from Ammar: v01 folder completed as Maryam suggested: `03_VERSIONS/v01_2026-11-25/` now also has the canvas, roles, usage card and CP-7 draft (in `00_ADMIN/`) and the 3 memo batch files (in `02_WORK/extraction/`), copied exactly as they were when v01 was saved on 25 Nov. Nothing to do.

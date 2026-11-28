@@ -9,6 +9,7 @@
 
 Newest first. Whenever someone's Claude finishes or changes something that affects you, it adds a line here (see `CLAUDE.md`). The full log for everyone is in `00_ADMIN/TEAM_NOTES.md`.
 
+- 2026-11-28, from Ammar: new fix for the tutor's question about a missing last memo: the coverage record now has a line "Pack memos read: N of 24" and names any pack memo not read. Please log it as evidence with the tutor's 28 Nov reply when that is saved.
 - 2026-11-27, from Maryam: waiting list (each member was asked to tell me when done): Fatema: AQ-1 to AQ-5, T-03 to T-06 screenshots, independent check. Hussain: rule review and MEMO-20 check, industrial gap draft (K-11), extension case. Marwan: extension case, demo plan, six answers. Ammar: tutor's confirmation of the part-family summary, any new version. When they tell me: log it in EVIDENCE_LIST.md, then finalize CP-8.
 - 2026-11-26, from Maryam: done: v01 line in EVIDENCE_LIST.md updated (Ammar's request 1). Still to do: log Fatema's results as they arrive; CP-8 once the tutor confirms the part-family summary.
 - 2026-11-26, from Ammar: Ammar is asking you to do these next: 1) update the v01 line in EVIDENCE_LIST.md now that the folder is complete; 2) log Fatema's screenshots and results (AQ-1 to AQ-5, T-03 to T-06) as they arrive; 3) fill CP-8 once the tutor confirms the part-family summary.

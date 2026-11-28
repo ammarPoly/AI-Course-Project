@@ -695,6 +695,10 @@ function validateAs(type,text){
   return null}
 /* memo headings the tool can't read: the ID must be "MEMO-" plus digits (MEMO-25), so "# MEMO-T06" is skipped. Say so instead of skipping in silence. */
 /* show a long run of missing numbers as a range: MEMO-26 to MEMO-89 (64 numbers) */
+/* The pack issues 24 memos, MEMO-01 to MEMO-24 (00_START_HERE_C5: "all 24 memos"). The gap check above only sees holes
+   below the highest number read, so a missing last memo (e.g. MEMO-24) needs this separate check. */
+const PACK_MEMOS=Array.from({length:24},(_,i)=>"MEMO-"+String(i+1).padStart(2,"0"));
+function packMemosMissing(ids){const have=new Set(ids);return PACK_MEMOS.filter(x=>!have.has(x))}
 function gapRanges(ids){const n=ids.map(x=>+String(x).replace(/\D/g,"")),out=[];for(let i=0;i<n.length;){let j=i;while(j+1<n.length&&n[j+1]===n[j]+1)j++;out.push(j-i>=2?ids[i]+" to "+ids[j]+" ("+(j-i+1)+" numbers)":ids.slice(i,j+1).join(", "));i=j+1}return out.join(", ")}
 function badMemoIds(text){return [...String(text).matchAll(/^#\s*(MEMO[^\s]*)/gim)].map(m=>m[1]).filter(id=>!/^MEMO-\d+$/.test(id))}
 async function ingest(files,forced){
@@ -746,7 +750,7 @@ function renderTiles(){
   $("#tiles").innerHTML=
    tile("master","Supplier master",S.master?S.master.records.length:0,"suppliers",S.master&&S.master.name)+
    tile("log","Assessment log",S.log?S.log.records.length:0,"assessment rows",S.log&&S.log.name)+
-   tile("memos","Memos",C.memos.length,"distinct memos",fileList(S.memos))+
+   tile("memos","Memos",C.memos.length,(()=>{const m=packMemosMissing(C.memos.map(x=>x.id)).length;return m?"distinct memos, "+m+" of the 24 pack memos missing":"distinct memos"})(),fileList(S.memos))+
    tile("extraction","Memo extraction",C.ex.length,rej?"rows, "+rej+" quote(s) rejected":"rows, "+v+" quotes verified",fileList(S.extraction));
   document.querySelectorAll("[data-choose]").forEach(b=>b.onclick=()=>b.closest(".tile").querySelector("input").click());
   document.querySelectorAll("[data-clear]").forEach(b=>b.onclick=()=>{clearType(b.dataset.clear);S.notes=[["ok",NAME[b.dataset.clear]+" cleared."]];ev(NAME[b.dataset.clear]+" cleared");render()});
@@ -758,6 +762,7 @@ function renderTiles(){
     t.ondrop=async e=>{if(!hasFiles(e))return;e.preventDefault();e.stopPropagation();t.classList.remove("drag");await ingest(await filesFromDrop(e.dataTransfer),t.dataset.type)}})}
 function fileList(a){return a.length>3?a.length+" files: "+a[0].name+" to "+a[a.length-1].name:a.map(f=>f.name).join(", ")}
 function renderMsgs(){const out=S.notes.map(([k,t])=>`<div class="msg ${k}">${esc(t)}</div>`);
+  const packMiss=packMemosMissing(C.memos.map(m=>m.id));if(packMiss.length)out.push(`<div class="msg bad">Pack memos not loaded: ${esc(gapRanges(packMiss))}. The pack has 24 memos (MEMO-01 to MEMO-24) and all 24 must be read, so results for any supplier these memos are about may be wrong until they are loaded.</div>`);
   const gaps=memoNumberGaps(C.memos.map(m=>m.id));if(gaps.length)out.push(`<div class="msg warn">Memo numbers missing from this run: ${esc(gapRanges(gaps))}.</div>`);
   C.dups.forEach(d=>out.push(`<div class="msg bad">${esc(d)}</div>`));
   if(C.sc)C.sc.warnings.forEach(w=>out.push(`<div class="msg warn">${esc(w)}</div>`));
@@ -849,6 +854,7 @@ function recordText(){const L=["COVERAGE RECORD, C5-A Supplier Risk Control Towe
   if(S.events.length){L.push("","CHANGES IN THIS SESSION");S.events.forEach(e=>L.push("- "+e.at.toLocaleTimeString("en-GB")+"  "+e.t))}
   L.push("","MEMOS READ: "+C.memos.length+" distinct",C.memos.map(m=>m.id).join(", ")||"(none)");
   const g=memoNumberGaps(C.memos.map(m=>m.id));L.push("Missing numbers in the sequence: "+(g.length?g.join(", "):"none"));
+  const pm=packMemosMissing(C.memos.map(m=>m.id));L.push("Pack memos read: "+(24-pm.length)+" of 24 (MEMO-01 to MEMO-24)"+(pm.length?". NOT READ: "+pm.join(", "):""));
   if(C.ex.length){const c=s=>C.checked.filter(r=>r.check.status===s).length;const cov=new Set(C.ex.map(r=>r.memo_id));const no=C.memos.filter(m=>!cov.has(m.id)).map(m=>m.id);
    L.push("","EXTRACTION CHECK","Verified quotations: "+c("VERIFIED")+", NONE rows: "+c("NONE ROW")+", rejected: "+c("REJECTED"),"Memos with no extraction row: "+(no.length?no.join(", "):"none"));
    C.checked.filter(r=>r.check.status==="REJECTED").forEach(r=>L.push("REJECTED "+r._file+" line "+r._line+": "+r.check.reason))}

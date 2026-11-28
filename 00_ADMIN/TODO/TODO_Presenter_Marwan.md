@@ -9,6 +9,7 @@
 
 Newest first. Whenever someone's Claude finishes or changes something that affects you, it adds a line here (see `CLAUDE.md`). The full log for everyone is in `00_ADMIN/TEAM_NOTES.md`.
 
+- 2026-11-28, from Ammar: the tutor asked what the coverage record shows if the last memo isn't loaded. Answer now: a red warning under Sources, the Memos card says how many of the 24 pack memos are missing, and the record says "Pack memos read: 23 of 24. NOT READ: MEMO-24". Worth showing in the demo.
 - 2026-11-27, from Maryam: I am waiting for you on: 1) your extension case with its expected result; 2) the demo plan; 3) the six answers draft. When each one is done, please tell Maryam so I can log it as evidence and finalize CP-8. Tell me BEFORE any long Claude run, for the usage card.
 - 2026-11-26, from Ammar: Ammar is asking you to do these next: 1) plan the demo on V2 (colour cards, the three flags, part families, the MEMO-20 refusal, new memo intake); 2) write your extension case with its expected result first; 3) draft the six answers (Week 7 task 3 in this file) if they aren't done yet, and tell Ammar where they are.
 - 2026-11-26, from Ammar: the helper robot can now be turned off with the robot button next to the dark/light button (click again to bring him back). On a 1280 or 1366 px screen, like most projectors, he is smaller and sits in the bottom right corner. Worth knowing for the demo; turn him off if he gets in the way.
