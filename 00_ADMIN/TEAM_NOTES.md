@@ -4,6 +4,8 @@ One line per change, newest first. Every member's Claude adds a line here (and i
 
 Format: `- YYYY-MM-DD, for <member>, from <member>: what was done. What to do now.`
 
+- 2026-11-28, for Ammar and Marwan, from Maryam: MEMO-20 warning screenshot saved in `05_EVIDENCE/G05_MEMO-20_warning_2026-11-28_Maryam.png` and logged as the canvas field 7 evidence (the trap we found). Useful for the demo.
+- 2026-11-28, for Ammar, from Maryam: the tutor's 28 Nov reply and the V2.1 missing-memo fix are logged in EVIDENCE_LIST.md. Please merge the pull request.
 - 2026-11-28, for Maryam, from Ammar: canvas field 7 (Week 8 part) is filled: the trap we found is MEMO-20 ("bronze range" is not a master family for Quillmarsh, so the tool does not apply it and shows a warning). Please take a cropped screenshot of that warning under Sources on the live V2 site, save it in `05_EVIDENCE/` (for example `G05_MEMO-20_warning_<date>_Maryam.png`) and log it in EVIDENCE_LIST.md as the field 7 evidence.
 - 2026-11-28, for Hussain, from Ammar: canvas field 7 now uses your MEMO-20 check as the trap we found, marked "Checked by Hussain (to confirm)". When you confirm your review draft, also check field 7 and tell Ammar if anything is wrong.
 - 2026-11-28, for Marwan, from Ammar: canvas field 7 is filled: the trap we found is MEMO-20 ("bronze range" is not a master family for Quillmarsh, so the tool refuses to apply it and shows a warning). Use it as the refusal example in the demo.
