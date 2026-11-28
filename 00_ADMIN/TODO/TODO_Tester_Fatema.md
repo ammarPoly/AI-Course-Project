@@ -9,6 +9,7 @@
 
 Newest first. Whenever someone's Claude finishes or changes something that affects you, it adds a line here (see `CLAUDE.md`). The full log for everyone is in `00_ADMIN/TEAM_NOTES.md`.
 
+- 2026-11-28, from Ammar: the tutor replied on V1 (saved in `05_EVIDENCE/G05_tutor_reply_2026-11-28_v1_review.md`). Order now: 1) AQ-1 to AQ-5 expected results with the RR-C5 clause, then run them on all 26 suppliers (this is CP-8 evidence); 2) re-read 2 memos per batch BEFORE opening the AI cross-check; 3) T-03 to T-06. Hussain now traces the five flags instead of you. Write the version label shown on the page (V1 or V2) in "Version tested" for every run. Still one extension case from you, any kind.
 - 2026-11-27, from Maryam: I am waiting for you on: 1) your AQ-1 to AQ-5 results; 2) T-03, T-04, T-05 and T-06 results with a screenshot each; 3) your independent check (tell me BEFORE you start it, it is a long run for the usage card). When each one is done, please tell Maryam (send the screenshot or its path in `05_EVIDENCE/`) so I can log it and finalize the evidence list and CP-8.
 - 2026-11-26, from Ammar: Ammar is asking you to do these next, in this order (CP-8 waits on them): 1) write the expected results for AQ-1 to AQ-5 in the test record BEFORE you open V2 or the Netlify link; 2) run T-03 to T-05 with "Use my own files", then T-06 with the files in `04_TESTS/T-06_inputs/`, record MATCH or MISMATCH and send each screenshot to Maryam; 3) the independent checks: re-read 2 memos from each batch yourself and check every sentence has a row in the batch CSVs, trace 5 flags in a fresh chat, and check the coverage table in Excel (details further down this file); 4) write your own extension case with its expected result first.
 - 2026-11-26, from Ammar: T-06 (Maryam's case) is merged and ready for you to run with the files in `04_TESTS/T-06_inputs/`. When you load MEMO-90 the page will also say memo numbers MEMO-25 to MEMO-89 are missing; that is only because MEMO-90 is an invented number, not part of the test.
@@ -121,6 +122,8 @@ Working it out on paper first is fine, but the final answer goes in `04_TESTS/G0
 ```
 The attached zip is a classroom project pack. Read only the rule card at C5-A_SUPPLIER_RISK_CONTROL_TOWER_PACK_V1_2_EXPLORATORY_DRAFT_V1/RULES/RISK_RULES_RR-C5.md. Suggest 8 test cases our tool should face: invented new memos or record changes that test the edges of these rules (name matching in section 2, the BHD 50,000 threshold, newer versus older memos, a planned assessment, "standard terms", a supplier name that cannot be matched). For each case give only the input and the rule clause it tests. Do NOT give the expected result; I will work that out myself.
 ```
+
+> **Changed 2026-11-28 (tutor):** another member traces the five flags, so **Hussain** now does the flag tracing below. You still do the memo re-read (2 memos per batch, before opening the AI cross-check) and the coverage check in Excel.
 
 **Independent check (your core step).** Once the scorecard exists, trace at least five flags back to their source. Use a **fresh chat** that has never seen our tool's output. Upload the pack zip, and the rule card and memos are inside it under `INPUTS/` and `RULES/`. For each flag:
 
