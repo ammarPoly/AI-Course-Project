@@ -4,6 +4,7 @@ One line per change, newest first. Every member's Claude adds a line here (and i
 
 Format: `- YYYY-MM-DD, for <member>, from <member>: what was done. What to do now.`
 
+- 2026-11-28, for Fatema, Maryam and Ammar, from Ammar: T-07 added (Ammar's extension case, expected result written by Ammar before any run): invented MEMO-99 for SUP-26 Mallowmere with an indemnity cap of BHD 39,000. Inputs in `04_TESTS/T-07_inputs/`. Fatema: please run it with the other tests (Use my own files, Add memo and Add extraction), record the verdict and the version label, and send the screenshot to Maryam.
 - 2026-11-28, for Maryam and Ammar, from Ammar: canvas field 7 now points to Maryam's MEMO-20 warning screenshot (`05_EVIDENCE/G05_MEMO-20_warning_2026-11-28_Maryam.png`) instead of "to add". Nothing to do.
 - 2026-11-28, for Ammar and Marwan, from Maryam: MEMO-20 warning screenshot saved in `05_EVIDENCE/G05_MEMO-20_warning_2026-11-28_Maryam.png` and logged as the canvas field 7 evidence (the trap we found). Useful for the demo.
 - 2026-11-28, for Ammar, from Maryam: the tutor's 28 Nov reply and the V2.1 missing-memo fix are logged in EVIDENCE_LIST.md. Please merge the pull request.
