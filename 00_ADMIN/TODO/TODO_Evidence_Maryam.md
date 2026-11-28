@@ -9,6 +9,7 @@
 
 Newest first. Whenever someone's Claude finishes or changes something that affects you, it adds a line here (see `CLAUDE.md`). The full log for everyone is in `00_ADMIN/TEAM_NOTES.md`.
 
+- 2026-11-28, from Ammar: canvas field 7 now points to Maryam's MEMO-20 warning screenshot (`05_EVIDENCE/G05_MEMO-20_warning_2026-11-28_Maryam.png`) instead of "to add". Nothing to do.
 - 2026-11-28, from Maryam: done: MEMO-20 warning screenshot saved and logged (canvas field 7 evidence). Next: CP-8 when the AQ rows and independent checks are in.
 - 2026-11-28, from Maryam: done: the tutor's 28 Nov reply and the V2.1 missing-memo fix logged in EVIDENCE_LIST.md (Ammar's requests). Still to do: cropped screenshot of the MEMO-20 warning on the live V2 site for canvas field 7; then CP-8 (part-family summary now confirmed).
 - 2026-11-28, from Ammar: canvas field 7 (Week 8 part) is filled: the trap we found is MEMO-20 ("bronze range" is not a master family for Quillmarsh, so the tool does not apply it and shows a warning). Please take a cropped screenshot of that warning under Sources on the live V2 site, save it in `05_EVIDENCE/` (for example `G05_MEMO-20_warning_<date>_Maryam.png`) and log it in EVIDENCE_LIST.md as the field 7 evidence.
