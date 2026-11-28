@@ -9,6 +9,7 @@
 
 Newest first. Whenever someone's Claude finishes or changes something that affects you, it adds a line here (see `CLAUDE.md`). The full log for everyone is in `00_ADMIN/TEAM_NOTES.md`.
 
+- 2026-11-28, from Ammar: test record: T-01 and T-02 now say "V1 (v01_2026-11-25)" in Version tested (no results changed), and the Excel copy has the same version-label note as the .md.
 - 2026-11-28, from Ammar: T-07 added (Ammar's extension case, expected result written by Ammar before any run): invented MEMO-99 for SUP-26 Mallowmere with an indemnity cap of BHD 39,000. Inputs in `04_TESTS/T-07_inputs/`. Fatema: please run it with the other tests (Use my own files, Add memo and Add extraction), record the verdict and the version label, and send the screenshot to Maryam.
 - 2026-11-28, from Ammar: canvas field 7 now points to Maryam's MEMO-20 warning screenshot (`05_EVIDENCE/G05_MEMO-20_warning_2026-11-28_Maryam.png`) instead of "to add". Nothing to do.
 - 2026-11-28, from Maryam: done: MEMO-20 warning screenshot saved and logged (canvas field 7 evidence). Next: CP-8 when the AQ rows and independent checks are in.
