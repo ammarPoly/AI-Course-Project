@@ -9,6 +9,7 @@
 
 Newest first. Whenever someone's Claude finishes or changes something that affects you, it adds a line here (see `CLAUDE.md`). The full log for everyone is in `00_ADMIN/TEAM_NOTES.md`.
 
+- 2026-11-28, from Maryam: MEMO-20 warning screenshot saved as `05_EVIDENCE/G05_MEMO-20_warning_2026-11-28_Maryam.png` and logged in EVIDENCE_LIST.md as the canvas field 7 evidence. You may want to point field 7 to it. Please merge the pull request.
 - 2026-11-28, from Maryam: logged in EVIDENCE_LIST.md: the tutor's 28 Nov reply and the V2.1 missing-memo fix ("Pack memos read: N of 24"). V2.1 is not yet saved as a folder in 03_VERSIONS; tell me if you save it so I can log it. Please merge the pull request.
 - 2026-11-28, from Ammar: tutor reply on V1 saved in 05_EVIDENCE, part-family summary marked confirmed in the canvas, version label note added to the test record. Hussain now traces the five flags and writes the new-memo intake case; Marwan writes the break-the-tool case. To do: ask the tutor in class about the built-in data on Netlify and show him V2; write your own extension case.
 - 2026-11-28, from Ammar: the page's version label is now V2.1 (top right and footer; the robot explains it). It goes up each time a new file goes on Netlify, so always write the label shown on the page in "Version tested".
